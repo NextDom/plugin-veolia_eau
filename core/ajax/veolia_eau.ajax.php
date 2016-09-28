@@ -47,4 +47,3 @@ try {
     ajax::error(displayExeption($e), $e->getCode());
 }
 ?>
-3
