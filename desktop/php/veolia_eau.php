@@ -74,6 +74,18 @@ $eqLogics = eqLogic::byType('veolia_eau');
 					</div>
 				</div>
                 <div class="form-group">
+                    <label class="col-sm-3 control-label">{{Heure de relève}}</label>
+                    <div class="col-sm-3">
+                        <select class="form-control configuration eqLogicAttr" data-l1key="configuration" data-l2key="heure">
+                        <?php
+                        for ($heure=0; $heure<24; $heure++) {
+                            echo '<option value="'.$heure.'">'.$heure.'H00</option>';
+                        }
+                        ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="col-sm-3 control-label">{{Identifiant}}</label>
                     <div class="col-sm-3">
                         <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="login" placeholder="Identifiant"/>

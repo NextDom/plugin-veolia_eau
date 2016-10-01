@@ -45,8 +45,11 @@ class veolia_eau extends eqLogic {
     
     // Fonction exécutée automatiquement toutes les heures par Jeedom
     public static function cronHourly() {
-		if (date('G') == 6) {
-			foreach (eqLogic::byType('veolia_eau', true) as $veolia_eau) {
+		foreach (eqLogic::byType('veolia_eau', true) as $veolia_eau) {
+            $heure_releve = $veolia_eau->getConfiguration('heure');
+            if (empty($heure_releve)) $heure_releve=6;
+            log::add('veolia_eau', 'debug', 'heure de relève: '.$heure_releve);
+            if (date('G') == $heure_releve) {
 				if ($veolia_eau->getIsEnable() == 1) {
 					if (!empty($veolia_eau->getConfiguration('login')) && !empty($veolia_eau->getConfiguration('password'))) {
 						$veolia_eau->getConso();
