@@ -31,16 +31,6 @@ class veolia_eau extends eqLogic {
     
     // Fonction exécutée automatiquement toutes les minutes par Jeedom
     public static function cron() {
-		/*foreach (eqLogic::byType('veolia_eau', true) as $veolia_eau) {
-			if ($veolia_eau->getIsEnable() == 1) {
-				if (!empty($veolia_eau->getConfiguration('login')) && !empty($veolia_eau->getConfiguration('password'))) {
-					log::add('veolia_eau', 'debug', '----------------------------------');
-					$veolia_eau->getConso();
-				} else {
-					log::add('veolia_eau', 'error', 'Identifiants non saisis');
-				}
-			}
-		}*/
     }
     
     // Fonction exécutée automatiquement toutes les heures par Jeedom
@@ -272,7 +262,7 @@ class veolia_eau extends eqLogic {
 	
 	public function traiteConso($file) {		
 		log::add('veolia_eau', 'debug', '### TRAITE CONSO ###');
-		$lastdate=$this->getConfiguration('last')
+		$lastdate = $this->getConfiguration('last');
 
 		require_once dirname(__FILE__).'/../../3rparty/PHPExcel/Classes/PHPExcel/IOFactory.php';
 

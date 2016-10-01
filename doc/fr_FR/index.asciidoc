@@ -6,7 +6,7 @@ include::presentation.asciidoc[]
 include::configuration.asciidoc[]
 
 '''
-==FAQ
+== FAQ
 include::faq.asciidoc[]
 
 '''
