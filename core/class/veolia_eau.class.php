@@ -272,54 +272,62 @@ class veolia_eau extends eqLogic {
 	
 	public function traiteConso($file) {		
 		log::add('veolia_eau', 'debug', '### TRAITE CONSO ###');
-		
+		$lastdate=$this->getConfiguration('last')
+
 		require_once dirname(__FILE__).'/../../3rparty/PHPExcel/Classes/PHPExcel/IOFactory.php';
-		
+
 		$objPHPExcel = PHPExcel_IOFactory::load($file);
-		
+
 		$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
-		
+
 		if (is_array($sheetData) && count($sheetData)) {
 			$entete = array_shift($sheetData);
-			
+
 			if (count($sheetData)) {
 				log::add('veolia_eau', 'debug', count($sheetData).' data lines');
-				
+				$row=0;
 				foreach ($sheetData as $line) {
 					$dateTemp = explode('/', $line['A']);
 					$date = $dateTemp[2].'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT);
 					$index = $line['B'];
 					$conso = $line['C'];
 					$typeReleve = $line['D'];
+
+					if ($date>$lastdate) {
+                        $cmd = $this->getCmd(null, 'index');
+
+                        if (is_object($cmd)) {
+                            $cmd->setCollectDate($date);
+                            $cmd->event($index);
+                        }
 					
-					$cmd = $this->getCmd(null, 'index');
+                        $cmd = $this->getCmd(null, 'conso');
+					
+                        if (is_object($cmd)) {
+                            $cmd->setCollectDate($date);
+                            $cmd->event($conso);
+                        }
+					
+                        $cmd = $this->getCmd(null, 'typeReleve');
 			
-					if (is_object($cmd)) {
-						$cmd->setCollectDate($date);
-						$cmd->event($index);
-					}
-					
-					$cmd = $this->getCmd(null, 'conso');
-					
-					if (is_object($cmd)) {
-						$cmd->setCollectDate($date);
-						$cmd->event($conso);
-					}
-					
-					$cmd = $this->getCmd(null, 'typeReleve');
-			
-					if (is_object($cmd)) {
-						$cmd->setCollectDate($date);
-						$cmd->event($typeReleve);
-					}				
+                        if (is_object($cmd)) {
+                            $cmd->setCollectDate($date);
+                            $cmd->event($typeReleve);
+                        }
+                        $row++;
+                    }
 				}
+                log::add('veolia_eau', 'debug', $row.' new data lines');
 			} else {
 				log::add('veolia_eau', 'error', 'Aucune donnée, merci de vérifier que vos identifiants sont corrects et que vous avez accès au télérelevé Veolia');	
 			}
 		} else {
 			log::add('veolia_eau', 'debug', 'empty data');	
-		}		
-		
+		}
+		if (! empty($date)) {
+            $this->setConfiguration('last', $date);
+            $this->save(true);
+        }
 		@unlink($file);
 	}
 	
