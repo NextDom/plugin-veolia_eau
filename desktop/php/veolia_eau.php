@@ -74,6 +74,18 @@ $eqLogics = eqLogic::byType('veolia_eau');
 					</div>
 				</div>
                 <div class="form-group">
+                    <label class="col-sm-3 control-label">{{Website}}</label>
+                    <div class="col-sm-3">
+                        <select class="form-control configuration eqLogicAttr" data-l1key="configuration" data-l2key="website">
+                        <?php
+                            echo '<option value="1">Véolia</option>';
+                            echo '<option value="2">Véolia Méditerranée</option>';
+                            //echo '<option value="3">Service Eau du Grand Lyon</option>';
+                         ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="col-sm-3 control-label">{{Heure de relève}}</label>
                     <div class="col-sm-3">
                         <select class="form-control configuration eqLogicAttr" data-l1key="configuration" data-l2key="heure">
@@ -83,6 +95,12 @@ $eqLogics = eqLogic::byType('veolia_eau');
                         }
                         ?>
                         </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">{{Index de départ}}</label>
+                    <div class="col-sm-3">
+                        <input type="number" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="depart" placeholder="0123456789"/>
                     </div>
                 </div>
                 <div class="form-group">
