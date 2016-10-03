@@ -388,7 +388,7 @@ class veolia_eau extends eqLogic {
                 $info = str_replace("{", "", $info);
                 $info = str_replace("y:", "", $info);
                 $info = str_replace("label:", "", $info);
-                $info = str_replace("color:\"#c0bebf\",", $info);
+                $info = str_replace("color:\"#c0bebf\",", "", $info);
                 $info = str_replace("\"", "", $info);
                 $info = explode( "|", $info);
                 //log::add('veolia_eau', 'debug', print_r($data, true));
