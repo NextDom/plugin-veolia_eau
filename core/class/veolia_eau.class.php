@@ -148,6 +148,19 @@ class veolia_eau extends eqLogic {
 			$veolia_eauCmd->setIsHistorized(0);
 			$veolia_eauCmd->save();
 		}
+
+		$cmdlogic = veolia_eauCmd::byEqLogicIdAndLogicalId($this->getId(), 'dateReleve');
+		if (!is_object($cmdlogic)) {
+			$veolia_eauCmd = new veolia_eauCmd();
+			$veolia_eauCmd->setName(__('Date', __FILE__));
+			$veolia_eauCmd->setEqLogic_id($this->id);
+			$veolia_eauCmd->setLogicalId('dateReleve');
+			$veolia_eauCmd->setConfiguration('data', 'dateReleve');
+			$veolia_eauCmd->setType('info');
+			$veolia_eauCmd->setSubType('string');
+			$veolia_eauCmd->setIsHistorized(0);
+			$veolia_eauCmd->save();
+		}
     }
 
     /* fonction appelé pendant la séquence de sauvegarde avant l'insertion 
@@ -303,6 +316,13 @@ class veolia_eau extends eqLogic {
                         if (is_object($cmd)) {
                             $cmd->setCollectDate($date);
                             $cmd->event($typeReleve);
+                        }
+
+                        $cmd = $this->getCmd(null, 'dateReleve');
+
+                        if (is_object($cmd)) {
+                            $cmd->setCollectDate($date);
+                            $cmd->event($date);
                         }
                         $row++;
                     }
