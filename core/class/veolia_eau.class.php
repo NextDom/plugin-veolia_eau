@@ -148,6 +148,13 @@ class veolia_eau extends eqLogic {
 			$veolia_eauCmd->setIsHistorized(0);
 			$veolia_eauCmd->save();
 		}
+	if ($this->getIsEnable() == 1) {
+		if (!empty($this->getConfiguration('login')) && !empty($this->getConfiguration('password'))) {
+			$this->getConso();
+		} else {
+			log::add('veolia_eau', 'error', 'Identifiants non saisis');
+		}
+	}
     }
 
     /* fonction appelé pendant la séquence de sauvegarde avant l'insertion 
