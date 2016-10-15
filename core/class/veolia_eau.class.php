@@ -371,7 +371,14 @@ class veolia_eau extends eqLogic {
                                     $cmd->setCollectDate($date);
                                     $cmd->event($typeReleve);
                                 }
-                                $row++;
+
+								$cmd = $this->getCmd(null, 'dateReleve');
+
+                        		if (is_object($cmd)) {
+                            		$cmd->setCollectDate($date);
+                            		$cmd->event($date);
+                        		}
+								$row++;
                             }
                         }
                         log::add('veolia_eau', 'debug', $row.' new data lines');
