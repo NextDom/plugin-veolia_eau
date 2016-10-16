@@ -195,20 +195,7 @@ class veolia_eau extends eqLogic {
 		$cookie_file = sys_get_temp_dir().'/veolia_php_cookies_'.uniqid();
 		static::secure_touch($cookie_file);
 		
-        $website = $this->getConfiguration('website');
-        if (empty($website)) $website=1;
-        switch ($website) {
-            case 1:
-                $url_login = 'https://www.service-client.veoliaeau.fr/home.loginAction.do';
-                $url_consommation = 'https://www.service-client.veoliaeau.fr/home/espace-client/votre-consommation.html?vueConso=releves';
-                $url_releve_csv = 'https://www.service-client.veoliaeau.fr/home/espace-client/votre-consommation.exportConsommationData.do?vueConso=releves';
-                $datas = array(
-                    'veolia_username='.urlencode($this->getConfiguration('login')),
-                    'veolia_password='.urlencode($this->getConfiguration('password')),
-                    'login=OK',
-                );
-                $extension='.xls';
-                break;
+        switch (intval($this->getConfiguration('website'))) {            
             case 2:
                 $url_login = 'https://www.eau-services.com/default.aspx';
                 // on ne peux avoir le csv que de deux jours en arrière
@@ -231,6 +218,7 @@ class veolia_eau extends eqLogic {
                 );
                 $extension='.csv';
                 break;
+				
             case 3:
                 $url_login = 'https://agence.eaudugrandlyon.com/default.aspx';
                 $url_consommation = 'https://agence.eaudugrandlyon.com/mon-espace-suivi-personnalise.aspx';
@@ -242,7 +230,20 @@ class veolia_eau extends eqLogic {
                 );
                 $extension='.csv';
                 break;
+			
+			case 1:
+			default:
+                $url_login = 'https://www.service-client.veoliaeau.fr/home.loginAction.do';
+                $url_consommation = 'https://www.service-client.veoliaeau.fr/home/espace-client/votre-consommation.html?vueConso=releves';
+                $url_releve_csv = 'https://www.service-client.veoliaeau.fr/home/espace-client/votre-consommation.exportConsommationData.do?vueConso=releves';
+                $datas = array(
+                    'veolia_username='.urlencode($this->getConfiguration('login')),
+                    'veolia_password='.urlencode($this->getConfiguration('password')),
+                    'login=OK',
+                );
+                $extension='.xls';
         }
+		
 		$headers = array(
 			"Accept: */*",
 			"Connection: Keep-Alive",
@@ -319,69 +320,14 @@ class veolia_eau extends eqLogic {
 		} else {
 			log::add('veolia_eau', 'error', 'error on creating file "'.$data_file.'"');
 		}	
+		
 		curl_close($ch);
 		@unlink($cookie_file);
 	}
 	
 	public function traiteConso($file, $htm_file) {
 
-        $website = $this->getConfiguration('website');
-        if (empty($website)) $website=1;
-        switch ($website) {
-            case 1:
-                log::add('veolia_eau', 'debug', '### TRAITE CONSO XLS '.$website.' ###');
-                $lastdate = $this->getConfiguration('last');
-                require_once dirname(__FILE__).'/../../3rparty/PHPExcel/Classes/PHPExcel/IOFactory.php';
-
-                $objPHPExcel = PHPExcel_IOFactory::load($file);
-
-                $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
-
-                if (is_array($sheetData) && count($sheetData)) {
-                    $entete = array_shift($sheetData);
-
-                    if (count($sheetData)) {
-                        log::add('veolia_eau', 'debug', count($sheetData).' data lines');
-                        $row=0;
-                        foreach ($sheetData as $line) {
-                            $dateTemp = explode('/', $line['A']);
-                            $date = $dateTemp[2].'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT);
-                            $index = $line['B'];
-                            $conso = $line['C'];
-                            $typeReleve = $line['D'];
-
-                            if ($date>$lastdate) {
-                                $cmd = $this->getCmd(null, 'index');
-
-                                if (is_object($cmd)) {
-                                    $cmd->setCollectDate($date);
-                                    $cmd->event($index);
-                                }
-
-                                $cmd = $this->getCmd(null, 'conso');
-
-                                if (is_object($cmd)) {
-                                    $cmd->setCollectDate($date);
-                                    $cmd->event($conso);
-                                }
-
-                                $cmd = $this->getCmd(null, 'typeReleve');
-
-                                if (is_object($cmd)) {
-                                    $cmd->setCollectDate($date);
-                                    $cmd->event($typeReleve);
-                                }
-                                $row++;
-                            }
-                        }
-                        log::add('veolia_eau', 'debug', $row.' new data lines');
-                    } else {
-                        log::add('veolia_eau', 'error', 'Aucune donnée, merci de vérifier que vos identifiants sont corrects et que vous avez accès au télérelevé Veolia');	
-                    }
-                } else {
-                    log::add('veolia_eau', 'debug', 'empty data');	
-                }
-                break;
+        switch (intval($this->getConfiguration('website'))) {             
             case 2:
                 log::add('veolia_eau', 'debug', '### TRAITE CONSO CSV '.$website.' ###');
                 $depart = $this->getConfiguration('depart');
@@ -495,18 +441,84 @@ class veolia_eau extends eqLogic {
                     log::add('veolia_eau', 'debug', $row.' new data lines');
                 }*/
                 break;
+				
             case 3:
                 log::add('veolia_eau', 'debug', '### TRAITE CONSO CSV '.$website.' ###');
                 break;
+			
+			case 1:
+			default:
+                log::add('veolia_eau', 'debug', '### TRAITE CONSO XLS '.$website.' ###');
+                $lastdate = $this->getConfiguration('last');
+                require_once dirname(__FILE__).'/../../3rparty/PHPExcel/Classes/PHPExcel/IOFactory.php';
+
+                $objPHPExcel = PHPExcel_IOFactory::load($file);
+
+                $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
+
+                if (is_array($sheetData) && count($sheetData)) {
+                    $entete = array_shift($sheetData);
+
+                    if (count($sheetData)) {
+                        log::add('veolia_eau', 'debug', count($sheetData).' data lines');
+                        $row=0;
+                        foreach ($sheetData as $line) {
+                            $dateTemp = explode('/', $line['A']);
+                            $date = $dateTemp[2].'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT);
+                            $index = $line['B'];
+                            $conso = $line['C'];
+                            $typeReleve = $line['D'];
+
+                            if ($date>$lastdate) {
+                                $cmd = $this->getCmd(null, 'index');
+
+                                if (is_object($cmd)) {
+                                    $cmd->setCollectDate($date);
+                                    $cmd->event($index);
+                                }
+
+                                $cmd = $this->getCmd(null, 'conso');
+
+                                if (is_object($cmd)) {
+                                    $cmd->setCollectDate($date);
+                                    $cmd->event($conso);
+                                }
+
+                                $cmd = $this->getCmd(null, 'typeReleve');
+
+                                if (is_object($cmd)) {
+                                    $cmd->setCollectDate($date);
+                                    $cmd->event($typeReleve);
+                                }
+
+								$cmd = $this->getCmd(null, 'dateReleve');
+
+								if (is_object($cmd)) {
+									$cmd->setCollectDate($date);
+									$cmd->event($date);
+								}
+                                $row++;
+                            }
+                        }
+                        log::add('veolia_eau', 'debug', $row.' new data lines');
+                    } else {
+                        log::add('veolia_eau', 'error', 'Aucune donnée, merci de vérifier que vos identifiants sont corrects et que vous avez accès au télérelevé Veolia');	
+                    }
+                } else {
+                    log::add('veolia_eau', 'debug', 'empty data');	
+                }
         }
+		
         if (! empty($compteur)) {
             $this->setConfiguration('compteur', $compteur);
             $this->save(true);
         }
+		
 		if (! empty($date)) {
             $this->setConfiguration('last', $date);
             $this->save(true);
         }
+		
 		@unlink($file);
 		@unlink($htm_file);
 	}
