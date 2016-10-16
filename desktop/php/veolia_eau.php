@@ -78,8 +78,8 @@ $eqLogics = eqLogic::byType('veolia_eau');
                     <div class="col-sm-3">
                         <select class="form-control configuration eqLogicAttr" data-l1key="configuration" data-l2key="website">
                         <?php
-                            echo '<option value="1">Véolia</option>';
-                            echo '<option value="2">Véolia Méditerranée</option>';
+                            echo '<option value="1">Veolia</option>';
+                            echo '<option value="2">Veolia Méditerranée</option>';
                             //echo '<option value="3">Service Eau du Grand Lyon</option>';
                          ?>
                         </select>
