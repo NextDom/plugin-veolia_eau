@@ -74,15 +74,27 @@ $eqLogics = eqLogic::byType('veolia_eau');
 					</div>
 				</div>
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">{{Website}}</label>
+                    <label class="col-sm-3 control-label">{{Service}}</label>
                     <div class="col-sm-3">
-                        <select class="form-control configuration eqLogicAttr" data-l1key="configuration" data-l2key="website">
+                        <select class="form-control configuration eqLogicAttr" id="configuration_website" data-l1key="configuration" data-l2key="website">
                         <?php
                             echo '<option value="1">Veolia</option>';
                             echo '<option value="2">Veolia Méditerranée</option>';
                             //echo '<option value="3">Service Eau du Grand Lyon</option>';
                          ?>
                         </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">{{Identifiant}}</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="login" placeholder="Identifiant"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">{{Mot de passe}}</label>
+                    <div class="col-sm-3">
+                        <input type="password" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="password" placeholder="Mot de passe"/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -97,22 +109,10 @@ $eqLogics = eqLogic::byType('veolia_eau');
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="group-configuration-depart">
                     <label class="col-sm-3 control-label">{{Index de départ}}</label>
                     <div class="col-sm-3">
                         <input type="number" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="depart" placeholder="0123456789"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">{{Identifiant}}</label>
-                    <div class="col-sm-3">
-                        <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="login" placeholder="Identifiant"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">{{Mot de passe}}</label>
-                    <div class="col-sm-3">
-                        <input type="password" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="password" placeholder="Mot de passe"/>
                     </div>
                 </div>
             </fieldset>

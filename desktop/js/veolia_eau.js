@@ -197,3 +197,14 @@ function updateDisplayPlugin(_callback) {
         }
     });
 }
+
+//Infos selon service
+$('#configuration_website').change(function(){
+	if($(this).val() == 2){
+		$('#group-configuration-depart').show()
+	} else {
+		$('#group-configuration-depart').hide()	
+	}
+});
+
+
