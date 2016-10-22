@@ -334,23 +334,23 @@ class veolia_eau extends eqLogic {
                 $compteur = $this->getConfiguration('compteur');
                 $lastdate=$this->getConfiguration('last');
                 $row=0;
-		// -- format des data a decoder (y en litres)
-	        // dataPoints: [
-		//  {y: 306, label: "01/10/2016"}
-		//  ,
-		//  {y: 602, label: "02/10/2016"}
-		//  ]	
-                // -- Exception a gerer:
-		// dataPoints: [
-		//  {y: 0, color:"#c0bebf", label: "Non mesurée"},
-		//  {y: 0, color:"#c0bebf", label: "Non mesurée"},
-		//  {y: 0, color:"#c0bebf", label: "Non mesurée"}
-		// ]				  
-		// --
-		// String cible: "306,01/10/2016,602,02/10/2016"
-		// --
-		// String en cas de non mesuree: "0,Nonmesurée,0,Nonmesurée,0,Nonmesurée"
-		// --
+				// -- format des data a decoder (y en litres)
+					// dataPoints: [
+				//  {y: 306, label: "01/10/2016"}
+				//  ,
+				//  {y: 602, label: "02/10/2016"}
+				//  ]	
+						// -- Exception a gerer:
+				// dataPoints: [
+				//  {y: 0, color:"#c0bebf", label: "Non mesurée"},
+				//  {y: 0, color:"#c0bebf", label: "Non mesurée"},
+				//  {y: 0, color:"#c0bebf", label: "Non mesurée"}
+				// ]				  
+				// --
+				// String cible: "306,01/10/2016,602,02/10/2016"
+				// --
+				// String en cas de non mesuree: "0,Nonmesurée,0,Nonmesurée,0,Nonmesurée"
+				// --
                 $html = file_get_contents($htm_file);
                 $info = explode("dataPoints: [", $html,2);
                 $info = explode("]", $info[1], 2);
@@ -368,74 +368,76 @@ class veolia_eau extends eqLogic {
                 $info = str_replace("\"", "", $info);
                 $info = explode( "|", $info);
                 //log::add('veolia_eau', 'debug', print_r($data, true));
+				
                 foreach ($info as $data) {
                     //log::add('veolia_eau', 'debug', print_r($data, true));
                     $data = explode(",", $data);
 		    
-                    // gerer le cas  "Non mesurée"
-	            // {y: 0, color:"#c0bebf", label: "Non mesurée"}
-		    // l espace a ete enleve par le str_replace(" ", "", $info[0]);
+					// gerer le cas  "Non mesurée"
+					// {y: 0, color:"#c0bebf", label: "Non mesurée"}
+					// l espace a ete enleve par le str_replace(" ", "", $info[0]);
 
-                    if ($data[1]=="Nonmesurée") { 
-                        log::add('veolia_eau', 'debug', 'valeur non mesurée');
-                        break;
-                    }
-		    
-                    $dateTemp = explode('/', $data[1]);
+					if ($data[1]=="Nonmesurée") { 
+						log::add('veolia_eau', 'debug', 'valeur non mesurée');
+						break;
+					}
+				
+					$dateTemp = explode('/', $data[1]);
 
-		    // verifier s il y a bien 2 /
-		    if(count($dateTemp)!=3) {
-                      log::add('veolia_eau', 'debug', 'date invalide - impossible de trouver 2 / :'.$data[1]);
-		      break;		         
-		    }
+					// verifier s il y a bien 2 /
+					if(count($dateTemp)!=3) {
+						log::add('veolia_eau', 'debug', 'date invalide - impossible de trouver 2 / :'.$data[1]);
+						break;		         
+					}
 
-		    // verifie si la date est valide
-                    if(!checkdate($dateTemp[1],$dateTemp[0],$dateTemp[2]))
-                    {
-                      log::add('veolia_eau', 'debug', 'date invalide:'.$data[1]);
-		      break;
-                    }
+					// verifie si la date est valide
+					if(!checkdate($dateTemp[1],$dateTemp[0],$dateTemp[2])){
+						log::add('veolia_eau', 'debug', 'date invalide:'.$data[1]);
+						break;
+					}
 
-		    // transform d/m/yyyy to yyy-mm-dd with leading 0
-                    $date = $dateTemp[2].'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT);
-                    //$index = 0;
-                    $conso = $data[0];
-                    $typeReleve = 'M';
-                    if ($date>$lastdate) {
-                        $compteur+=$conso;
-                        $index = $depart + $compteur;
-                        log::add('veolia_eau', 'debug', $date.' '.$conso.' '.$typeReleve.' '.$compteur.' '.$index);
+					// transform d/m/yyyy to yyy-mm-dd with leading 0
+					$date = $dateTemp[2].'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT);
+					//$index = 0;
+					$conso = $data[0];
+					$typeReleve = 'M';
+					
+					if ($date>$lastdate) {
+						$compteur+=$conso;
+						$index = $depart + $compteur;
+						log::add('veolia_eau', 'debug', $date.' '.$conso.' '.$typeReleve.' '.$compteur.' '.$index);
 
-                        $cmd = $this->getCmd(null, 'index');
+						$cmd = $this->getCmd(null, 'index');
 
-                        if (is_object($cmd)) {
-                            $cmd->setCollectDate($date);
-                            $cmd->event($index);
-                        }
+						if (is_object($cmd)) {
+							$cmd->setCollectDate($date);
+							$cmd->event($index);
+						}
 
-                        $cmd = $this->getCmd(null, 'conso');
+						$cmd = $this->getCmd(null, 'conso');
 
-                        if (is_object($cmd)) {
-                            $cmd->setCollectDate($date);
-                            $cmd->event($conso);
-                        }
+						if (is_object($cmd)) {
+							$cmd->setCollectDate($date);
+							$cmd->event($conso);
+						}
 
-                        $cmd = $this->getCmd(null, 'typeReleve');
+						$cmd = $this->getCmd(null, 'typeReleve');
 
-                        if (is_object($cmd)) {
-                            $cmd->setCollectDate($date);
-                            $cmd->event($typeReleve);
-                        }
+						if (is_object($cmd)) {
+							$cmd->setCollectDate($date);
+							$cmd->event($typeReleve);
+						}
 
-                        $cmd = $this->getCmd(null, 'dateReleve');
+						$cmd = $this->getCmd(null, 'dateReleve');
 
-                        if (is_object($cmd)) {
-                            $cmd->setCollectDate($date);
-                            $cmd->event($date);
-                        }
-                        $row++;
-                    }
-                }
+						if (is_object($cmd)) {
+							$cmd->setCollectDate($date);
+							$cmd->event($date);
+						}
+						$row++;
+					}
+				}
+				
                 log::add('veolia_eau', 'debug', $row.' new data lines');
 
                 /*
