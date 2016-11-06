@@ -204,7 +204,7 @@ class veolia_eau extends eqLogic {
                 // ex=mm/YYYY
                 // mm=mm/YYYY
                 // d=dd moins deux jours
-                $releve = mktime(0, 0, 0, date("m")  , date("d")-2, date("Y"));
+                $releve = mktime(0, 0, 0, date("m")  , date("d")-3, date("Y"));
                 $month = date('m/Y',$releve);
                 $day = date('d',$releve);
                 log::add('veolia_eau', 'debug',  $month.' '.$day);
@@ -376,23 +376,33 @@ class veolia_eau extends eqLogic {
 					// gerer le cas  "Non mesurée"
 					// {y: 0, color:"#c0bebf", label: "Non mesurée"}
 					// l espace a ete enleve par le str_replace(" ", "", $info[0]);
-
-					if ($data[1]=="Nonmesurée") { 
-						log::add('veolia_eau', 'debug', 'valeur non mesurée');
-						break;
+					if ($data[1]=="Nonmesurée") {
+					  log::add('veolia_eau', 'debug', 'valeur non mesurée');
+					  // verification que la donnee non mesuree ne se produit pas le dernier jour du mois, dans ce cas elle est perdu et ne sera pas ajoute le lendemain
+					  $nm_currentreleve = mktime(0, 0, 0, date("m")  , date("d")-3, date("Y"));
+					  $nm_month = date('m/Y',$nm_currentreleve);
+					  $nm_nextreleve = mktime(0, 0, 0, date("m")  , date("d")-2, date("Y"));
+					  $nm_nextmonth = date('m/Y',$nm_nextreleve);
+					  if ($nm_month != $nm_nextmonth) {
+					    log::add('veolia_eau', 'error', 'valeur non mesurée en fin de mois: la mesure sera perdu demain, il faut la recuperer avant minuit ou ensuite a la main et corriger la valeur dans history ainsi que la valeur compteur dans eqLogic');
+					    // TODO: gerer ce cas automatiquement
+					  }
+					  break;
 					}
+
 				
 					$dateTemp = explode('/', $data[1]);
 
-					// verifier s il y a bien 2 /
+					// Recuperation d autres cas potentiel ou ce champ ne serait pas une date pour eviter de fausser le compteur
+					// verifie s il y a bien 2 slash
 					if(count($dateTemp)!=3) {
-						log::add('veolia_eau', 'debug', 'date invalide - impossible de trouver 2 / :'.$data[1]);
+						log::add('veolia_eau', 'error', 'date invalide - impossible de trouver 2 slash :'.$data[1]);
 						break;		         
 					}
 
 					// verifie si la date est valide
 					if(!checkdate($dateTemp[1],$dateTemp[0],$dateTemp[2])){
-						log::add('veolia_eau', 'debug', 'date invalide:'.$data[1]);
+						log::add('veolia_eau', 'error', 'date invalide:'.$data[1]);
 						break;
 					}
 
