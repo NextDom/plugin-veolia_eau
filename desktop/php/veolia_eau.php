@@ -115,6 +115,29 @@ $eqLogics = eqLogic::byType('veolia_eau');
                         <input type="number" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="depart" placeholder="0123456789"/>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">{{Max Journalier}}</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="maxday" placeholder="Max Journalier"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">{{Max mensuel}}</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="maxmonth" placeholder="Max mensuel"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">{{Commande Alerte}}</label>
+                    <div class="col-sm-3">
+                        <div class="input-group">
+                            <input type="text"  class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="alert" />
+                            <span class="input-group-btn">
+                            <a class="btn btn-default cursor" title="Rechercher une commande" id="bt_selectAlertCmd"><i class="fa fa-list-alt"></i></a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </fieldset>
         </form>
 		
