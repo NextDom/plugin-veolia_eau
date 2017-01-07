@@ -327,7 +327,7 @@ class veolia_eau extends eqLogic {
 
 	public function traiteConso($file, $htm_file) {
 
-        $consomonth = 0;
+        $consomonth = [];
         $alert = str_replace('#','',$this->getConfiguration('alert'));
         log::add('veolia_eau', 'debug', 'alert: '. $alert);
 
@@ -414,7 +414,7 @@ class veolia_eau extends eqLogic {
 					$date = $dateTemp[2].'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT);
 					//$index = 0;
 					$conso = $data[0];
-					$consomonth += $conso;
+					$consomonth[] = $conso;
 					$typeReleve = 'M';
 
 					if ($date>$lastdate) {
@@ -525,7 +525,7 @@ class veolia_eau extends eqLogic {
                             $date = $dateTemp[2].'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT);
                             $index = $line['B'];
                             $conso = $line['C'];
-			    			$consomonth += $conso;
+			    			$consomonth[] = $conso;
                             $typeReleve = $line['D'];
 
                             if ($date>$lastdate) {
@@ -570,7 +570,8 @@ class veolia_eau extends eqLogic {
 
         $maxday = $this->getConfiguration('maxday');
         $maxmonth = $this->getConfiguration('maxmonth');
-        if ($conso >= $maxday && $alert != '') {
+
+        if (!empty($maxday) && $conso >= $maxday && $alert != '') {
             $cmdalerte = cmd::byId($alert);
             $options['title'] = "Alerte Conso Eau";
             $options['message'] = "Conso journalière du ".$date. ": ".$conso." litres";
@@ -578,7 +579,8 @@ class veolia_eau extends eqLogic {
             $cmdalerte->execCmd($options);
         }
 
-        if ($consomonth >= $maxmonth && $alert != '') {
+        $consomonth = array_sum(array_slice($consomonth, -30));
+        if (!empty($maxmonth) && $consomonth >= $maxmonth && $alert != '') {
             $cmdalerte = cmd::byId($alert);
             $options['title'] = "Alerte Conso Eau";
             $options['message'] = "Conso mensuelle: ".$consomonth." litres";
@@ -586,12 +588,12 @@ class veolia_eau extends eqLogic {
             $cmdalerte->execCmd($options);
         }
 
-        if (! empty($compteur)) {
+        if (!empty($compteur)) {
             $this->setConfiguration('compteur', $compteur);
             $this->save(true);
         }
 
-		if (! empty($date)) {
+		if (!empty($date)) {
             $this->setConfiguration('last', $date);
             $this->save(true);
         }
