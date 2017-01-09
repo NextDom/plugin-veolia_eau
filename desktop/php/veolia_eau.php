@@ -81,6 +81,7 @@ $eqLogics = eqLogic::byType('veolia_eau');
                             echo '<option value="1">Veolia</option>';
                             echo '<option value="2">Veolia Méditerranée</option>';
                             //echo '<option value="3">Service Eau du Grand Lyon</option>';
+							echo '<option value="4">Tout sur mon eau</option>';
                          ?>
                         </select>
                     </div>
@@ -113,6 +114,12 @@ $eqLogics = eqLogic::byType('veolia_eau');
                     <label class="col-sm-3 control-label">{{Index de départ}}</label>
                     <div class="col-sm-3">
                         <input type="number" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="depart" placeholder="0123456789"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">{{N° Compteur}}</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="numerocompteur" placeholder="N° Compteur indispensable pour toutsurmoneau.fr 123456789"/>
                     </div>
                 </div>
 
