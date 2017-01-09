@@ -34,7 +34,7 @@ class veolia_eau extends eqLogic {
     public static function cronHourly() {
       
 		foreach (eqLogic::byType('veolia_eau', true) as $veolia_eau) {
-          $veolia_eau->getConso();/*
+          
             $heure_releve = intval($veolia_eau->getConfiguration('heure'));
             if ($heure_releve > 23) $heure_releve = 6;
             log::add('veolia_eau', 'debug', 'heure de relève: '.$heure_releve);
@@ -48,7 +48,7 @@ class veolia_eau extends eqLogic {
 					}
 				}
 			}
-            */
+            
 		}
         
       
