@@ -232,20 +232,16 @@ class veolia_eau extends eqLogic {
                 break;
 
            case 4:
-
-            $url_login = "https://www.eau-en-ligne.com/security/signin";
-            $url_consommation = "https://www.eau-en-ligne.com/ma-consommation/DetailConsoExcel";
-            $url_releve_csv = "https://www.eau-en-ligne.com/ma-consommation/DetailConsoExcel";
-
-            $datas = array(
-            'signin[username]='.urlencode($this->getConfiguration('login')),
-            'signin[password]='.urlencode($this->getConfiguration('password')),
-            'x=47&y=19',
-            );
-
-            $extension='.xls';
-
-            break;
+                $url_login = "https://www.eau-en-ligne.com/security/signin";
+                $url_consommation = "https://www.eau-en-ligne.com/ma-consommation/DetailConsoExcel";
+                $url_releve_csv = "https://www.eau-en-ligne.com/ma-consommation/DetailConsoExcel";
+                $datas = array(
+                    'signin[username]='.urlencode($this->getConfiguration('login')),
+                    'signin[password]='.urlencode($this->getConfiguration('password')),
+                    'x=47&y=19',
+                );
+                $extension='.xls';
+                break;
 
 			case 1:
 			default:
@@ -519,16 +515,15 @@ class veolia_eau extends eqLogic {
             case 3:
                 log::add('veolia_eau', 'debug', '### TRAITE CONSO CSV '.$website.' ###');
                 break;
-                
-             case 4:
-            	
+
+            case 4:
                 $lastdate = $this->getConfiguration('last');
                 require_once dirname(__FILE__).'/../../3rparty/PHPExcel/Classes/PHPExcel/IOFactory.php';
 
                 $objPHPExcel = PHPExcel_IOFactory::load($file);
 
                 $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
-            
+
                 log::add('veolia_eau', 'debug', '### TRAITE CONSO XLS TOUT SUR MON EAU '.$website.' ### '.$lastdate);
 
                 if (is_array($sheetData) && count($sheetData)) {
@@ -537,18 +532,18 @@ class veolia_eau extends eqLogic {
                     if (count($sheetData)) {
                         log::add('veolia_eau', 'debug', count($sheetData).' data lines');
                         $row=0;
+
                         foreach ($sheetData as $line) {
-                          
                             $conso = $line['B']*1000;
-                          
-                            if ($conso == 0) continue;                          
-                          
+
+                            if ($conso == 0) continue;
+
                             $dateTemp = explode('-', $line['A']);
                             $date = $dateTemp[2].'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT);
-                            $index = $line['C'];
+                            $index = $line['C'] * 1000;
 			    			$consomonth[] = $conso;
                             $typeReleve = '';
-                          
+
                             if ($date>$lastdate && $conso > 0 ) {
                                 $cmd = $this->getCmd(null, 'index');
 
@@ -562,7 +557,7 @@ class veolia_eau extends eqLogic {
                                 if (is_object($cmd)) {
                                     $cmd->setCollectDate($date);
                                     $cmd->event($conso);
-                                  
+
                                   log::add('veolia_eau', 'debug', 'D'.$date.' C'.$conso);
                                 }
 
@@ -589,7 +584,7 @@ class veolia_eau extends eqLogic {
                 } else {
                     log::add('veolia_eau', 'debug', 'empty data');
                 }
-             
+
             break;
 
 			case 1:
