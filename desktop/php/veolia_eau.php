@@ -81,6 +81,7 @@ $eqLogics = eqLogic::byType('veolia_eau');
                             echo '<option value="1">Veolia</option>';
                             echo '<option value="2">Veolia Méditerranée</option>';
                             //echo '<option value="3">Service Eau du Grand Lyon</option>';
+                            echo '<option value="4">Tout sur mon eau / Eau en ligne</option>';
                          ?>
                         </select>
                     </div>
