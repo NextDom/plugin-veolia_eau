@@ -231,6 +231,22 @@ class veolia_eau extends eqLogic {
                 $extension='.csv';
                 break;
 
+           case 4:
+
+            $url_login = "https://www.eau-en-ligne.com/security/signin";
+            $url_consommation = "https://www.eau-en-ligne.com/ma-consommation/DetailConsoExcel";
+            $url_releve_csv = "https://www.eau-en-ligne.com/ma-consommation/DetailConsoExcel";
+
+            $datas = array(
+            'signin[username]='.urlencode($this->getConfiguration('login')),
+            'signin[password]='.urlencode($this->getConfiguration('password')),
+            'x=47&y=19',
+            );
+
+            $extension='.xls';
+
+            break;
+
 			case 1:
 			default:
                 $url_login = 'https://www.service-client.veoliaeau.fr/home.loginAction.do';
@@ -503,6 +519,78 @@ class veolia_eau extends eqLogic {
             case 3:
                 log::add('veolia_eau', 'debug', '### TRAITE CONSO CSV '.$website.' ###');
                 break;
+                
+             case 4:
+            	
+                $lastdate = $this->getConfiguration('last');
+                require_once dirname(__FILE__).'/../../3rparty/PHPExcel/Classes/PHPExcel/IOFactory.php';
+
+                $objPHPExcel = PHPExcel_IOFactory::load($file);
+
+                $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
+            
+                log::add('veolia_eau', 'debug', '### TRAITE CONSO XLS TOUT SUR MON EAU '.$website.' ### '.$lastdate);
+
+                if (is_array($sheetData) && count($sheetData)) {
+                    $entete = array_shift($sheetData);
+
+                    if (count($sheetData)) {
+                        log::add('veolia_eau', 'debug', count($sheetData).' data lines');
+                        $row=0;
+                        foreach ($sheetData as $line) {
+                          
+                            $conso = $line['B']*1000;
+                          
+                            if ($conso == 0) continue;                          
+                          
+                            $dateTemp = explode('-', $line['A']);
+                            $date = $dateTemp[2].'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT);
+                            $index = $line['C'];
+			    			$consomonth[] = $conso;
+                            $typeReleve = '';
+                          
+                            if ($date>$lastdate && $conso > 0 ) {
+                                $cmd = $this->getCmd(null, 'index');
+
+                                if (is_object($cmd) && $index > 0 ) {
+                                    $cmd->setCollectDate($date);
+                                    $cmd->event($index);
+                                }
+
+                                $cmd = $this->getCmd(null, 'conso');
+
+                                if (is_object($cmd)) {
+                                    $cmd->setCollectDate($date);
+                                    $cmd->event($conso);
+                                  
+                                  log::add('veolia_eau', 'debug', 'D'.$date.' C'.$conso);
+                                }
+
+                                $cmd = $this->getCmd(null, 'typeReleve');
+
+                                if (is_object($cmd)) {
+                                    $cmd->setCollectDate($date);
+                                    $cmd->event($typeReleve);
+                                }
+
+								$cmd = $this->getCmd(null, 'dateReleve');
+
+								if (is_object($cmd)) {
+									$cmd->setCollectDate($date);
+									$cmd->event($date);
+								}
+                                $row++;
+                            }
+                        }
+                        log::add('veolia_eau', 'debug', $row.' new data lines');
+                    } else {
+                        log::add('veolia_eau', 'error', 'Aucune donnée, merci de vérifier que vos identifiants sont corrects et que vous avez accès au télérelevé Veolia');
+                    }
+                } else {
+                    log::add('veolia_eau', 'debug', 'empty data');
+                }
+             
+            break;
 
 			case 1:
 			default:
