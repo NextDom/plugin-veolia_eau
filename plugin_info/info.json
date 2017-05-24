@@ -1,0 +1,10 @@
+{
+	"id" : "veolia_eau",
+	"name" : "Veolia eau",
+	"description" : "Plugin pour retrouver le télé-relevé Veolia eau",
+  "icon" : "icon nature-drops1",
+	"licence" : "AGPL",
+	"author" : "Damien Virlouvet",
+	"require" : "2.2",
+	"category" : "monitoring"
+}
