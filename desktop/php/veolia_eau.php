@@ -2,8 +2,9 @@
 if (!isConnect('admin')) {
     throw new Exception('{{401 - Accès non autorisé}}');
 }
-sendVarToJS('eqType', 'veolia_eau');
-$eqLogics = eqLogic::byType('veolia_eau');
+$plugin = plugin::byId('veolia_eau');
+sendVarToJS('eqType', $plugin->getId());
+$eqLogics = eqLogic::byType($plugin->getId());
 ?>
 
 <div class="row row-overflow">
