@@ -39,37 +39,37 @@ function addCmdToTable(_cmd) {
     if (!isset(_cmd.configuration)) {
         _cmd.configuration = {};
     }
-    
+
 	var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
-    
+
 	tr += '<td>';
     tr += 	'<span class="cmdAttr" data-l1key="id"></span>';
     tr += '</td>';
-    
+
 	tr += '<td>';
     tr += 	'<input class="cmdAttr form-control input-sm" data-l1key="name" style="width : 140px;" placeholder="{{Nom}}">';
     tr += '</td>';
-	
+
     tr += '<td>';
     tr += 	'<input class="cmdAttr form-control type input-sm" data-l1key="type" value="info" disabled style="margin-bottom : 5px;" />';
     tr += 	'<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
     tr += '</td>';
-    
+
 	tr += '<td>';
-    tr += 	'<span><input type="checkbox" class="cmdAttr bootstrapSwitch" data-size="mini" data-label-text="{{Historiser}}" data-l1key="isHistorized"/></span> ';
-    tr += 	'<span><input type="checkbox" class="cmdAttr bootstrapSwitch" data-size="mini" data-label-text="{{Afficher}}" data-l1key="isVisible" checked/></span> ';
+    tr += 	'<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isVisible" checked/>{{Afficher}}</label></span> ';
+    tr += 	'<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span> ';
     tr += 	'<input class="cmdAttr form-control tooltips input-sm" data-l1key="unite" style="width:100px;" placeholder="Unité"/>';
 	tr += '</td>';
-	
+
 	tr += '<td>';
 	if (is_numeric(_cmd.id)) {
         tr += '<a class="btn btn-default btn-xs cmdAction expertModeVisible" data-action="configure"><i class="fa fa-cogs"></i></a> ';
         tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fa fa-rss"></i> {{Tester}}</a>';
     }
-    tr += '</td>'; 
-	
+    tr += '</td>';
+
 	tr += '</tr>';
-    
+
 	$('#table_cmd tbody').append(tr);
     $('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
     if (isset(_cmd.type)) {
@@ -82,10 +82,10 @@ function addCmdToTable(_cmd) {
  * _data: les détails des informations à sauvegardé
  */
 function displayEqLogic(_data) {
-    
+
 }
 
-/* Fonction appelé pour mettre l'affichage à jour de la sidebar et du container 
+/* Fonction appelé pour mettre l'affichage à jour de la sidebar et du container
  * en asynchrone, est appelé en début d'affichage de page, au moment de la sauvegarde,
  * de la suppression, de la création
  * _callback: obligatoire, permet d'appeler une fonction en fin de traitement
@@ -209,7 +209,7 @@ $('#configuration_website').change(function(){
 	if($(this).val() == 2){
 		$('#group-configuration-depart').show()
 	} else {
-		$('#group-configuration-depart').hide()	
+		$('#group-configuration-depart').hide()
 	}
 });
 
