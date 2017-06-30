@@ -1,6 +1,9 @@
 === Configuration du plugin
 
-Vous devez renseigner les identifiants Veolia utilisés pour vous connecter au site https://www.service-client.veoliaeau.fr 
+Vous devez renseigner les identifiants utilisés pour vous connecter votre site
+* Veolia Eau: https://www.service-client.veoliaeau.fr
+* Veolia Méditerranée: https://www.eau-services.com
+* Tout sur mon eau / Eau en ligne: https://www.eau-en-ligne.com
 
 Le "Service Télé relevé" doit être activé chez Veolia (Vous pouvez le faire depuis le site Internet dans la rubrique "Vos contrats" si votre compteur d'eau le permet).
 
