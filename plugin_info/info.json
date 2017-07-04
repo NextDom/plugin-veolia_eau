@@ -1,0 +1,11 @@
+{
+	"id" : "veolia_eau",
+	"name" : "Veolia eau",
+	"licence" : "AGPL",
+	"author" : "Damien Virlouvet",
+	"require" : "2.2",
+	"category" : "monitoring",
+	"hasDependency" : false,
+	"hasOwnDeamon" : false,
+	"maxDependancyInstallTime" : 0
+}
