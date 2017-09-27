@@ -19,6 +19,13 @@
 /******************************* Includes *******************************/
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
+if (!function_exists('mb_strtolower')) { 
+  function mb_strtolower ($string, $encoding) {
+	return strtolower($string);
+  } 
+} 
+
+
 class veolia_eau extends eqLogic {
     /******************************* Attributs *******************************/
     /* Ajouter ici toutes vos variables propre à votre classe */
