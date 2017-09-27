@@ -597,7 +597,10 @@ class veolia_eau extends eqLogic {
 			case 1:
 			default:
                 log::add('veolia_eau', 'debug', '### TRAITE CONSO XLS '.$website.' ###');
-                $lastdate = $this->getConfiguration('last');
+                $lastdate = $this->getConfiguration('last');				
+				
+				log::add('veolia_eau', 'debug', 'lastdate: '.$lastdate);
+				
                 require_once dirname(__FILE__).'/../../3rparty/PHPExcel/Classes/PHPExcel/IOFactory.php';
 
                 $objPHPExcel = PHPExcel_IOFactory::load($file);
@@ -617,8 +620,13 @@ class veolia_eau extends eqLogic {
                             $conso = $line['C'];
 			    			$consomonth[] = $conso;
                             $typeReleve = $line['D'];
+							log::add('veolia_eau', 'debug', 'line infos:');
+							log::add('veolia_eau', 'debug', 'date: '.$date);
+							log::add('veolia_eau', 'debug', 'index: '.$index);
+							log::add('veolia_eau', 'debug', 'conso: '.$conso);
 
                             if ($date>$lastdate) {
+								log::add('veolia_eau', 'debug', 'date > lastdate');
                                 $cmd = $this->getCmd(null, 'index');
 
                                 if (is_object($cmd)) {
@@ -647,7 +655,9 @@ class veolia_eau extends eqLogic {
 									$cmd->event($date);
 								}
                                 $row++;
-                            }
+                            } else {
+								log::add('veolia_eau', 'debug', 'date <= lastdate');
+							}
                         }
                         log::add('veolia_eau', 'debug', $row.' new data lines');
                     } else {
