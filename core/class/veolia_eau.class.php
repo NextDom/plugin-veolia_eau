@@ -630,25 +630,25 @@ class veolia_eau extends eqLogic {
                                 $cmd = $this->getCmd(null, 'index');
 
                                 if (is_object($cmd)) {
-									$cmd->addHistoryValue($index, $date);
+									$cmd->event($index, $date);
                                 }
 
                                 $cmd = $this->getCmd(null, 'conso');
 
                                 if (is_object($cmd)) {
-									$cmd->addHistoryValue($conso, $date);
+									$cmd->event($conso, $date);
                                 }
 
                                 $cmd = $this->getCmd(null, 'typeReleve');
 
                                 if (is_object($cmd)) {
-									$cmd->addHistoryValue($typeReleve, $date);
+									$cmd->event($typeReleve, $date);
                                 }
 
 								$cmd = $this->getCmd(null, 'dateReleve');
 
 								if (is_object($cmd)) {
-									$cmd->addHistoryValue($date, $date);
+									$cmd->event($date, $date);
 								}
                                 $row++;
                             } else {
