@@ -1,0 +1,6 @@
+[panel,primary]
+.2017-10-18
+--
+Création du changelog
+Mise à jour de la documentation
+--
