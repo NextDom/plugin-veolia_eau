@@ -1,5 +1,3 @@
-=== Configuration du plugin
-
 Vous devez renseigner les identifiants utilisés pour vous connecter votre site
 - Veolia Eau: https://www.service-client.veoliaeau.fr
 - Veolia Méditerranée: https://www.eau-services.com
