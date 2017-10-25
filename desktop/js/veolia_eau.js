@@ -78,4 +78,13 @@ function addCmdToTable(_cmd) {
     jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
 }
 
+-//Infos selon service
+ $('#configuration_website').change(function(){
+ 	if($(this).val() == 2){
+ 		$('#group-configuration-depart').show()
+ 	} else {
+ 		$('#group-configuration-depart').hide()
+ 	}
+ });
+
 $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
