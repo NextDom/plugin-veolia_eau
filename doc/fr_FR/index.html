@@ -415,18 +415,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table des matières</div>
 <ul class="sectlevel1">
-<li><a href="#_description">1. Description</a>
-<ul class="sectlevel2">
-<li><a href="#_veolia_eau">1.1. Veolia eau</a></li>
-</ul>
-</li>
-<li><a href="#_configuration">2. Configuration</a>
-<ul class="sectlevel2">
-<li><a href="#_configuration_du_plugin">2.1. Configuration du plugin</a></li>
-</ul>
-</li>
+<li><a href="#_description">1. Description</a></li>
+<li><a href="#_configuration">2. Configuration</a></li>
 <li><a href="#_faq">3. FAQ</a></li>
 <li><a href="#_troubleshoting">4. Troubleshoting</a></li>
+<li><a href="#_changelog">5. Changelog</a></li>
 </ul>
 </div>
 </div>
@@ -434,25 +427,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_description">1. Description</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_veolia_eau">1.1. Veolia eau</h3>
 <div class="paragraph">
 <p>Ce plugin permet de récupérer le télé-relevé disponible sur les sites Internet de Veolia Eau / Veolia Méditerranée / Tout sur mon eau / Eau en ligne</p>
 </div>
 <hr>
 </div>
 </div>
-</div>
 <div class="sect1">
 <h2 id="_configuration">2. Configuration</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_configuration_du_plugin">2.1. Configuration du plugin</h3>
 <div class="paragraph">
 <p>Vous devez renseigner les identifiants utilisés pour vous connecter votre site
-* Veolia Eau: <a href="https://www.service-client.veoliaeau.fr" class="bare">https://www.service-client.veoliaeau.fr</a>
-* Veolia Méditerranée: <a href="https://www.eau-services.com" class="bare">https://www.eau-services.com</a>
-* Tout sur mon eau / Eau en ligne: <a href="https://www.eau-en-ligne.com" class="bare">https://www.eau-en-ligne.com</a></p>
+- Veolia Eau: <a href="https://www.service-client.veoliaeau.fr" class="bare">https://www.service-client.veoliaeau.fr</a>
+- Veolia Méditerranée: <a href="https://www.eau-services.com" class="bare">https://www.eau-services.com</a>
+- Tout sur mon eau / Eau en ligne: <a href="https://www.eau-en-ligne.com" class="bare">https://www.eau-en-ligne.com</a></p>
 </div>
 <div class="paragraph">
 <p>Le "Service Télé relevé" doit être activé chez Veolia (Vous pouvez le faire depuis le site Internet dans la rubrique "Vos contrats" si votre compteur d&#8217;eau le permet).</p>
@@ -461,7 +449,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Votre consommation d&#8217;eau sera récupérée chaque jour.</p>
 </div>
 <hr>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -498,6 +485,31 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="title">Même après plusieurs jours, je n&#8217;ai aucun relevé</div><div class="content">
 <div class="paragraph">
 <p>Vérifiez que vos identifiants de connexion sont corrects et que vous avez accès au télé-relevé</p>
+</div>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_changelog">5. Changelog</h2>
+<div class="sectionbody">
+<div class="openblock panel">
+<div class="title">2017-10-25</div><div class="content">
+<div class="paragraph">
+<p>Correction de la date de relevé
+Enregistrement de toutes les dates, même déjà enregistrées (mise à jour des valeurs)
+Correction de la page qui liste les compteur pour griser les compteurs inactifs
+Possibilité de trier les commande par glisser-déposer
+Refactoring et simplification du code</p>
+</div>
+</div>
+</div>
+<div class="openblock panel">
+<div class="title">2017-10-18</div><div class="content">
+<div class="paragraph">
+<p>Création du changelog
+Mise à jour de la documentation</p>
 </div>
 </div>
 </div>

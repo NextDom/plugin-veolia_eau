@@ -19,6 +19,13 @@
 /******************************* Includes *******************************/
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
+if (!function_exists('mb_strtolower')) {
+  function mb_strtolower ($string, $encoding) {
+	return strtolower($string);
+  }
+}
+
+
 class veolia_eau extends eqLogic {
     /******************************* Attributs *******************************/
     /* Ajouter ici toutes vos variables propre à votre classe */
@@ -27,8 +34,18 @@ class veolia_eau extends eqLogic {
 
 
     // Fonction exécutée automatiquement toutes les minutes par Jeedom
-    /*public static function cron() {
-    }*/
+    // public static function cron() {
+    //     foreach (eqLogic::byType('veolia_eau', true) as $veolia_eau) {
+	// 			if ($veolia_eau->getIsEnable() == 1) {
+	// 				if (!empty($veolia_eau->getConfiguration('login')) && !empty($veolia_eau->getConfiguration('password'))) {
+	// 					$veolia_eau->getConso();
+    //                     log::add('veolia_eau', 'debug', 'done... ');
+	// 				} else {
+	// 					log::add('veolia_eau', 'error', 'Identifiants non saisis');
+	// 				}
+	// 			}
+	// 	}
+    // }
 
     // Fonction exécutée automatiquement toutes les heures par Jeedom
     public static function cronHourly() {
@@ -340,6 +357,8 @@ class veolia_eau extends eqLogic {
 	public function traiteConso($file, $htm_file) {
 
         $consomonth = [];
+        $datasFetched = [];
+
         $alert = str_replace('#','',$this->getConfiguration('alert'));
         log::add('veolia_eau', 'debug', 'alert: '. $alert);
 
@@ -348,8 +367,6 @@ class veolia_eau extends eqLogic {
                 log::add('veolia_eau', 'debug', '### TRAITE CONSO CSV '.$website.' ###');
                 $depart = $this->getConfiguration('depart');
                 $compteur = $this->getConfiguration('compteur');
-                $lastdate=$this->getConfiguration('last');
-                $row=0;
 				// -- format des data a decoder (y en litres)
 					// dataPoints: [
 				//  {y: 306, label: "01/10/2016"}
@@ -429,87 +446,18 @@ class veolia_eau extends eqLogic {
 					$consomonth[] = $conso;
 					$typeReleve = 'M';
 
-					if ($date>$lastdate) {
-						$compteur+=$conso;
-						$index = $depart + $compteur;
-						log::add('veolia_eau', 'debug', $date.' '.$conso.' '.$typeReleve.' '.$compteur.' '.$index);
+					$compteur += $conso;
+					$index = $depart + $compteur;
+					log::add('veolia_eau', 'debug', $date.' '.$conso.' '.$typeReleve.' '.$compteur.' '.$index);
 
-						$cmd = $this->getCmd(null, 'index');
-
-						if (is_object($cmd)) {
-							$cmd->setCollectDate($date);
-							$cmd->event($index);
-						}
-
-						$cmd = $this->getCmd(null, 'conso');
-
-						if (is_object($cmd)) {
-							$cmd->setCollectDate($date);
-							$cmd->event($conso);
-						}
-
-						$cmd = $this->getCmd(null, 'typeReleve');
-
-						if (is_object($cmd)) {
-							$cmd->setCollectDate($date);
-							$cmd->event($typeReleve);
-						}
-
-						$cmd = $this->getCmd(null, 'dateReleve');
-
-						if (is_object($cmd)) {
-							$cmd->setCollectDate($date);
-							$cmd->event($date);
-						}
-						$row++;
-					}
+                    $datasFetched[] = array(
+                        'date' => $date,
+                        'index' => $index,
+                        'conso' => $conso,
+                        'typeReleve' => $typeReleve
+                    );
 				}
 
-                log::add('veolia_eau', 'debug', $row.' new data lines');
-
-                /*
-                if (($handle = fopen($file, "r")) !== FALSE) {
-                    $lastdate=$this->getConfiguration('last');
-                    // on passe la première ligne
-                    $data = fgetcsv($handle, 1000, ";");
-                    $row=0;
-                    while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
-                        $dateTemp = explode('/', $data['0']);
-                        $date = $dateTemp[2].'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT);
-                        //$index = 0;
-                        $conso = $data['1'];
-                        $typeReleve = 'M';
-                        if ($date>$lastdate) {
-                            $compteur+=$conso;
-                            $index = $depart + $compteur;
-                            log::add('veolia_eau', 'debug', $date.' '.$conso.' '.$typeReleve.' '.$compteur.' '.$index);
-
-                            $cmd = $this->getCmd(null, 'index');
-
-                            if (is_object($cmd)) {
-                                $cmd->setCollectDate($date);
-                                $cmd->event($index);
-                            }
-
-                            $cmd = $this->getCmd(null, 'conso');
-
-                            if (is_object($cmd)) {
-                                $cmd->setCollectDate($date);
-                                $cmd->event($conso);
-                            }
-
-                            $cmd = $this->getCmd(null, 'typeReleve');
-
-                            if (is_object($cmd)) {
-                                $cmd->setCollectDate($date);
-                                $cmd->event($typeReleve);
-                            }
-                            $row++;
-                        }
-                    }
-                    fclose($handle);
-                    log::add('veolia_eau', 'debug', $row.' new data lines');
-                }*/
                 break;
 
             case 3:
@@ -517,7 +465,6 @@ class veolia_eau extends eqLogic {
                 break;
 
             case 4:
-                $lastdate = $this->getConfiguration('last');
                 require_once dirname(__FILE__).'/../../3rparty/PHPExcel/Classes/PHPExcel/IOFactory.php';
 
                 $objPHPExcel = PHPExcel_IOFactory::load($file);
@@ -531,7 +478,6 @@ class veolia_eau extends eqLogic {
 
                     if (count($sheetData)) {
                         log::add('veolia_eau', 'debug', count($sheetData).' data lines');
-                        $row=0;
 
                         foreach ($sheetData as $line) {
                             $conso = $line['B']*1000;
@@ -544,40 +490,13 @@ class veolia_eau extends eqLogic {
 			    			$consomonth[] = $conso;
                             $typeReleve = '';
 
-                            if ($date>$lastdate && $conso > 0 ) {
-                                $cmd = $this->getCmd(null, 'index');
-
-                                if (is_object($cmd) && $index > 0 ) {
-                                    $cmd->setCollectDate($date);
-                                    $cmd->event($index);
-                                }
-
-                                $cmd = $this->getCmd(null, 'conso');
-
-                                if (is_object($cmd)) {
-                                    $cmd->setCollectDate($date);
-                                    $cmd->event($conso);
-
-                                  log::add('veolia_eau', 'debug', 'D'.$date.' C'.$conso);
-                                }
-
-                                $cmd = $this->getCmd(null, 'typeReleve');
-
-                                if (is_object($cmd)) {
-                                    $cmd->setCollectDate($date);
-                                    $cmd->event($typeReleve);
-                                }
-
-								$cmd = $this->getCmd(null, 'dateReleve');
-
-								if (is_object($cmd)) {
-									$cmd->setCollectDate($date);
-									$cmd->event($date);
-								}
-                                $row++;
-                            }
+                            $datasFetched[] = array(
+                                'date' => $date,
+                                'index' => $index,
+                                'conso' => $conso,
+                                'typeReleve' => $typeReleve
+                            );
                         }
-                        log::add('veolia_eau', 'debug', $row.' new data lines');
                     } else {
                         log::add('veolia_eau', 'error', 'Aucune donnée, merci de vérifier que vos identifiants sont corrects et que vous avez accès au télérelevé Veolia');
                     }
@@ -590,7 +509,7 @@ class veolia_eau extends eqLogic {
 			case 1:
 			default:
                 log::add('veolia_eau', 'debug', '### TRAITE CONSO XLS '.$website.' ###');
-                $lastdate = $this->getConfiguration('last');
+
                 require_once dirname(__FILE__).'/../../3rparty/PHPExcel/Classes/PHPExcel/IOFactory.php';
 
                 $objPHPExcel = PHPExcel_IOFactory::load($file);
@@ -602,7 +521,7 @@ class veolia_eau extends eqLogic {
 
                     if (count($sheetData)) {
                         log::add('veolia_eau', 'debug', count($sheetData).' data lines');
-                        $row=0;
+
                         foreach ($sheetData as $line) {
                             $dateTemp = explode('/', $line['A']);
                             $date = $dateTemp[2].'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT);
@@ -611,44 +530,49 @@ class veolia_eau extends eqLogic {
 			    			$consomonth[] = $conso;
                             $typeReleve = $line['D'];
 
-                            if ($date>$lastdate) {
-                                $cmd = $this->getCmd(null, 'index');
-
-                                if (is_object($cmd)) {
-                                    $cmd->setCollectDate($date);
-                                    $cmd->event($index);
-                                }
-
-                                $cmd = $this->getCmd(null, 'conso');
-
-                                if (is_object($cmd)) {
-                                    $cmd->setCollectDate($date);
-                                    $cmd->event($conso);
-                                }
-
-                                $cmd = $this->getCmd(null, 'typeReleve');
-
-                                if (is_object($cmd)) {
-                                    $cmd->setCollectDate($date);
-                                    $cmd->event($typeReleve);
-                                }
-
-								$cmd = $this->getCmd(null, 'dateReleve');
-
-								if (is_object($cmd)) {
-									$cmd->setCollectDate($date);
-									$cmd->event($date);
-								}
-                                $row++;
-                            }
+                            $datasFetched[] = array(
+                                'date' => $date,
+                                'index' => $index,
+                                'conso' => $conso,
+                                'typeReleve' => $typeReleve
+                            );
                         }
-                        log::add('veolia_eau', 'debug', $row.' new data lines');
                     } else {
                         log::add('veolia_eau', 'error', 'Aucune donnée, merci de vérifier que vos identifiants sont corrects et que vous avez accès au télérelevé Veolia');
                     }
                 } else {
                     log::add('veolia_eau', 'debug', 'empty data');
                 }
+        }
+
+        foreach ($datasFetched as $data) {
+            log::add('veolia_eau', 'debug', 'Date: '.$data['date'].' / Index: '.$data['index'].' / Conso: '.$data['conso'].' / Type de relevé: '.$data['typeReleve']);
+
+            if ($data['index'] > 0 ) {
+                $cmd = $this->getCmd(null, 'index');
+
+                if (is_object($cmd)) {
+                    $cmd->event($data['index'], $data['date']);
+                }
+
+                $cmd = $this->getCmd(null, 'conso');
+
+                if (is_object($cmd)) {
+                    $cmd->event($data['conso'], $data['date']);
+                }
+
+                $cmd = $this->getCmd(null, 'typeReleve');
+
+                if (is_object($cmd)) {
+                    $cmd->event($data['typeReleve'], $data['date']);
+                }
+
+                $cmd = $this->getCmd(null, 'dateReleve');
+
+                if (is_object($cmd)) {
+                    $cmd->event($data['date'], $data['date']);
+                }
+            }
         }
 
         $maxday = $this->getConfiguration('maxday');
@@ -673,11 +597,6 @@ class veolia_eau extends eqLogic {
 
         if (!empty($compteur)) {
             $this->setConfiguration('compteur', $compteur);
-            $this->save(true);
-        }
-
-		if (!empty($date)) {
-            $this->setConfiguration('last', $date);
             $this->save(true);
         }
 
