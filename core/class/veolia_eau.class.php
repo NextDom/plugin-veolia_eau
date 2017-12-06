@@ -249,13 +249,16 @@ class veolia_eau extends eqLogic {
                 break;
 
            case 4:
-                $url_login = "https://www.eau-en-ligne.com/security/signin";
-                $url_consommation = "https://www.eau-en-ligne.com/ma-consommation/DetailConsoExcel";
-                $url_releve_csv = "https://www.eau-en-ligne.com/ma-consommation/DetailConsoExcel";
+                $month = date('m');
+                $year = date('Y');
+                // le rôle de cet id est inconnu mais son absence rend impossible la récupération du fichier
+                $fakeId = '0123456789';
+                $url_login = "https://www.toutsurmoneau.fr/mon-compte-en-ligne/je-me-connecte";
+                $url_consommation = "https://www.toutsurmoneau.fr/mon-compte-en-ligne/historique-de-consommation";
+                $url_releve_csv = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/exporter-consommation/day/'.$fakeId.'/'.$year.'/'.$month';
                 $datas = array(
-                    'signin[username]='.urlencode($this->getConfiguration('login')),
-                    'signin[password]='.urlencode($this->getConfiguration('password')),
-                    'x=47&y=19',
+                    '_username='.urlencode($this->getConfiguration('login')),
+                    '_password='.urlencode($this->getConfiguration('password'))
                 );
                 $extension='.xls';
                 break;
@@ -484,7 +487,7 @@ class veolia_eau extends eqLogic {
 
                             if ($conso == 0)
                             {
-                                log::add('veolia_eau', 'debug', 'La ligne '.($index + 1).' a une valeur nulle ou incorrecte');
+                                log::add('veolia_eau', 'debug', 'La ligne '.($index + 1).' a une valeur nulle');
                                 continue;
                             }
 
