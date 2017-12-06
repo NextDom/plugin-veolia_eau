@@ -289,7 +289,7 @@ class veolia_eau extends eqLogic {
 		curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_file);
 		curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file);
 		curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0");
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, FALSE);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 
@@ -477,12 +477,16 @@ class veolia_eau extends eqLogic {
                     $entete = array_shift($sheetData);
 
                     if (count($sheetData)) {
-                        log::add('veolia_eau', 'debug', count($sheetData).' data lines');
+                        log::add('veolia_eau', 'debug', count($sheetData).' lignes trouvées dans le fichier.');
 
-                        foreach ($sheetData as $line) {
+                        foreach ($sheetData as $index => $line) {
                             $conso = $line['B']*1000;
 
-                            if ($conso == 0) continue;
+                            if ($conso == 0)
+                            {
+                                log::add('veolia_eau', 'debug', 'La ligne '.($index + 1).' a une valeur nulle ou incorrecte');
+                                continue;
+                            }
 
                             $dateTemp = explode('-', $line['A']);
                             $date = $dateTemp[2].'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT);
@@ -497,6 +501,7 @@ class veolia_eau extends eqLogic {
                                 'typeReleve' => $typeReleve
                             );
                         }
+                        log::add('veolia_eau', 'debug', count($datasFetched).' lignes trouvées avec une consommation > 0');
                     } else {
                         log::add('veolia_eau', 'error', 'Aucune donnée, merci de vérifier que vos identifiants sont corrects et que vous avez accès au télérelevé Veolia');
                     }
