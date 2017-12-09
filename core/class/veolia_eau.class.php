@@ -253,9 +253,9 @@ class veolia_eau extends eqLogic {
                 $year = date('Y');
                 // le rôle de cet id est inconnu mais son absence rend impossible la récupération du fichier
                 $fakeId = '0123456789';
-                $url_login = "https://www.toutsurmoneau.fr/mon-compte-en-ligne/je-me-connecte";
-                $url_consommation = "https://www.toutsurmoneau.fr/mon-compte-en-ligne/historique-de-consommation";
-                $url_releve_csv = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/exporter-consommation/day/'.$fakeId.'/'.$year.'/'.$month';
+                $url_login = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/je-me-connecte';
+                $url_consommation = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/historique-de-consommation';
+                $url_releve_csv = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/exporter-consommation/day/'.$fakeId.'/'.$year.'/'.$month;
                 $datas = array(
                     '_username='.urlencode($this->getConfiguration('login')),
                     '_password='.urlencode($this->getConfiguration('password'))
