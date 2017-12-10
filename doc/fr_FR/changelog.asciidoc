@@ -1,4 +1,10 @@
 [panel,primary]
+.2017-12-10
+--
+Correction des URL pour toutsurmoneau
+--
+
+[panel,primary]
 .2017-12-06
 --
 Ajout de log de debug
