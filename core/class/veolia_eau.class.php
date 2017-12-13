@@ -34,18 +34,18 @@ class veolia_eau extends eqLogic {
 
 
     // Fonction exécutée automatiquement toutes les minutes par Jeedom
-    // public static function cron() {
-    //     foreach (eqLogic::byType('veolia_eau', true) as $veolia_eau) {
-	// 			if ($veolia_eau->getIsEnable() == 1) {
-	// 				if (!empty($veolia_eau->getConfiguration('login')) && !empty($veolia_eau->getConfiguration('password'))) {
-	// 					$veolia_eau->getConso();
-    //                     log::add('veolia_eau', 'debug', 'done... ');
-	// 				} else {
-	// 					log::add('veolia_eau', 'error', 'Identifiants non saisis');
-	// 				}
-	// 			}
-	// 	}
-    // }
+//     public static function cron() {
+//         foreach (eqLogic::byType('veolia_eau', true) as $veolia_eau) {
+//	 			if ($veolia_eau->getIsEnable() == 1) {
+//	 				if (!empty($veolia_eau->getConfiguration('login')) && !empty($veolia_eau->getConfiguration('password'))) {
+//	 					$veolia_eau->getConso();
+//                         log::add('veolia_eau', 'debug', 'done... ');
+//	 				} else {
+//	 					log::add('veolia_eau', 'error', 'Identifiants non saisis');
+//	 				}
+//	 			}
+//	 	}
+//     }
 
     // Fonction exécutée automatiquement toutes les heures par Jeedom
     public static function cronHourly() {
@@ -265,6 +265,7 @@ class veolia_eau extends eqLogic {
 
 			case 1:
 			default:
+                $url_home = 'https://www.service-client.veoliaeau.fr/connexion-espace-client.html';
                 $url_login = 'https://www.service-client.veoliaeau.fr/home.loginAction.do';
                 $url_consommation = 'https://www.service-client.veoliaeau.fr/home/espace-client/votre-consommation.html?vueConso=releves';
                 $url_releve_csv = 'https://www.service-client.veoliaeau.fr/home/espace-client/votre-consommation.exportConsommationData.do?vueConso=releves';
@@ -295,6 +296,29 @@ class veolia_eau extends eqLogic {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+
+		// besoin de récupérer le token généré par Veolia
+		if ($url_home) {
+            curl_setopt($ch, CURLOPT_URL, $url_home);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $response = curl_exec($ch);
+            $info = curl_getinfo($ch);
+
+            log::add('veolia_eau', 'debug', '### GET HOME PAGE ON '.$url_home.' ###');
+            log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
+            log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
+
+            require_once dirname(__FILE__).'/../../3rparty/SimpleHtmlParser/simple_html_dom.php';
+
+            $html = str_get_html($response);
+            $ret = $html->find('input[name=token]', 0);
+
+            log::add('veolia_eau', 'debug', 'Token value: '.$ret->value);
+
+            if ($ret->value !== '') {
+                array_push($datas, "token=".$ret->value);
+            }
+        }
 
 		curl_setopt($ch, CURLOPT_URL, $url_login);
 		curl_setopt($ch, CURLOPT_POST, TRUE);
