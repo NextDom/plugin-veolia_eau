@@ -211,7 +211,6 @@ class veolia_eau extends eqLogic {
 	public function getConso() {
 		$cookie_file = sys_get_temp_dir().'/veolia_php_cookies_'.uniqid();
 		static::secure_touch($cookie_file);
-        $isTokenRequired = false;
         switch (intval($this->getConfiguration('website'))) {
             case 2:
                 $url_login = 'https://www.eau-services.com/default.aspx';
