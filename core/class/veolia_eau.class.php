@@ -303,7 +303,7 @@ class veolia_eau extends eqLogic {
 		$response = curl_exec($ch);
 		$info = curl_getinfo($ch);
 
-		log::add('veolia_eau', 'debug', '### LOGIN ###');
+		log::add('veolia_eau', 'debug', '### LOGIN ON '.$url_login.' ###');
 		log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
 		log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 
@@ -320,7 +320,7 @@ class veolia_eau extends eqLogic {
             $response = curl_exec($ch);
             $info = curl_getinfo($ch);
 
-            log::add('veolia_eau', 'debug', '### GO TO CONSOMMATION PAGE ###');
+            log::add('veolia_eau', 'debug', '### GO TO CONSOMMATION ON '.$url_consommation.' ###');
             log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
             log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
             fclose($fp);
@@ -341,7 +341,7 @@ class veolia_eau extends eqLogic {
 			$response = curl_exec($ch);
 			$info = curl_getinfo($ch);
 
-			log::add('veolia_eau', 'debug', '### GET DATAFILE ###');
+			log::add('veolia_eau', 'debug', '### GET DATAFILE ON '.$url_releve_csv.' ###');
 			log::add('veolia_eau', 'debug', 'response length : '.strlen($response));
 			log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 
