@@ -211,7 +211,6 @@ class veolia_eau extends eqLogic {
 	public function getConso() {
 		$cookie_file = sys_get_temp_dir().'/veolia_php_cookies_'.uniqid();
 		static::secure_touch($cookie_file);
-
         switch (intval($this->getConfiguration('website'))) {
             case 2:
                 $url_login = 'https://www.eau-services.com/default.aspx';
@@ -253,6 +252,8 @@ class veolia_eau extends eqLogic {
                 $year = date('Y');
                 // le rôle de cet id est inconnu mais son absence rend impossible la récupération du fichier
                 $fakeId = '0123456789';
+                $url_token = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/je-me-connecte';
+                $tokenFieldName = '_csrf_token';
                 $url_login = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/je-me-connecte';
                 $url_consommation = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/historique-de-consommation';
                 $url_releve_csv = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/exporter-consommation/day/'.$fakeId.'/'.$year.'/'.$month;
@@ -265,7 +266,8 @@ class veolia_eau extends eqLogic {
 
 			case 1:
 			default:
-                $url_home = 'https://www.service-client.veoliaeau.fr/connexion-espace-client.html';
+                $url_token = 'https://www.service-client.veoliaeau.fr/connexion-espace-client.html';
+                $tokenFieldName = 'token';
                 $url_login = 'https://www.service-client.veoliaeau.fr/home.loginAction.do';
                 $url_consommation = 'https://www.service-client.veoliaeau.fr/home/espace-client/votre-consommation.html?vueConso=releves';
                 $url_releve_csv = 'https://www.service-client.veoliaeau.fr/home/espace-client/votre-consommation.exportConsommationData.do?vueConso=releves';
@@ -298,20 +300,21 @@ class veolia_eau extends eqLogic {
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 
 		// besoin de récupérer le token généré par Veolia
-		if ($url_home) {
-            curl_setopt($ch, CURLOPT_URL, $url_home);
+		if ($url_token) {
+            curl_setopt($ch, CURLOPT_URL, $url_token);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             $response = curl_exec($ch);
             $info = curl_getinfo($ch);
 
-            log::add('veolia_eau', 'debug', '### GET HOME PAGE ON '.$url_home.' ###');
+            log::add('veolia_eau', 'debug', '### GET HOME PAGE ON '.$url_token.' ###');
             log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
             log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 
             require_once dirname(__FILE__).'/../../3rparty/SimpleHtmlParser/simple_html_dom.php';
 
             $html = str_get_html($response);
-            $ret = $html->find('input[name=token]', 0);
+            $inputName = 'input[name='.$tokenFieldName.']';
+            $ret = $html->find($inputName, 0);
 
             log::add('veolia_eau', 'debug', 'Token value: '.$ret->value);
 
