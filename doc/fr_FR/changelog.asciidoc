@@ -1,4 +1,23 @@
 [panel,primary]
+.2017-12-14
+--
+Correction de la récupération des données pour toutsurmoneau (Ajout du token pour le login)
+--
+
+[panel,primary]
+.2017-12-13
+--
+Ajout de log de debug
+Correction de la récupération des données pour Veolia (Ajout du token pour le login)
+--
+
+[panel,primary]
+.2017-12-10
+--
+Correction des URL pour toutsurmoneau
+--
+
+[panel,primary]
 .2017-12-06
 --
 Ajout de log de debug

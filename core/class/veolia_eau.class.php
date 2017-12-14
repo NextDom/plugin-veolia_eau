@@ -34,18 +34,18 @@ class veolia_eau extends eqLogic {
 
 
     // Fonction exécutée automatiquement toutes les minutes par Jeedom
-    // public static function cron() {
-    //     foreach (eqLogic::byType('veolia_eau', true) as $veolia_eau) {
-	// 			if ($veolia_eau->getIsEnable() == 1) {
-	// 				if (!empty($veolia_eau->getConfiguration('login')) && !empty($veolia_eau->getConfiguration('password'))) {
-	// 					$veolia_eau->getConso();
-    //                     log::add('veolia_eau', 'debug', 'done... ');
-	// 				} else {
-	// 					log::add('veolia_eau', 'error', 'Identifiants non saisis');
-	// 				}
-	// 			}
-	// 	}
-    // }
+//     public static function cron() {
+//         foreach (eqLogic::byType('veolia_eau', true) as $veolia_eau) {
+//	 			if ($veolia_eau->getIsEnable() == 1) {
+//	 				if (!empty($veolia_eau->getConfiguration('login')) && !empty($veolia_eau->getConfiguration('password'))) {
+//	 					$veolia_eau->getConso();
+//                         log::add('veolia_eau', 'debug', 'done... ');
+//	 				} else {
+//	 					log::add('veolia_eau', 'error', 'Identifiants non saisis');
+//	 				}
+//	 			}
+//	 	}
+//     }
 
     // Fonction exécutée automatiquement toutes les heures par Jeedom
     public static function cronHourly() {
@@ -211,7 +211,6 @@ class veolia_eau extends eqLogic {
 	public function getConso() {
 		$cookie_file = sys_get_temp_dir().'/veolia_php_cookies_'.uniqid();
 		static::secure_touch($cookie_file);
-
         switch (intval($this->getConfiguration('website'))) {
             case 2:
                 $url_login = 'https://www.eau-services.com/default.aspx';
@@ -249,19 +248,26 @@ class veolia_eau extends eqLogic {
                 break;
 
            case 4:
-                $url_login = "https://www.eau-en-ligne.com/security/signin";
-                $url_consommation = "https://www.eau-en-ligne.com/ma-consommation/DetailConsoExcel";
-                $url_releve_csv = "https://www.eau-en-ligne.com/ma-consommation/DetailConsoExcel";
+                $month = date('m');
+                $year = date('Y');
+                // le rôle de cet id est inconnu mais son absence rend impossible la récupération du fichier
+                $fakeId = '0123456789';
+                $url_token = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/je-me-connecte';
+                $tokenFieldName = '_csrf_token';
+                $url_login = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/je-me-connecte';
+                $url_consommation = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/historique-de-consommation';
+                $url_releve_csv = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/exporter-consommation/day/'.$fakeId.'/'.$year.'/'.$month;
                 $datas = array(
-                    'signin[username]='.urlencode($this->getConfiguration('login')),
-                    'signin[password]='.urlencode($this->getConfiguration('password')),
-                    'x=47&y=19',
+                    '_username='.urlencode($this->getConfiguration('login')),
+                    '_password='.urlencode($this->getConfiguration('password'))
                 );
                 $extension='.xls';
                 break;
 
 			case 1:
 			default:
+                $url_token = 'https://www.service-client.veoliaeau.fr/connexion-espace-client.html';
+                $tokenFieldName = 'token';
                 $url_login = 'https://www.service-client.veoliaeau.fr/home.loginAction.do';
                 $url_consommation = 'https://www.service-client.veoliaeau.fr/home/espace-client/votre-consommation.html?vueConso=releves';
                 $url_releve_csv = 'https://www.service-client.veoliaeau.fr/home/espace-client/votre-consommation.exportConsommationData.do?vueConso=releves';
@@ -293,6 +299,30 @@ class veolia_eau extends eqLogic {
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 
+		// besoin de récupérer le token généré par Veolia
+		if ($url_token) {
+            curl_setopt($ch, CURLOPT_URL, $url_token);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $response = curl_exec($ch);
+            $info = curl_getinfo($ch);
+
+            log::add('veolia_eau', 'debug', '### GET HOME PAGE ON '.$url_token.' ###');
+            log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
+            log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
+
+            require_once dirname(__FILE__).'/../../3rparty/SimpleHtmlParser/simple_html_dom.php';
+
+            $html = str_get_html($response);
+            $inputName = 'input[name='.$tokenFieldName.']';
+            $ret = $html->find($inputName, 0);
+
+            log::add('veolia_eau', 'debug', 'Token value: '.$ret->value);
+
+            if ($ret->value !== '') {
+                array_push($datas, "token=".$ret->value);
+            }
+        }
+
 		curl_setopt($ch, CURLOPT_URL, $url_login);
 		curl_setopt($ch, CURLOPT_POST, TRUE);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, implode('&', $datas));
@@ -300,7 +330,7 @@ class veolia_eau extends eqLogic {
 		$response = curl_exec($ch);
 		$info = curl_getinfo($ch);
 
-		log::add('veolia_eau', 'debug', '### LOGIN ###');
+		log::add('veolia_eau', 'debug', '### LOGIN ON '.$url_login.' ###');
 		log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
 		log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 
@@ -317,7 +347,7 @@ class veolia_eau extends eqLogic {
             $response = curl_exec($ch);
             $info = curl_getinfo($ch);
 
-            log::add('veolia_eau', 'debug', '### GO TO CONSOMMATION PAGE ###');
+            log::add('veolia_eau', 'debug', '### GO TO CONSOMMATION ON '.$url_consommation.' ###');
             log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
             log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
             fclose($fp);
@@ -338,7 +368,7 @@ class veolia_eau extends eqLogic {
 			$response = curl_exec($ch);
 			$info = curl_getinfo($ch);
 
-			log::add('veolia_eau', 'debug', '### GET DATAFILE ###');
+			log::add('veolia_eau', 'debug', '### GET DATAFILE ON '.$url_releve_csv.' ###');
 			log::add('veolia_eau', 'debug', 'response length : '.strlen($response));
 			log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 
@@ -484,7 +514,7 @@ class veolia_eau extends eqLogic {
 
                             if ($conso == 0)
                             {
-                                log::add('veolia_eau', 'debug', 'La ligne '.($index + 1).' a une valeur nulle ou incorrecte');
+                                log::add('veolia_eau', 'debug', 'La ligne '.($index + 1).' a une valeur nulle');
                                 continue;
                             }
 
