@@ -211,7 +211,7 @@ class veolia_eau extends eqLogic {
 	public function getConso() {
 		$cookie_file = sys_get_temp_dir().'/veolia_php_cookies_'.uniqid();
 		static::secure_touch($cookie_file);
-
+		$getConsoInHtmlFile = true;
         switch (intval($this->getConfiguration('website'))) {
             case 2:
                 $url_login = 'https://www.eau-services.com/default.aspx';
@@ -249,13 +249,11 @@ class veolia_eau extends eqLogic {
                 break;
 
            case 4:
-                $month = date('m');
-                $year = date('Y');
-                // le rôle de cet id est inconnu mais son absence rend impossible la récupération du fichier
-                $fakeId = '0123456789';
+				$url_token = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/je-me-connecte';
+                $tokenFieldName = '_csrf_token';																		   											
                 $url_login = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/je-me-connecte';
                 $url_consommation = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/historique-de-consommation';
-                $url_releve_csv = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/exporter-consommation/day/'.$fakeId.'/'.$year.'/'.$month;
+				$getConsoInHtmlFile = false;
                 $datas = array(
                     '_username='.urlencode($this->getConfiguration('login')),
                     '_password='.urlencode($this->getConfiguration('password'))
@@ -265,6 +263,8 @@ class veolia_eau extends eqLogic {
 
 			case 1:
 			default:
+				$url_token = 'https://www.service-client.veoliaeau.fr/connexion-espace-client.html';
+                $tokenFieldName = 'token';																				
                 $url_login = 'https://www.service-client.veoliaeau.fr/home.loginAction.do';
                 $url_consommation = 'https://www.service-client.veoliaeau.fr/home/espace-client/votre-consommation.html?vueConso=releves';
                 $url_releve_csv = 'https://www.service-client.veoliaeau.fr/home/espace-client/votre-consommation.exportConsommationData.do?vueConso=releves';
@@ -292,56 +292,101 @@ class veolia_eau extends eqLogic {
 		curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_file);
 		curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file);
 		curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0");
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, FALSE);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 
+		// récupérer le token généré en cas de besoin
+		if ($url_token) {
+          	log::add('veolia_eau', 'debug', '### GET HOME PAGE ON '.$url_token.' ###');
+            curl_setopt($ch, CURLOPT_URL, $url_token);
+            $response = curl_exec($ch);
+            $info = curl_getinfo($ch);            
+            log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
+            log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
+
+          	log::add('veolia_eau', 'debug', 'Extracting token');
+            require_once dirname(__FILE__).'/../../3rparty/SimpleHtmlParser/simple_html_dom.php';
+            $html = str_get_html($response);
+            $inputName = 'input[name='.$tokenFieldName.']';
+            $ret = $html->find($inputName, 0);
+            log::add('veolia_eau', 'debug', 'Token value: '.$ret->value);
+
+            if ($ret->value !== '') {
+                array_push($datas, $tokenFieldName.'='.$ret->value);
+            }
+        }
+
+		log::add('veolia_eau', 'debug', '### LOGIN ON '.$url_login.' ###');																  
 		curl_setopt($ch, CURLOPT_URL, $url_login);
 		curl_setopt($ch, CURLOPT_POST, TRUE);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, implode('&', $datas));
-
 		$response = curl_exec($ch);
 		$info = curl_getinfo($ch);
-
-		log::add('veolia_eau', 'debug', '### LOGIN ###');
 		log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
 		log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 
-		$htm_file = sys_get_temp_dir().'/veolia_html_'.uniqid().'.htm';
-		static::secure_touch($htm_file);
+		log::add('veolia_eau', 'debug', '### GO TO CONSOMMATION PAGE ###');
+		if ($getConsoInHtmlFile)
+		{
+			$htm_file = sys_get_temp_dir().'/veolia_html_'.uniqid().'.htm';
+			static::secure_touch($htm_file);
+			
+			$fp = fopen($htm_file, 'w');
+			if ($fp) {
+				curl_setopt($ch, CURLOPT_URL, $url_consommation);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($ch, CURLOPT_FILE, $fp);
+				//curl_setopt($ch, CURLOPT_POST, FALSE);
 
-        $fp = fopen($htm_file, 'w');
-        if ($fp) {
-            curl_setopt($ch, CURLOPT_URL, $url_consommation);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_FILE, $fp);
-            //curl_setopt($ch, CURLOPT_POST, FALSE);
+				$response = curl_exec($ch);
+				$info = curl_getinfo($ch);
 
-            $response = curl_exec($ch);
-            $info = curl_getinfo($ch);
+				
+				log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
+				log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
+				fclose($fp);
+			} else {
+				log::add('veolia_eau', 'error', 'error on creating htm file "'.$htm_file.'"');
+			}
+		}
+		else
+		{
+			curl_setopt($ch, CURLOPT_URL, $url_consommation);
+			curl_setopt($ch, CURLOPT_POST, FALSE);
+			$response = curl_exec($ch);
+			$info = curl_getinfo($ch);
+			log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
+			log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
+		  
+			// extraction du token de téléchargement pour ToutSurMonEau
+			if (intval($this->getConfiguration('website')) == 4)
+			{
+			  require_once dirname(__FILE__).'/../../3rparty/SimpleHtmlParser/simple_html_dom.php';
+			  $html = str_get_html($response);
+			  $monthlyReportUrl = $html->find('div[id=export] a', 0)->href;
+			  $downloadToken = substr($monthlyReportUrl, strrpos($monthlyReportUrl, '/') + 1);
+			  log::add('veolia_eau', 'debug', 'downloadToken : '.$downloadToken);
+			  $month = date('m');
+			  $year = date('Y');
+			  $url_releve_csv = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/exporter-consommation/day/'.$downloadToken.'/'.$year.'/'.$month;
+			  log::add('veolia_eau', 'debug', 'url csv : '.$url_releve_csv);
+			}			
+		}
 
-            log::add('veolia_eau', 'debug', '### GO TO CONSOMMATION PAGE ###');
-            log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
-            log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
-            fclose($fp);
-        } else {
-            log::add('veolia_eau', 'error', 'error on creating htm file "'.$htm_file.'"');
-        }
-
+		log::add('veolia_eau', 'debug', '### GET DATAFILE ###');
 		$data_file = sys_get_temp_dir().'/veolia_releve_'.uniqid().$extension;
 		static::secure_touch($data_file);
 
         $fp = fopen($data_file, 'w');
-
 		if ($fp) {
 			curl_setopt($ch, CURLOPT_URL, $url_releve_csv);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_FILE, $fp);
-
+			curl_setopt($ch, CURLOPT_POST, TRUE);			
 			$response = curl_exec($ch);
 			$info = curl_getinfo($ch);
-
-			log::add('veolia_eau', 'debug', '### GET DATAFILE ###');
+			
 			log::add('veolia_eau', 'debug', 'response length : '.strlen($response));
 			log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 
