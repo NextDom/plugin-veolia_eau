@@ -37,6 +37,6 @@ Refactoring et simplification du code
 [panel,primary]
 .2017-10-18
 --
-Création du changelog
+Erstellung des Änderungsprotokolls
 Mise à jour de la documentation
 --

@@ -14,5 +14,5 @@ include::faq.asciidoc[]
 include::troubleshoting.asciidoc[]
 
 '''
-== Changelog
+== Änderungsprotokoll
 include::changelog.asciidoc[]
