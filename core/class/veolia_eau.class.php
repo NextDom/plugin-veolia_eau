@@ -25,6 +25,12 @@ if (!function_exists('mb_strtolower')) {
   }
 }
 
+if (!function_exists('mb_convert_encoding')) {
+  function mb_convert_encoding ($str, $to_encoding, $from_encoding = "auto") {
+	return $str;
+  }
+}
+
 
 class veolia_eau extends eqLogic {
     /******************************* Attributs *******************************/
@@ -250,7 +256,7 @@ class veolia_eau extends eqLogic {
 
            case 4:
 				$url_token = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/je-me-connecte';
-                $tokenFieldName = '_csrf_token';																		   											
+                $tokenFieldName = '_csrf_token';
                 $url_login = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/je-me-connecte';
                 $url_consommation = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/historique-de-consommation';
 				$getConsoInHtmlFile = false;
@@ -264,7 +270,7 @@ class veolia_eau extends eqLogic {
 			case 1:
 			default:
 				$url_token = 'https://www.service-client.veoliaeau.fr/connexion-espace-client.html';
-                $tokenFieldName = 'token';																				
+                $tokenFieldName = 'token';
                 $url_login = 'https://www.service-client.veoliaeau.fr/home.loginAction.do';
                 $url_consommation = 'https://www.service-client.veoliaeau.fr/home/espace-client/votre-consommation.html?vueConso=releves';
                 $url_releve_csv = 'https://www.service-client.veoliaeau.fr/home/espace-client/votre-consommation.exportConsommationData.do?vueConso=releves';
@@ -301,7 +307,7 @@ class veolia_eau extends eqLogic {
           	log::add('veolia_eau', 'debug', '### GET HOME PAGE ON '.$url_token.' ###');
             curl_setopt($ch, CURLOPT_URL, $url_token);
             $response = curl_exec($ch);
-            $info = curl_getinfo($ch);            
+            $info = curl_getinfo($ch);
             log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
             log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 
@@ -317,7 +323,7 @@ class veolia_eau extends eqLogic {
             }
         }
 
-		log::add('veolia_eau', 'debug', '### LOGIN ON '.$url_login.' ###');																  
+		log::add('veolia_eau', 'debug', '### LOGIN ON '.$url_login.' ###');
 		curl_setopt($ch, CURLOPT_URL, $url_login);
 		curl_setopt($ch, CURLOPT_POST, TRUE);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, implode('&', $datas));
@@ -331,7 +337,7 @@ class veolia_eau extends eqLogic {
 		{
 			$htm_file = sys_get_temp_dir().'/veolia_html_'.uniqid().'.htm';
 			static::secure_touch($htm_file);
-			
+
 			$fp = fopen($htm_file, 'w');
 			if ($fp) {
 				curl_setopt($ch, CURLOPT_URL, $url_consommation);
@@ -342,7 +348,7 @@ class veolia_eau extends eqLogic {
 				$response = curl_exec($ch);
 				$info = curl_getinfo($ch);
 
-				
+
 				log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
 				log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 				fclose($fp);
@@ -358,7 +364,7 @@ class veolia_eau extends eqLogic {
 			$info = curl_getinfo($ch);
 			log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
 			log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
-		  
+
 			// extraction du token de téléchargement pour ToutSurMonEau
 			if (intval($this->getConfiguration('website')) == 4)
 			{
@@ -371,7 +377,7 @@ class veolia_eau extends eqLogic {
 			  $year = date('Y');
 			  $url_releve_csv = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/exporter-consommation/day/'.$downloadToken.'/'.$year.'/'.$month;
 			  log::add('veolia_eau', 'debug', 'url csv : '.$url_releve_csv);
-			}			
+			}
 		}
 
 		log::add('veolia_eau', 'debug', '### GET DATAFILE ###');
@@ -383,10 +389,10 @@ class veolia_eau extends eqLogic {
 			curl_setopt($ch, CURLOPT_URL, $url_releve_csv);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_FILE, $fp);
-			curl_setopt($ch, CURLOPT_POST, TRUE);			
+			curl_setopt($ch, CURLOPT_POST, TRUE);
 			$response = curl_exec($ch);
 			$info = curl_getinfo($ch);
-			
+
 			log::add('veolia_eau', 'debug', 'response length : '.strlen($response));
 			log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 
