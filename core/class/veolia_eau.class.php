@@ -35,7 +35,6 @@ if (!function_exists('mb_convert_encoding')) {
 class veolia_eau extends eqLogic {
     /******************************* Attributs *******************************/
     /* Ajouter ici toutes vos variables propre à votre classe */
-
     /***************************** Methode static ****************************/
 
 
@@ -217,7 +216,9 @@ class veolia_eau extends eqLogic {
 	public function getConso() {
 		$cookie_file = sys_get_temp_dir().'/veolia_php_cookies_'.uniqid();
 		static::secure_touch($cookie_file);
+
 		$getConsoInHtmlFile = true;
+
         switch (intval($this->getConfiguration('website'))) {
             case 2:
                 $url_login = 'https://www.eau-services.com/default.aspx';
@@ -302,24 +303,23 @@ class veolia_eau extends eqLogic {
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 
-		// récupérer le token généré en cas de besoin
+		// récupérer le token CSRF généré en cas de besoin
 		if ($url_token) {
-          	log::add('veolia_eau', 'debug', '### GET HOME PAGE ON '.$url_token.' ###');
+          	log::add('veolia_eau', 'debug', '### GET CSRF TOKEN ON '.$url_token.' ###');
             curl_setopt($ch, CURLOPT_URL, $url_token);
             $response = curl_exec($ch);
-            $info = curl_getinfo($ch);
+
             log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
             log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 
           	log::add('veolia_eau', 'debug', 'Extracting token');
             require_once dirname(__FILE__).'/../../3rparty/SimpleHtmlParser/simple_html_dom.php';
             $html = str_get_html($response);
-            $inputName = 'input[name='.$tokenFieldName.']';
-            $ret = $html->find($inputName, 0);
-            log::add('veolia_eau', 'debug', 'Token value: '.$ret->value);
+            $token = $html->find('input[name='.$tokenFieldName.']', 0)->value;
+            log::add('veolia_eau', 'debug', 'Token: '.$token);
 
-            if ($ret->value !== '') {
-                array_push($datas, $tokenFieldName.'='.$ret->value);
+            if ($token !== '') {
+                array_push($datas, $tokenFieldName.'='.$token);
             }
         }
 
@@ -328,13 +328,12 @@ class veolia_eau extends eqLogic {
 		curl_setopt($ch, CURLOPT_POST, TRUE);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, implode('&', $datas));
 		$response = curl_exec($ch);
-		$info = curl_getinfo($ch);
 		log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
 		log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 
 		log::add('veolia_eau', 'debug', '### GO TO CONSOMMATION PAGE ###');
-		if ($getConsoInHtmlFile)
-		{
+
+		if ($getConsoInHtmlFile) {
 			$htm_file = sys_get_temp_dir().'/veolia_html_'.uniqid().'.htm';
 			static::secure_touch($htm_file);
 
@@ -343,11 +342,8 @@ class veolia_eau extends eqLogic {
 				curl_setopt($ch, CURLOPT_URL, $url_consommation);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 				curl_setopt($ch, CURLOPT_FILE, $fp);
-				//curl_setopt($ch, CURLOPT_POST, FALSE);
 
 				$response = curl_exec($ch);
-				$info = curl_getinfo($ch);
-
 
 				log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
 				log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
@@ -355,19 +351,17 @@ class veolia_eau extends eqLogic {
 			} else {
 				log::add('veolia_eau', 'error', 'error on creating htm file "'.$htm_file.'"');
 			}
-		}
-		else
-		{
+		} else {
 			curl_setopt($ch, CURLOPT_URL, $url_consommation);
 			curl_setopt($ch, CURLOPT_POST, FALSE);
+
 			$response = curl_exec($ch);
-			$info = curl_getinfo($ch);
+
 			log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
 			log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 
 			// extraction du token de téléchargement pour ToutSurMonEau
-			if (intval($this->getConfiguration('website')) == 4)
-			{
+			if (intval($this->getConfiguration('website')) === 4) {
 			  require_once dirname(__FILE__).'/../../3rparty/SimpleHtmlParser/simple_html_dom.php';
 			  $html = str_get_html($response);
 			  $monthlyReportUrl = $html->find('div[id=export] a', 0)->href;
@@ -391,7 +385,6 @@ class veolia_eau extends eqLogic {
 			curl_setopt($ch, CURLOPT_FILE, $fp);
 			curl_setopt($ch, CURLOPT_POST, TRUE);
 			$response = curl_exec($ch);
-			$info = curl_getinfo($ch);
 
 			log::add('veolia_eau', 'debug', 'response length : '.strlen($response));
 			log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
@@ -463,7 +456,7 @@ class veolia_eau extends eqLogic {
 					// gerer le cas  "Non mesurée"
 					// {y: 0, color:"#c0bebf", label: "Non mesurée"}
 					// l espace a ete enleve par le str_replace(" ", "", $info[0]);
-					if ($data[1]=="Nonmesurée") {
+					if ($data[1] == "Nonmesurée") {
 					  log::add('veolia_eau', 'debug', 'valeur non mesurée');
 					  // verification que la donnee non mesuree ne se produit pas le dernier jour du mois, dans ce cas elle est perdu et ne sera pas ajoute le lendemain
 					  $nm_currentreleve = mktime(0, 0, 0, date("m")  , date("d")-3, date("Y"));
@@ -477,25 +470,23 @@ class veolia_eau extends eqLogic {
 					  break;
 					}
 
-
 					$dateTemp = explode('/', $data[1]);
 
 					// Recuperation d autres cas potentiel ou ce champ ne serait pas une date pour eviter de fausser le compteur
 					// verifie s il y a bien 2 slash
-					if(count($dateTemp)!=3) {
+					if(count($dateTemp) != 3) {
 						log::add('veolia_eau', 'error', 'date invalide - impossible de trouver 2 slash :'.$data[1]);
 						break;
 					}
 
 					// verifie si la date est valide
-					if(!checkdate($dateTemp[1],$dateTemp[0],$dateTemp[2])){
+					if(!checkdate($dateTemp[1], $dateTemp[0], $dateTemp[2])){
 						log::add('veolia_eau', 'error', 'date invalide:'.$data[1]);
 						break;
 					}
 
 					// transform d/m/yyyy to yyy-mm-dd with leading 0
 					$date = $dateTemp[2].'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT);
-					//$index = 0;
 					$conso = $data[0];
 					$consomonth[] = $conso;
 					$typeReleve = 'M';
@@ -536,8 +527,7 @@ class veolia_eau extends eqLogic {
                         foreach ($sheetData as $index => $line) {
                             $conso = $line['B']*1000;
 
-                            if ($conso == 0)
-                            {
+                            if ($conso == 0) {
                                 log::add('veolia_eau', 'debug', 'La ligne '.($index + 1).' a une valeur nulle');
                                 continue;
                             }
@@ -691,8 +681,6 @@ class veolia_eauCmd extends cmd {
     }
 
     /***************************** Getteur/Setteur ***************************/
-
-
 }
 
 ?>
