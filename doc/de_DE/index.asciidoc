@@ -1,4 +1,4 @@
-== Description
+== Beschreibung
 include::presentation.asciidoc[]
 
 '''
@@ -10,7 +10,7 @@ include::configuration.asciidoc[]
 include::faq.asciidoc[]
 
 '''
-== Troubleshoting
+== Fehlersuche
 include::troubleshoting.asciidoc[]
 
 '''
