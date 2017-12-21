@@ -52,6 +52,7 @@ class veolia_eau extends eqLogic {
 	 // 	 }
    // }
 
+
     // Fonction exécutée automatiquement toutes les heures par Jeedom
     public static function cronHourly() {
 		foreach (eqLogic::byType('veolia_eau', true) as $veolia_eau) {
@@ -328,7 +329,9 @@ class veolia_eau extends eqLogic {
 		curl_setopt($ch, CURLOPT_POST, TRUE);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, implode('&', $datas));
 		$response = curl_exec($ch);
+
     log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
+
 		log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 
 		log::add('veolia_eau', 'debug', '### GO TO CONSOMMATION PAGE ###');

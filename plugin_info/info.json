@@ -1,0 +1,13 @@
+{
+	"id" : "veolia_eau",
+	"name" : "Veolia eau",
+	"licence" : "AGPL",
+	"author" : "Damien Virlouvet",
+    "icon" : "icon nature-drops1",
+    "description" : "Plugin pour retrouver le télé-relevé Veolia eau / Tout sur mon eau / Eau en ligne",
+	"require" : "2.2",
+	"category" : "monitoring",
+	"hasDependency" : false,
+	"hasOwnDeamon" : false,
+	"maxDependancyInstallTime" : 0
+}
