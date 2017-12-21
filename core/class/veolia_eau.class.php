@@ -16,20 +16,42 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/******************************* Includes *******************************/ 
+/******************************* Includes *******************************/
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
-class veolia_eau extends eqLogic {
-    /******************************* Attributs *******************************/ 
-    /* Ajouter ici toutes vos variables propre à votre classe */
-	
-    /***************************** Methode static ****************************/ 
+if (!function_exists('mb_strtolower')) {
+  function mb_strtolower ($string, $encoding) {
+	return strtolower($string);
+  }
+}
 
-    
+if (!function_exists('mb_convert_encoding')) {
+  function mb_convert_encoding ($str, $to_encoding, $from_encoding = "auto") {
+	return $str;
+  }
+}
+
+
+class veolia_eau extends eqLogic {
+    /******************************* Attributs *******************************/
+    /* Ajouter ici toutes vos variables propre à votre classe */
+    /***************************** Methode static ****************************/
+
+
     // Fonction exécutée automatiquement toutes les minutes par Jeedom
-    /*public static function cron() {
-    }*/
-    
+   //   public static function cron() {
+   //    foreach (eqLogic::byType('veolia_eau', true) as $veolia_eau) {
+	 // 	 		if ($veolia_eau->getIsEnable() == 1) {
+	 // 	 			if (!empty($veolia_eau->getConfiguration('login')) && !empty($veolia_eau->getConfiguration('password'))) {
+	 // 	 				$veolia_eau->getConso();
+   //                       log::add('veolia_eau', 'debug', 'done... ');
+	 // 	 			} else {
+	 // 	 				log::add('veolia_eau', 'error', 'Identifiants non saisis');
+	 // 				}
+	 // 	 		}
+	 // 	 }
+   // }
+
     // Fonction exécutée automatiquement toutes les heures par Jeedom
     public static function cronHourly() {
 		foreach (eqLogic::byType('veolia_eau', true) as $veolia_eau) {
@@ -48,28 +70,28 @@ class veolia_eau extends eqLogic {
 			}
 		}
     }
-    
+
     // Fonction exécutée automatiquement tous les jours par Jeedom
     public static function cronDayly() {
     }
- 
-    /*************************** Methode d'instance **************************/ 
- 
 
-    /************************** Pile de mise à jour **************************/ 
-    
-    /* fonction permettant d'initialiser la pile 
+    /*************************** Methode d'instance **************************/
+
+
+    /************************** Pile de mise à jour **************************/
+
+    /* fonction permettant d'initialiser la pile
      * plugin: le nom de votre plugin
-     * action: l'action qui sera utilisé dans le fichier ajax du pulgin 
-     * callback: fonction appelé coté client(JS) pour mettre à jour l'affichage 
-     */ 
+     * action: l'action qui sera utilisé dans le fichier ajax du pulgin
+     * callback: fonction appelé coté client(JS) pour mettre à jour l'affichage
+     */
     public function initStackData() {
         nodejs::pushUpdate('veolia_eau::initStackDataEqLogic', array('plugin' => 'veolia_eau', 'action' => 'saveStack', 'callback' => 'displayEqLogic'));
     }
-    
-    /* fonnction permettant d'envoyer un nouvel équipement pour sauvegarde et affichage, 
+
+    /* fonnction permettant d'envoyer un nouvel équipement pour sauvegarde et affichage,
      * les données sont envoyé au client(JS) pour être traité de manière asynchrone
-     * Entrée: 
+     * Entrée:
      *      - $params: variable contenant les paramètres eqLogic
      */
     public function stackData($params) {
@@ -78,9 +100,9 @@ class veolia_eau extends eqLogic {
         }
         nodejs::pushUpdate('veolia_eau::stackDataEqLogic', $paramsArray);
     }
-    
+
     /* fonction appelé pour la sauvegarde asynchrone
-     * Entrée: 
+     * Entrée:
      *      - $params: variable contenant les paramètres eqLogic
      */
     public function saveStack($params) {
@@ -91,19 +113,19 @@ class veolia_eau extends eqLogic {
     public function preSave() {
     }
 
-    /* fonction appelé pendant la séquence de sauvegarde avant l'insertion 
+    /* fonction appelé pendant la séquence de sauvegarde avant l'insertion
      * dans la base de données pour une mise à jour d'une entrée */
     public function preUpdate() {
 		if (empty($this->getConfiguration('login'))) {
 			throw new Exception(__('L\'identifiant ne peut pas être vide',__FILE__));
 		}
-		
+
 		if (empty($this->getConfiguration('password'))) {
 			throw new Exception(__('Le mot de passe ne peut etre vide',__FILE__));
 		}
     }
-	
-    /* fonction appelé pendant la séquence de sauvegarde après l'insertion 
+
+    /* fonction appelé pendant la séquence de sauvegarde après l'insertion
      * dans la base de données pour une mise à jour d'une entrée */
     public function postUpdate() {
 		$cmdlogic = veolia_eauCmd::byEqLogicIdAndLogicalId($this->getId(), 'index');
@@ -119,7 +141,7 @@ class veolia_eau extends eqLogic {
 			$veolia_eauCmd->setIsHistorized(1);
 			$veolia_eauCmd->save();
 		}
-		
+
 		$cmdlogic = veolia_eauCmd::byEqLogicIdAndLogicalId($this->getId(), 'conso');
 		if (!is_object($cmdlogic)) {
 			$veolia_eauCmd = new veolia_eauCmd();
@@ -133,7 +155,7 @@ class veolia_eau extends eqLogic {
 			$veolia_eauCmd->setIsHistorized(1);
 			$veolia_eauCmd->save();
 		}
-		
+
 		$cmdlogic = veolia_eauCmd::byEqLogicIdAndLogicalId($this->getId(), 'typeReleve');
 		if (!is_object($cmdlogic)) {
 			$veolia_eauCmd = new veolia_eauCmd();
@@ -161,18 +183,18 @@ class veolia_eau extends eqLogic {
 		}
     }
 
-    /* fonction appelé pendant la séquence de sauvegarde avant l'insertion 
+    /* fonction appelé pendant la séquence de sauvegarde avant l'insertion
      * dans la base de données pour une nouvelle entrée */
     public function preInsert() {
     }
 
-    /* fonction appelé pendant la séquence de sauvegarde après l'insertion 
+    /* fonction appelé pendant la séquence de sauvegarde après l'insertion
      * dans la base de données pour une nouvelle entrée */
     public function postInsert() {
     }
 
     /* fonction appelé après la fin de la séquence de sauvegarde */
-    public function postSave() {		
+    public function postSave() {
     }
 
     /* fonction appelé avant l'effacement d'une entrée */
@@ -190,12 +212,14 @@ class veolia_eau extends eqLogic {
      */
 
     /*     * **********************Getteur Setteur*************************** */
-	
-	public function getConso() {	
+
+	public function getConso() {
 		$cookie_file = sys_get_temp_dir().'/veolia_php_cookies_'.uniqid();
 		static::secure_touch($cookie_file);
-		
-        switch (intval($this->getConfiguration('website'))) {            
+
+		$getConsoInHtmlFile = true;
+
+        switch (intval($this->getConfiguration('website'))) {
             case 2:
                 $url_login = 'https://www.eau-services.com/default.aspx';
                 // on ne peux avoir le csv que de deux jours en arrière
@@ -218,7 +242,7 @@ class veolia_eau extends eqLogic {
                 );
                 $extension='.csv';
                 break;
-				
+
             case 3:
                 $url_login = 'https://agence.eaudugrandlyon.com/default.aspx';
                 $url_consommation = 'https://agence.eaudugrandlyon.com/mon-espace-suivi-personnalise.aspx';
@@ -230,9 +254,24 @@ class veolia_eau extends eqLogic {
                 );
                 $extension='.csv';
                 break;
-			
+
+           case 4:
+				$url_token = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/je-me-connecte';
+                $tokenFieldName = '_csrf_token';
+                $url_login = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/je-me-connecte';
+                $url_consommation = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/historique-de-consommation';
+				$getConsoInHtmlFile = false;
+                $datas = array(
+                    '_username='.urlencode($this->getConfiguration('login')),
+                    '_password='.urlencode($this->getConfiguration('password'))
+                );
+                $extension='.xls';
+                break;
+
 			case 1:
 			default:
+				$url_token = 'https://www.service-client.veoliaeau.fr/connexion-espace-client.html';
+                $tokenFieldName = 'token';
                 $url_login = 'https://www.service-client.veoliaeau.fr/home.loginAction.do';
                 $url_consommation = 'https://www.service-client.veoliaeau.fr/home/espace-client/votre-consommation.html?vueConso=releves';
                 $url_releve_csv = 'https://www.service-client.veoliaeau.fr/home/espace-client/votre-consommation.exportConsommationData.do?vueConso=releves';
@@ -243,14 +282,14 @@ class veolia_eau extends eqLogic {
                 );
                 $extension='.xls';
         }
-		
+
 		$headers = array(
 			"Accept: */*",
 			"Connection: Keep-Alive",
 		);
-		
+
 		$ch = curl_init();
-		
+
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch, CURLOPT_HEADER, FALSE);
 		curl_setopt($ch, CURLOPT_NOBODY, FALSE);
@@ -260,92 +299,133 @@ class veolia_eau extends eqLogic {
 		curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_file);
 		curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file);
 		curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0");
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, FALSE);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 
-		curl_setopt($ch, CURLOPT_URL, $url_login);
-		curl_setopt($ch, CURLOPT_POST, TRUE);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, implode('&', $datas));		
-		
-		$response = curl_exec($ch);
-		$info = curl_getinfo($ch);
-		
-		log::add('veolia_eau', 'debug', '### LOGIN ###');				
-		log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));	
-		log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));		
-
-		$htm_file = sys_get_temp_dir().'/veolia_html_'.uniqid().'.htm';
-		static::secure_touch($htm_file);
-
-        $fp = fopen($htm_file, 'w');
-        if ($fp) {
-            curl_setopt($ch, CURLOPT_URL, $url_consommation);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_FILE, $fp);
-            //curl_setopt($ch, CURLOPT_POST, FALSE);
-
+		// récupérer le token CSRF généré en cas de besoin
+		if ($url_token) {
+          	log::add('veolia_eau', 'debug', '### GET CSRF TOKEN ON '.$url_token.' ###');
+            curl_setopt($ch, CURLOPT_URL, $url_token);
             $response = curl_exec($ch);
-            $info = curl_getinfo($ch);
 
-            log::add('veolia_eau', 'debug', '### GO TO CONSOMMATION PAGE ###');				
-            log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));	
+            log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
             log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
-            fclose($fp);
-        } else {
-            log::add('veolia_eau', 'error', 'error on creating htm file "'.$htm_file.'"');
+
+          	log::add('veolia_eau', 'debug', 'Extracting token');
+            require_once dirname(__FILE__).'/../../3rparty/SimpleHtmlParser/simple_html_dom.php';
+            $html = str_get_html($response);
+            $token = $html->find('input[name='.$tokenFieldName.']', 0)->value;
+            log::add('veolia_eau', 'debug', 'Token: '.$token);
+
+            if ($token !== '') {
+                array_push($datas, $tokenFieldName.'='.$token);
+            }
         }
 
+		log::add('veolia_eau', 'debug', '### LOGIN ON '.$url_login.' ###');
+		curl_setopt($ch, CURLOPT_URL, $url_login);
+		curl_setopt($ch, CURLOPT_POST, TRUE);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, implode('&', $datas));
+		$response = curl_exec($ch);
+    log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
+		log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
+
+		log::add('veolia_eau', 'debug', '### GO TO CONSOMMATION PAGE ###');
+
+		if ($getConsoInHtmlFile) {
+			$htm_file = sys_get_temp_dir().'/veolia_html_'.uniqid().'.htm';
+			static::secure_touch($htm_file);
+
+			$fp = fopen($htm_file, 'w');
+			if ($fp) {
+				curl_setopt($ch, CURLOPT_URL, $url_consommation);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($ch, CURLOPT_FILE, $fp);
+
+				$response = curl_exec($ch);
+
+				log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
+				log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
+				fclose($fp);
+			} else {
+				log::add('veolia_eau', 'error', 'error on creating htm file "'.$htm_file.'"');
+			}
+		} else {
+			curl_setopt($ch, CURLOPT_URL, $url_consommation);
+			curl_setopt($ch, CURLOPT_POST, FALSE);
+
+			$response = curl_exec($ch);
+
+			log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
+			log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
+
+			// extraction du token de téléchargement pour ToutSurMonEau
+			if (intval($this->getConfiguration('website')) === 4) {
+			  require_once dirname(__FILE__).'/../../3rparty/SimpleHtmlParser/simple_html_dom.php';
+			  $html = str_get_html($response);
+			  $monthlyReportUrl = $html->find('div[id=export] a', 0)->href;
+			  $downloadToken = substr($monthlyReportUrl, strrpos($monthlyReportUrl, '/') + 1);
+			  log::add('veolia_eau', 'debug', 'downloadToken : '.$downloadToken);
+			  $month = date('m');
+			  $year = date('Y');
+			  $url_releve_csv = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/exporter-consommation/day/'.$downloadToken.'/'.$year.'/'.$month;
+			  log::add('veolia_eau', 'debug', 'url csv : '.$url_releve_csv);
+			}
+		}
+
+		log::add('veolia_eau', 'debug', '### GET DATAFILE ###');
 		$data_file = sys_get_temp_dir().'/veolia_releve_'.uniqid().$extension;
 		static::secure_touch($data_file);
 
         $fp = fopen($data_file, 'w');
-
 		if ($fp) {
 			curl_setopt($ch, CURLOPT_URL, $url_releve_csv);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_FILE, $fp);
-			
+			curl_setopt($ch, CURLOPT_POST, TRUE);
 			$response = curl_exec($ch);
-			$info = curl_getinfo($ch);		
-			
-			log::add('veolia_eau', 'debug', '### GET DATAFILE ###');
-			log::add('veolia_eau', 'debug', 'response length : '.strlen($response));		
-			log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));			
-					
+
+			log::add('veolia_eau', 'debug', 'response length : '.strlen($response));
+			log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
+
 			fclose($fp);
-			
+
 			//traitement du xls
 			$this->traiteConso($data_file, $htm_file);
 		} else {
 			log::add('veolia_eau', 'error', 'error on creating file "'.$data_file.'"');
-		}	
-		
+		}
+
 		curl_close($ch);
 		@unlink($cookie_file);
 	}
-	
+
 	public function traiteConso($file, $htm_file) {
 
-        switch (intval($this->getConfiguration('website'))) {             
+        $consomonth = [];
+        $datasFetched = [];
+
+        $alert = str_replace('#','',$this->getConfiguration('alert'));
+        log::add('veolia_eau', 'debug', 'alert: '. $alert);
+
+        switch (intval($this->getConfiguration('website'))) {
             case 2:
                 log::add('veolia_eau', 'debug', '### TRAITE CONSO CSV '.$website.' ###');
                 $depart = $this->getConfiguration('depart');
                 $compteur = $this->getConfiguration('compteur');
-                $lastdate=$this->getConfiguration('last');
-                $row=0;
 				// -- format des data a decoder (y en litres)
 					// dataPoints: [
 				//  {y: 306, label: "01/10/2016"}
 				//  ,
 				//  {y: 602, label: "02/10/2016"}
-				//  ]	
+				//  ]
 						// -- Exception a gerer:
 				// dataPoints: [
 				//  {y: 0, color:"#c0bebf", label: "Non mesurée"},
 				//  {y: 0, color:"#c0bebf", label: "Non mesurée"},
 				//  {y: 0, color:"#c0bebf", label: "Non mesurée"}
-				// ]				  
+				// ]
 				// --
 				// String cible: "306,01/10/2016,602,02/10/2016"
 				// --
@@ -353,6 +433,16 @@ class veolia_eau extends eqLogic {
 				// --
                 $html = file_get_contents($htm_file);
                 $info = explode("dataPoints: [", $html,2);
+                log::add('veolia_eau', 'debug',' info1:'.$info[1].'End');
+                if (strlen($info[1]) == 0) { //dataPoints pas dans le HTML
+                  log::add('veolia_eau', 'error', 'dataPoints: pas trouvé dans la reponse de Veolia');
+                  $pos = strrpos($info[0], "Nous nous excusons pour la");
+                  if ($pos != false) { // note: three equal signs
+                      log::add('veolia_eau', 'error', 'Site Veolia HS: Une erreur est survenue, Veuillez réessayer ultérieurement, Nous nous excusons pour la gêne occasionnée.');
+                  }
+                  break;
+                }
+
                 $info = explode("]", $info[1], 2);
                 $info = str_replace(" ", "", $info[0]);
                 $info = str_replace("\t,", "", $info);
@@ -368,15 +458,15 @@ class veolia_eau extends eqLogic {
                 $info = str_replace("\"", "", $info);
                 $info = explode( "|", $info);
                 //log::add('veolia_eau', 'debug', print_r($data, true));
-				
+
                 foreach ($info as $data) {
                     //log::add('veolia_eau', 'debug', print_r($data, true));
                     $data = explode(",", $data);
-		    
+
 					// gerer le cas  "Non mesurée"
 					// {y: 0, color:"#c0bebf", label: "Non mesurée"}
 					// l espace a ete enleve par le str_replace(" ", "", $info[0]);
-					if ($data[1]=="Nonmesurée") {
+					if ($data[1] == "Nonmesurée") {
 					  log::add('veolia_eau', 'debug', 'valeur non mesurée');
 					  // verification que la donnee non mesuree ne se produit pas le dernier jour du mois, dans ce cas elle est perdu et ne sera pas ajoute le lendemain
 					  $nm_currentreleve = mktime(0, 0, 0, date("m")  , date("d")-3, date("Y"));
@@ -390,119 +480,95 @@ class veolia_eau extends eqLogic {
 					  break;
 					}
 
-				
 					$dateTemp = explode('/', $data[1]);
 
 					// Recuperation d autres cas potentiel ou ce champ ne serait pas une date pour eviter de fausser le compteur
 					// verifie s il y a bien 2 slash
-					if(count($dateTemp)!=3) {
+					if(count($dateTemp) != 3) {
 						log::add('veolia_eau', 'error', 'date invalide - impossible de trouver 2 slash :'.$data[1]);
-						break;		         
+						break;
 					}
 
 					// verifie si la date est valide
-					if(!checkdate($dateTemp[1],$dateTemp[0],$dateTemp[2])){
+					if(!checkdate($dateTemp[1], $dateTemp[0], $dateTemp[2])){
 						log::add('veolia_eau', 'error', 'date invalide:'.$data[1]);
 						break;
 					}
 
 					// transform d/m/yyyy to yyy-mm-dd with leading 0
 					$date = $dateTemp[2].'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT);
-					//$index = 0;
 					$conso = $data[0];
+					$consomonth[] = $conso;
 					$typeReleve = 'M';
-					
-					if ($date>$lastdate) {
-						$compteur+=$conso;
-						$index = $depart + $compteur;
-						log::add('veolia_eau', 'debug', $date.' '.$conso.' '.$typeReleve.' '.$compteur.' '.$index);
 
-						$cmd = $this->getCmd(null, 'index');
+					$compteur += $conso;
+					$index = $depart + $compteur;
+					log::add('veolia_eau', 'debug', $date.' '.$conso.' '.$typeReleve.' '.$compteur.' '.$index);
 
-						if (is_object($cmd)) {
-							$cmd->setCollectDate($date);
-							$cmd->event($index);
-						}
-
-						$cmd = $this->getCmd(null, 'conso');
-
-						if (is_object($cmd)) {
-							$cmd->setCollectDate($date);
-							$cmd->event($conso);
-						}
-
-						$cmd = $this->getCmd(null, 'typeReleve');
-
-						if (is_object($cmd)) {
-							$cmd->setCollectDate($date);
-							$cmd->event($typeReleve);
-						}
-
-						$cmd = $this->getCmd(null, 'dateReleve');
-
-						if (is_object($cmd)) {
-							$cmd->setCollectDate($date);
-							$cmd->event($date);
-						}
-						$row++;
-					}
+                    $datasFetched[] = array(
+                        'date' => $date,
+                        'index' => $index,
+                        'conso' => $conso,
+                        'typeReleve' => $typeReleve
+                    );
 				}
-				
-                log::add('veolia_eau', 'debug', $row.' new data lines');
 
-                /*
-                if (($handle = fopen($file, "r")) !== FALSE) {
-                    $lastdate=$this->getConfiguration('last');
-                    // on passe la première ligne
-                    $data = fgetcsv($handle, 1000, ";");
-                    $row=0;
-                    while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
-                        $dateTemp = explode('/', $data['0']);
-                        $date = $dateTemp[2].'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT);
-                        //$index = 0;
-                        $conso = $data['1'];
-                        $typeReleve = 'M';
-                        if ($date>$lastdate) {
-                            $compteur+=$conso;
-                            $index = $depart + $compteur;
-                            log::add('veolia_eau', 'debug', $date.' '.$conso.' '.$typeReleve.' '.$compteur.' '.$index);
-
-                            $cmd = $this->getCmd(null, 'index');
-
-                            if (is_object($cmd)) {
-                                $cmd->setCollectDate($date);
-                                $cmd->event($index);
-                            }
-
-                            $cmd = $this->getCmd(null, 'conso');
-
-                            if (is_object($cmd)) {
-                                $cmd->setCollectDate($date);
-                                $cmd->event($conso);
-                            }
-
-                            $cmd = $this->getCmd(null, 'typeReleve');
-
-                            if (is_object($cmd)) {
-                                $cmd->setCollectDate($date);
-                                $cmd->event($typeReleve);
-                            }
-                            $row++;
-                        }
-                    }
-                    fclose($handle);
-                    log::add('veolia_eau', 'debug', $row.' new data lines');
-                }*/
                 break;
-				
+
             case 3:
                 log::add('veolia_eau', 'debug', '### TRAITE CONSO CSV '.$website.' ###');
                 break;
-			
+
+            case 4:
+                require_once dirname(__FILE__).'/../../3rparty/PHPExcel/Classes/PHPExcel/IOFactory.php';
+
+                $objPHPExcel = PHPExcel_IOFactory::load($file);
+
+                $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
+
+                log::add('veolia_eau', 'debug', '### TRAITE CONSO XLS TOUT SUR MON EAU '.$website.' ### '.$lastdate);
+
+                if (is_array($sheetData) && count($sheetData)) {
+                    $entete = array_shift($sheetData);
+
+                    if (count($sheetData)) {
+                        log::add('veolia_eau', 'debug', count($sheetData).' lignes trouvées dans le fichier.');
+
+                        foreach ($sheetData as $index => $line) {
+                            $conso = $line['B']*1000;
+
+                            if ($conso == 0) {
+                                log::add('veolia_eau', 'debug', 'La ligne '.($index + 1).' a une valeur nulle');
+                                continue;
+                            }
+
+                            $dateTemp = explode('-', $line['A']);
+                            $date = $dateTemp[2].'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT);
+                            $index = $line['C'] * 1000;
+			    			$consomonth[] = $conso;
+                            $typeReleve = '';
+
+                            $datasFetched[] = array(
+                                'date' => $date,
+                                'index' => $index,
+                                'conso' => $conso,
+                                'typeReleve' => $typeReleve
+                            );
+                        }
+                        log::add('veolia_eau', 'debug', count($datasFetched).' lignes trouvées avec une consommation > 0');
+                    } else {
+                        log::add('veolia_eau', 'error', 'Aucune donnée, merci de vérifier que vos identifiants sont corrects et que vous avez accès au télérelevé Veolia');
+                    }
+                } else {
+                    log::add('veolia_eau', 'debug', 'empty data');
+                }
+
+            break;
+
 			case 1:
 			default:
                 log::add('veolia_eau', 'debug', '### TRAITE CONSO XLS '.$website.' ###');
-                $lastdate = $this->getConfiguration('last');
+
                 require_once dirname(__FILE__).'/../../3rparty/PHPExcel/Classes/PHPExcel/IOFactory.php';
 
                 $objPHPExcel = PHPExcel_IOFactory::load($file);
@@ -514,68 +580,89 @@ class veolia_eau extends eqLogic {
 
                     if (count($sheetData)) {
                         log::add('veolia_eau', 'debug', count($sheetData).' data lines');
-                        $row=0;
+
                         foreach ($sheetData as $line) {
                             $dateTemp = explode('/', $line['A']);
                             $date = $dateTemp[2].'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT);
                             $index = $line['B'];
                             $conso = $line['C'];
+			    			$consomonth[] = $conso;
                             $typeReleve = $line['D'];
 
-                            if ($date>$lastdate) {
-                                $cmd = $this->getCmd(null, 'index');
-
-                                if (is_object($cmd)) {
-                                    $cmd->setCollectDate($date);
-                                    $cmd->event($index);
-                                }
-
-                                $cmd = $this->getCmd(null, 'conso');
-
-                                if (is_object($cmd)) {
-                                    $cmd->setCollectDate($date);
-                                    $cmd->event($conso);
-                                }
-
-                                $cmd = $this->getCmd(null, 'typeReleve');
-
-                                if (is_object($cmd)) {
-                                    $cmd->setCollectDate($date);
-                                    $cmd->event($typeReleve);
-                                }
-
-								$cmd = $this->getCmd(null, 'dateReleve');
-
-								if (is_object($cmd)) {
-									$cmd->setCollectDate($date);
-									$cmd->event($date);
-								}
-                                $row++;
-                            }
+                            $datasFetched[] = array(
+                                'date' => $date,
+                                'index' => $index,
+                                'conso' => $conso,
+                                'typeReleve' => $typeReleve
+                            );
                         }
-                        log::add('veolia_eau', 'debug', $row.' new data lines');
                     } else {
-                        log::add('veolia_eau', 'error', 'Aucune donnée, merci de vérifier que vos identifiants sont corrects et que vous avez accès au télérelevé Veolia');	
+                        log::add('veolia_eau', 'error', 'Aucune donnée, merci de vérifier que vos identifiants sont corrects et que vous avez accès au télérelevé Veolia');
                     }
                 } else {
-                    log::add('veolia_eau', 'debug', 'empty data');	
+                    log::add('veolia_eau', 'debug', 'empty data');
                 }
         }
-		
-        if (! empty($compteur)) {
+
+        foreach ($datasFetched as $data) {
+            log::add('veolia_eau', 'debug', 'Date: '.$data['date'].' / Index: '.$data['index'].' / Conso: '.$data['conso'].' / Type de relevé: '.$data['typeReleve']);
+
+            if ($data['index'] > 0 ) {
+                $cmd = $this->getCmd(null, 'index');
+
+                if (is_object($cmd)) {
+                    $cmd->event($data['index'], $data['date']);
+                }
+
+                $cmd = $this->getCmd(null, 'conso');
+
+                if (is_object($cmd)) {
+                    $cmd->event($data['conso'], $data['date']);
+                }
+
+                $cmd = $this->getCmd(null, 'typeReleve');
+
+                if (is_object($cmd)) {
+                    $cmd->event($data['typeReleve'], $data['date']);
+                }
+
+                $cmd = $this->getCmd(null, 'dateReleve');
+
+                if (is_object($cmd)) {
+                    $cmd->event($data['date'], $data['date']);
+                }
+            }
+        }
+
+        $maxday = $this->getConfiguration('maxday');
+        $maxmonth = $this->getConfiguration('maxmonth');
+
+        if (!empty($maxday) && $conso >= $maxday && $alert != '') {
+            $cmdalerte = cmd::byId($alert);
+            $options['title'] = "Alerte Conso Eau";
+            $options['message'] = "Conso journalière du ".$date. ": ".$conso." litres";
+            log::add('veolia_eau', 'debug', $options['message']);
+            $cmdalerte->execCmd($options);
+        }
+
+        $consomonth = array_sum(array_slice($consomonth, -30));
+        if (!empty($maxmonth) && $consomonth >= $maxmonth && $alert != '') {
+            $cmdalerte = cmd::byId($alert);
+            $options['title'] = "Alerte Conso Eau";
+            $options['message'] = "Conso mensuelle: ".$consomonth." litres";
+            log::add('veolia_eau', 'debug', $options['message']);
+            $cmdalerte->execCmd($options);
+        }
+
+        if (!empty($compteur)) {
             $this->setConfiguration('compteur', $compteur);
             $this->save(true);
         }
-		
-		if (! empty($date)) {
-            $this->setConfiguration('last', $date);
-            $this->save(true);
-        }
-		
+
 		@unlink($file);
 		@unlink($htm_file);
 	}
-	
+
 	private static function secure_touch($fname) {
 		if (file_exists($fname)) {
 			return;
@@ -586,12 +673,12 @@ class veolia_eau extends eqLogic {
 }
 
 class veolia_eauCmd extends cmd {
-    /******************************* Attributs *******************************/ 
+    /******************************* Attributs *******************************/
     /* Ajouter ici toutes vos variables propre à votre classe */
 
-    /***************************** Methode static ****************************/ 
+    /***************************** Methode static ****************************/
 
-    /*************************** Methode d'instance **************************/ 
+    /*************************** Methode d'instance **************************/
 
     /* Non obligatoire permet de demander de ne pas supprimer les commandes même si elles ne sont pas dans la nouvelle configuration de l'équipement envoyé en JS
     public function dontRemoveCmd() {
@@ -600,12 +687,10 @@ class veolia_eauCmd extends cmd {
     */
 
     public function execute($_options = array()) {
-        
+
     }
 
-    /***************************** Getteur/Setteur ***************************/ 
-
-    
+    /***************************** Getteur/Setteur ***************************/
 }
 
 ?>
