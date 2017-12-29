@@ -39,18 +39,19 @@ class veolia_eau extends eqLogic {
 
 
     // Fonction exécutée automatiquement toutes les minutes par Jeedom
-    // public static function cron() {
-    //     foreach (eqLogic::byType('veolia_eau', true) as $veolia_eau) {
-	// 			if ($veolia_eau->getIsEnable() == 1) {
-	// 				if (!empty($veolia_eau->getConfiguration('login')) && !empty($veolia_eau->getConfiguration('password'))) {
-	// 					$veolia_eau->getConso();
-    //                     log::add('veolia_eau', 'debug', 'done... ');
-	// 				} else {
-	// 					log::add('veolia_eau', 'error', 'Identifiants non saisis');
-	// 				}
-	// 			}
-	// 	}
-    // }
+   //   public static function cron() {
+   //    foreach (eqLogic::byType('veolia_eau', true) as $veolia_eau) {
+	 // 	 		if ($veolia_eau->getIsEnable() == 1) {
+	 // 	 			if (!empty($veolia_eau->getConfiguration('login')) && !empty($veolia_eau->getConfiguration('password'))) {
+	 // 	 				$veolia_eau->getConso();
+   //                       log::add('veolia_eau', 'debug', 'done... ');
+	 // 	 			} else {
+	 // 	 				log::add('veolia_eau', 'error', 'Identifiants non saisis');
+	 // 				}
+	 // 	 		}
+	 // 	 }
+   // }
+
 
     // Fonction exécutée automatiquement toutes les heures par Jeedom
     public static function cronHourly() {
@@ -328,7 +329,9 @@ class veolia_eau extends eqLogic {
 		curl_setopt($ch, CURLOPT_POST, TRUE);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, implode('&', $datas));
 		$response = curl_exec($ch);
-		log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
+
+    log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
+
 		log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 
 		log::add('veolia_eau', 'debug', '### GO TO CONSOMMATION PAGE ###');
@@ -433,6 +436,15 @@ class veolia_eau extends eqLogic {
 				// --
                 $html = file_get_contents($htm_file);
                 $info = explode("dataPoints: [", $html,2);
+                if (strlen($info[1]) == 0) { //dataPoints pas dans le HTML
+                  log::add('veolia_eau', 'error', 'dataPoints: pas trouvé dans la reponse de Veolia');
+                  $pos = strrpos($info[0], "Nous nous excusons pour la");
+                  if ($pos != false) { // note: three equal signs
+                      log::add('veolia_eau', 'error', 'Site Veolia HS: Une erreur est survenue, Veuillez réessayer ultérieurement, Nous nous excusons pour la gêne occasionnée.');
+                  }
+                  break;
+                }
+
                 $info = explode("]", $info[1], 2);
                 $info = str_replace(" ", "", $info[0]);
                 $info = str_replace("\t,", "", $info);
