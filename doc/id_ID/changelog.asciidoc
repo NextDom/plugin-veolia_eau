@@ -1,4 +1,12 @@
 [panel,primary]
+.2017-12-19
+--
+Correction de la récupération des données pour toutsurmoneau (Ajout du token pour le login)
+Ajout d'un polyfill pour la fonction
+Refactoring
+--
+
+[panel,primary]
 .2017-12-13
 --
 Ajout de log de debug
