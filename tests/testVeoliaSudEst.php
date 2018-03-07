@@ -3,7 +3,7 @@
  *
  */
 
-require_once '../core/class/veolia_eau.class.php' ;
+require_once '../core/class/veolia_eau_process.class.php' ;
 
 class eqLogic{
   private $website = 2;

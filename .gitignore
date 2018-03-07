@@ -6,5 +6,3 @@ sftp-config.json
 .idea
 tests/veolia_sudest_data_src_init
 tests/veolia_sudest_data
-
-core/class/veolia_eau_process.class.php
