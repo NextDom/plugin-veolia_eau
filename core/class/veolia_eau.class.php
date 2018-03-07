@@ -36,21 +36,11 @@ class veolia_eau extends eqLogic {
     /******************************* Attributs *******************************/
     /* Ajouter ici toutes vos variables propre à votre classe */
     /***************************** Methode static ****************************/
-
-
-    // Fonction exécutée automatiquement toutes les minutes par Jeedom
-   //   public static function cron() {
-   //    foreach (eqLogic::byType('veolia_eau', true) as $veolia_eau) {
-	 // 	 		if ($veolia_eau->getIsEnable() == 1) {
-	 // 	 			if (!empty($veolia_eau->getConfiguration('login')) && !empty($veolia_eau->getConfiguration('password'))) {
-	 // 	 				$veolia_eau->getConso();
-   //                       log::add('veolia_eau', 'debug', 'done... ');
-	 // 	 			} else {
-	 // 	 				log::add('veolia_eau', 'error', 'Identifiants non saisis');
-	 // 				}
-	 // 	 		}
-	 // 	 }
-   // }
+    public static function cron() {
+        if (log::getLogLevel('veolia_eau') == 100) {
+             self::cronHourly();
+        }
+    }
 
 
     // Fonction exécutée automatiquement toutes les heures par Jeedom
@@ -62,7 +52,7 @@ class veolia_eau extends eqLogic {
             if (date('G') == $heure_releve) {
 				if ($veolia_eau->getIsEnable() == 1) {
 					if (!empty($veolia_eau->getConfiguration('login')) && !empty($veolia_eau->getConfiguration('password'))) {
-						$veolia_eau->getConso();
+						$veolia_eau->getConso(0);
                         log::add('veolia_eau', 'debug', 'done... ');
 					} else {
 						log::add('veolia_eau', 'error', 'Identifiants non saisis');
@@ -214,7 +204,11 @@ class veolia_eau extends eqLogic {
 
     /*     * **********************Getteur Setteur*************************** */
 
-	public function getConso() {
+	public function getConso($mock_test) {
+        // Add ability to mock and tests the process without Jeedom
+        // $mock_test=0: Normal process
+        // $mock_test=1: Run automated tests with direct call to veolia
+        // $mock_test=2: Run automated tests with mocked files
 		$cookie_file = sys_get_temp_dir().'/veolia_php_cookies_'.uniqid();
 		static::secure_touch($cookie_file);
 
@@ -308,7 +302,11 @@ class veolia_eau extends eqLogic {
 		if ($url_token) {
           	log::add('veolia_eau', 'debug', '### GET CSRF TOKEN ON '.$url_token.' ###');
             curl_setopt($ch, CURLOPT_URL, $url_token);
-            $response = curl_exec($ch);
+            if($mock_test==2){
+                $response = "tbd";
+            }else{
+                $response = curl_exec($ch);
+            }
 
             log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
             log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
@@ -328,7 +326,11 @@ class veolia_eau extends eqLogic {
 		curl_setopt($ch, CURLOPT_URL, $url_login);
 		curl_setopt($ch, CURLOPT_POST, TRUE);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, implode('&', $datas));
-		$response = curl_exec($ch);
+        if($mock_test==2){
+            $response = "tbd";
+        }else{
+            $response = curl_exec($ch);
+        }
 
     log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
 
@@ -346,7 +348,12 @@ class veolia_eau extends eqLogic {
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 				curl_setopt($ch, CURLOPT_FILE, $fp);
 
-				$response = curl_exec($ch);
+                if($mock_test==2){
+                    $response = 1;
+                    $htm_file=$this->getConfiguration('mock_file');
+                }else{
+                    $response = curl_exec($ch);
+                }
 
 				log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
 				log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
@@ -358,7 +365,11 @@ class veolia_eau extends eqLogic {
 			curl_setopt($ch, CURLOPT_URL, $url_consommation);
 			curl_setopt($ch, CURLOPT_POST, FALSE);
 
-			$response = curl_exec($ch);
+            if($mock_test==2){
+                $response = "tbd";
+            }else{
+                $response = curl_exec($ch);
+            }
 
 			log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
 			log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
@@ -387,7 +398,11 @@ class veolia_eau extends eqLogic {
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_FILE, $fp);
 			curl_setopt($ch, CURLOPT_POST, TRUE);
-			$response = curl_exec($ch);
+            if($mock_test==2){
+                $response = "tbd";
+            }else{
+                $response = curl_exec($ch);
+            }
 
 			log::add('veolia_eau', 'debug', 'response length : '.strlen($response));
 			log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
@@ -395,7 +410,7 @@ class veolia_eau extends eqLogic {
 			fclose($fp);
 
 			//traitement du xls
-			$this->traiteConso($data_file, $htm_file);
+			$this->traiteConso($data_file, $htm_file, $mock_test);
 		} else {
 			log::add('veolia_eau', 'error', 'error on creating file "'.$data_file.'"');
 		}
@@ -404,7 +419,7 @@ class veolia_eau extends eqLogic {
 		@unlink($cookie_file);
 	}
 
-	public function traiteConso($file, $htm_file) {
+	public function traiteConso($file, $htm_file, $mock_test) {
 
         $consomonth = [];
         $datasFetched = [];
@@ -412,11 +427,14 @@ class veolia_eau extends eqLogic {
         $alert = str_replace('#','',$this->getConfiguration('alert'));
         log::add('veolia_eau', 'debug', 'alert: '. $alert);
 
-        switch (intval($this->getConfiguration('website'))) {
+        $website=intval($this->getConfiguration('website'));
+        switch ($website) {
             case 2:
                 log::add('veolia_eau', 'debug', '### TRAITE CONSO CSV '.$website.' ###');
                 $depart = $this->getConfiguration('depart');
                 $compteur = $this->getConfiguration('compteur');
+                $lastdate=$this->getConfiguration('last');
+                log::add('veolia_eau', 'debug', 'last1: '. $lastdate);
 				// -- format des data a decoder (y en litres)
 					// dataPoints: [
 				//  {y: 306, label: "01/10/2016"}
@@ -459,7 +477,7 @@ class veolia_eau extends eqLogic {
                 $info = str_replace("color:\"#c0bebf\",", "", $info);
                 $info = str_replace("\"", "", $info);
                 $info = explode( "|", $info);
-                //log::add('veolia_eau', 'debug', print_r($data, true));
+                //log::add('veolia_eau', 'debug', print_r($info, true));
 
                 foreach ($info as $data) {
                     //log::add('veolia_eau', 'debug', print_r($data, true));
@@ -503,7 +521,10 @@ class veolia_eau extends eqLogic {
 					$consomonth[] = $conso;
 					$typeReleve = 'M';
 
-					$compteur += $conso;
+					if ($date>$lastdate) {
+                      $compteur += $conso;
+                    }
+
 					$index = $depart + $compteur;
 					log::add('veolia_eau', 'debug', $date.' '.$conso.' '.$typeReleve.' '.$compteur.' '.$index);
 
@@ -657,12 +678,19 @@ class veolia_eau extends eqLogic {
         }
 
         if (!empty($compteur)) {
+            log::add('veolia_eau', 'debug', 'save compteur: ' . $compteur);
             $this->setConfiguration('compteur', $compteur);
             $this->save(true);
         }
-
-		@unlink($file);
-		@unlink($htm_file);
+        if (!empty($date)) {
+             log::add('veolia_eau', 'debug', 'save last: '. $lastdate);
+             $this->setConfiguration('last', $date);
+             $this->save(true);
+        }
+        if($mock_test=0){
+		  @unlink($file);
+		  @unlink($htm_file);
+        }
 	}
 
 	private static function secure_touch($fname) {
