@@ -209,12 +209,14 @@ class veolia_eau extends eqLogic {
         // $mock_test=0: Normal process
         // $mock_test=1: Run automated tests with direct call to veolia
         // $mock_test=2: Run automated tests with mocked files
+        // $mock_test=3: Run automated tests with mocked files and change of month
 		$cookie_file = sys_get_temp_dir().'/veolia_php_cookies_'.uniqid();
 		static::secure_touch($cookie_file);
 
 		$getConsoInHtmlFile = true;
-
-        switch (intval($this->getConfiguration('website'))) {
+        $website=intval($this->getConfiguration('website'));
+        $offsetVeoliaDate=3;
+        switch ($website) {
             case 2:
                 $url_login = 'https://www.eau-services.com/default.aspx';
                 // on ne peux avoir le csv que de deux jours en arrière
@@ -222,14 +224,14 @@ class veolia_eau extends eqLogic {
                 // le csv par heure pas de données pour 0-1H
                 // ex=mm/YYYY
                 // mm=mm/YYYY
-                // d=dd moins deux jours
-                $releve = mktime(0, 0, 0, date("m")  , date("d")-3, date("Y"));
+                // d=dd moins deux/trois jours
+                $releve = mktime(0, 0, 0, date("m")  , date("d")-$offsetVeoliaDate, date("Y"));
                 $month = date('m/Y',$releve);
                 $day = date('d',$releve);
                 log::add('veolia_eau', 'debug',  $month.' '.$day);
                 $url_consommation = 'https://www.eau-services.com/mon-espace-suivi-personnalise.aspx?mm='.$month.'&d=';
-                $url_releve_csv = 'https://www.eau-services.com/mon-espace-suivi-personnalise.aspx?ex='.$month.'&mm='.$month.'&d=';
-                log::add('veolia_eau', 'debug',  $url_releve_csv);
+                //$url_releve_csv = 'https://www.eau-services.com/mon-espace-suivi-personnalise.aspx?ex='.$month.'&mm='.$month.'&d=';
+                //log::add('veolia_eau', 'debug',  $url_releve_csv);
                 $datas = array(
                     'login='.urlencode($this->getConfiguration('login')),
                     'pass='.urlencode($this->getConfiguration('password')),
@@ -302,7 +304,7 @@ class veolia_eau extends eqLogic {
 		if ($url_token) {
           	log::add('veolia_eau', 'debug', '### GET CSRF TOKEN ON '.$url_token.' ###');
             curl_setopt($ch, CURLOPT_URL, $url_token);
-            if($mock_test==2){
+            if($mock_test>=2){
                 $response = "tbd";
             }else{
                 $response = curl_exec($ch);
@@ -326,13 +328,13 @@ class veolia_eau extends eqLogic {
 		curl_setopt($ch, CURLOPT_URL, $url_login);
 		curl_setopt($ch, CURLOPT_POST, TRUE);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, implode('&', $datas));
-        if($mock_test==2){
+        if($mock_test>=2){
             $response = "tbd";
         }else{
             $response = curl_exec($ch);
         }
 
-    log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
+        log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
 
 		log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 
@@ -348,7 +350,7 @@ class veolia_eau extends eqLogic {
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 				curl_setopt($ch, CURLOPT_FILE, $fp);
 
-                if($mock_test==2){
+                if($mock_test>=2){
                     $response = 1;
                     $htm_file=$this->getConfiguration('mock_file');
                 }else{
@@ -365,7 +367,7 @@ class veolia_eau extends eqLogic {
 			curl_setopt($ch, CURLOPT_URL, $url_consommation);
 			curl_setopt($ch, CURLOPT_POST, FALSE);
 
-            if($mock_test==2){
+            if($mock_test>=2){
                 $response = "tbd";
             }else{
                 $response = curl_exec($ch);
@@ -375,7 +377,7 @@ class veolia_eau extends eqLogic {
 			log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 
 			// extraction du token de téléchargement pour ToutSurMonEau
-			if (intval($this->getConfiguration('website')) === 4) {
+			if ($website == 4) {
 			  require_once dirname(__FILE__).'/../../3rparty/SimpleHtmlParser/simple_html_dom.php';
 			  $html = str_get_html($response);
 			  $monthlyReportUrl = $html->find('div[id=export] a', 0)->href;
@@ -388,17 +390,19 @@ class veolia_eau extends eqLogic {
 			}
 		}
 
-		log::add('veolia_eau', 'debug', '### GET DATAFILE ###');
-		$data_file = sys_get_temp_dir().'/veolia_releve_'.uniqid().$extension;
-		static::secure_touch($data_file);
+        if ($website != 2){
+        // Inutile de recuperer le xls pour www.eau-services.com
+    	  log::add('veolia_eau', 'debug', '### GET DATAFILE ###');
+		  $data_file = sys_get_temp_dir().'/veolia_releve_'.uniqid().$extension;
+		  static::secure_touch($data_file);
 
-        $fp = fopen($data_file, 'w');
-		if ($fp) {
+          $fp = fopen($data_file, 'w');
+		  if ($fp) {
 			curl_setopt($ch, CURLOPT_URL, $url_releve_csv);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_FILE, $fp);
 			curl_setopt($ch, CURLOPT_POST, TRUE);
-            if($mock_test==2){
+            if($mock_test>=2){
                 $response = "tbd";
             }else{
                 $response = curl_exec($ch);
@@ -409,17 +413,18 @@ class veolia_eau extends eqLogic {
 
 			fclose($fp);
 
-			//traitement du xls
-			$this->traiteConso($data_file, $htm_file, $mock_test);
-		} else {
+		  } else {
 			log::add('veolia_eau', 'error', 'error on creating file "'.$data_file.'"');
-		}
-
+		  }
+        }
 		curl_close($ch);
+
+        //traitement du xls
+        $this->traiteConso($data_file, $htm_file, $mock_test,$offsetVeoliaDate);
 		@unlink($cookie_file);
 	}
 
-	public function traiteConso($file, $htm_file, $mock_test) {
+	public function traiteConso($file, $htm_file, $mock_test,$offsetVeoliaDate) {
 
         $consomonth = [];
         $datasFetched = [];
@@ -489,10 +494,17 @@ class veolia_eau extends eqLogic {
 					if ($data[1] == "Nonmesurée") {
 					  log::add('veolia_eau', 'debug', 'valeur non mesurée');
 					  // verification que la donnee non mesuree ne se produit pas le dernier jour du mois, dans ce cas elle est perdu et ne sera pas ajoute le lendemain
-					  $nm_currentreleve = mktime(0, 0, 0, date("m")  , date("d")-3, date("Y"));
-					  $nm_month = date('m/Y',$nm_currentreleve);
-					  $nm_nextreleve = mktime(0, 0, 0, date("m")  , date("d")-2, date("Y"));
+                      if($mock_test==3){
+                        $nm_currentreleve = mktime(0, 0, 0, date("m",mktime(0, 0, 0, 3, 3, 2018))  , date("d",mktime(0, 0, 0, 3, 3, 2018))-$offsetVeoliaDate, date("Y",mktime(0, 0, 0, 3, 3, 2018)));
+                        $nm_nextreleve = mktime(0, 0, 0, date("m",mktime(0, 0, 0, 3, 3, 2018))  , date("d",mktime(0, 0, 0, 3, 3, 2018))-$offsetVeoliaDate+1, date("Y",mktime(0, 0, 0, 3, 3, 2018)));
+                      }
+                      else{
+                          $nm_currentreleve = mktime(0, 0, 0, date("m")  , date("d")-$offsetVeoliaDate, date("Y"));
+                          $nm_nextreleve = mktime(0, 0, 0, date("m")  , date("d")-$offsetVeoliaDate+1, date("Y"));
+                      }
+                      $nm_month = date('m/Y',$nm_currentreleve);
 					  $nm_nextmonth = date('m/Y',$nm_nextreleve);
+                      log::add('veolia_eau', 'debug', ' $nm_nextmonth:'.$nm_nextmonth.' $nm_month:'.$nm_month);
 					  if ($nm_month != $nm_nextmonth) {
 					    log::add('veolia_eau', 'error', 'valeur non mesurée en fin de mois: la mesure sera perdu demain, il faut la recuperer avant minuit ou ensuite a la main et corriger la valeur dans history ainsi que la valeur compteur dans eqLogic');
 					    // TODO: gerer ce cas automatiquement
@@ -683,9 +695,11 @@ class veolia_eau extends eqLogic {
             $this->save(true);
         }
         if (!empty($date)) {
-             log::add('veolia_eau', 'debug', 'save last: '. $lastdate);
-             $this->setConfiguration('last', $date);
-             $this->save(true);
+             if ($date >=$lastdate){
+               log::add('veolia_eau', 'debug', 'save last: '. $lastdate);
+               $this->setConfiguration('last', $date);
+               $this->save(true);
+             }
         }
         if($mock_test=0){
 		  @unlink($file);

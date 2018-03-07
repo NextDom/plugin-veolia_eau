@@ -6,3 +6,4 @@ sftp-config.json
 .idea
 tests/veolia_sudest_data_src_init
 tests/veolia_sudest_data
+tests/veolia_sudest_data_reprocess

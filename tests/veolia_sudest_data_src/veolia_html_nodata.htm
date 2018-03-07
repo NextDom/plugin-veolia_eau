@@ -1,0 +1,694 @@
+
+
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="ISO-8859-1">
+        <!--[if lt IE 9]>
+            <script src="./js/html5shiv.js"></script>
+            <script src="./js/css3mediaqueries.js"></script>
+        <![endif]-->     
+        <title>Inscription - Veolia</title>
+        <link rel="stylesheet" href="./css/jquery.ui.1.11.0.css">
+        <script src="./js/jquery.1.8.2.min.js"></script>
+        <script src="./js/mobile-menu.js"></script>
+        <script src="./js/jquery.bxslider.min.js"></script>
+        <script src="./js/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+        <link href="./js/fancybox/jquery.fancybox.css" media="all" rel="stylesheet" />
+        <link href="./css/jquery.bxslider.css" rel="stylesheet" />
+        <link href="./css/font.css" rel="stylesheet" media="all" />
+        <link href="./css/base.css" rel="stylesheet" media="all" />
+        <link href="./css/grid-3x3-large.css" rel="stylesheet" media="all" />
+        <link href="./css/style.css" rel="stylesheet" media="all" />
+        <link href="./css/FormValidation.css" rel="stylesheet" media="all" />
+        <script src="./js/jquery-ui.js"></script>
+		<style>
+			.subscribed-col form label.large-insc-row {
+				width: 145px;
+			}
+			.subscribed-col form input.large-insc-row {
+				width: 165px;
+			}
+			.subscribed-col form label[for=email].large-insc-row {
+				width: 80px;
+			}
+			.subscribed-col form input[id=email].large-insc-row {
+				width: 230px;
+			}
+		</style>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no" />
+    </head>
+    <body>
+    	
+        
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-338825-7', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+<style>
+
+    div.hover-account{
+                position: absolute;
+                background: url("./images/bandeau-co-bg.png") no-repeat top left;
+                width: 297px;
+                height: 547px;
+                top: 1px;
+                right: -40px;
+                z-index: 9999;
+                display: none;
+                border-radius: 0 0 25px 25px;
+        }
+        div.hover-account form input[type=text] {
+            width: 220px;
+            height: 30px;
+            border-radius: 5px;
+            border: 1px solid #dfdbda;
+            padding: 5px 10px;
+        }
+       div.hover-account form input[type=password] {
+            width: 220px;
+            height: 30px;
+            border-radius: 5px;
+            border: 1px solid #dfdbda;
+            padding: 5px 10px;
+       }
+       div.hover-account  form [type=submit] {
+            background-color: #df0024;
+            color: #FFF;
+            border: 0;
+            border-radius: 10px;
+            height: 35px;
+            width: 230px;
+            float: right;
+            margin-top: 25px;
+            margin-bottom: 20px;
+       }
+        div.hover-account   a.lien-btn-h {
+                 background-color: #df0024;
+                 color: #FFF;
+                 border: 0;
+                 border-radius: 10px;
+                 height: 35px;
+                 width: 230px;
+                 float: right;
+                 margin-top: 0;
+                 padding: 8px 0;
+                 text-align: center;
+        }
+        div.hover-account   a.lien-btn-h:hover,div.hover-account  form [type=submit]:hover {
+           background-color: #a40016;
+        }
+       div.hover-account p.identifiant-client{
+            text-align: center;
+           font-size: 14px;
+       }
+       div.hover-account.not-connected{
+
+       }
+       div.hover-account .lien-menu-off{
+            display: block;
+            width: 296px;
+            height: 82px;
+            position: absolute;
+            top: 90px;
+       }
+
+       div.hover-account .container-forms {
+            display: block;
+            width: 297px;
+            padding: 0 35px;
+            top: 172px;
+            position: absolute;
+       }
+      div.hover-account ul.liens {
+                margin: 20px 0 0;
+       }
+       div.hover-account ul.liens li{
+                  display: inline-block;
+                  margin: 15px 0 0;
+             }
+     div.hover-account ul.liens li a{
+          text-align: left;
+          font-weight: bold;
+
+       }
+
+       div.hover-account ul.liens li [class^="iconf-"]:before, [class*=" iconf-"]:before {
+            margin: 0 15px 0 15px;
+            font-weight: bold;
+            font-size: 17px;
+
+
+       }
+       div.hover-account form a.pass-oubli{
+            color: #df0024;
+            float: right;
+       }
+
+       .hover-account a.fleche-ferme:before{
+                transform: rotateX(180deg);
+                font-size: 20px;
+       }
+
+       .hover-account a.fleche-ferme{
+            position: absolute;
+            margin: 0 auto;
+            display: block;
+            float: none;
+            width: 50px;
+            color: #808080;
+            bottom: 25px;
+            right: 0;
+            left: 0;
+            display: none;
+       }
+
+       header .connect-area .user-info{
+            z-index: 999;
+            right: -40px;
+           width: 295px;
+           height: 91px;
+           text-align: center;
+           padding-top: 15px;
+           padding-left: 14px;/* fix pour que ce soit centré à "espace perso*/
+            background: rgb(231,231,231);
+            background:  -moz-linear-gradient(top, rgba(231,231,231,1) 0%, rgba(255,255,255,0) 50%);
+            background:    -webkit-gradient(linear, left top, left bottom, from(rgba(242,242,242,1)), to(rgba(255,255,255,0)), color-stop(0.50, #eee));
+            background:   linear-gradient(to bottom, rgba(231,231,231,1) 0%,rgba(255,255,255,0) 50%);
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e7e7e7', endColorstr='#ffffff',GradientType=0 );
+       }
+       header .connect-area .user-info i:before{
+            color:#808080;
+            font-size: 18px;
+       }
+       .connect-area span {
+           font-family: "fs_rufusregular";
+           display: inline-block;
+           margin-top: 2px;
+           background: none;
+           padding-left: 0;
+           padding-top: 0;
+           font-size: 14px;
+       }
+       
+       
+       
+       /*Responsive */
+@media (max-width: 959px) {
+       div.hover-account {
+           background: #f2f2f2 ;
+           width: 267px;
+           height: 377px;
+           top: 171px;
+           right: 0;
+           border-radius: 0 0 25px 25px;
+           /* color: #f2f2f2; */
+       }
+       div.hover-account .container-forms {
+           width: 100%;
+           padding: 25px 25px;
+           top: 0;
+        }
+        div.hover-account   a.lien-btn-h{
+            max-width: 100%;
+            min-width: 100%;
+        }
+}
+
+@media (max-width: 729px) {
+       div.hover-account {
+          display: none!important;
+       }
+}
+
+</style>
+
+<script src="./js/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+<link href="./js/fancybox/jquery.fancybox.css" media="all" rel="stylesheet" />
+
+
+<div class="container-w960" style="position: relative;">
+</div>
+<header>
+            <div class="container-w960">
+                <a href="./default.aspx" title="Veolia" id="logo">
+                    <img src="./images/logo-veolia.png" alt="Logo Veolia" />
+                </a>
+                <div class="connect-area">
+                    
+                   <!-- <form action="./default.aspx" method="POST">
+                        <label for="login">Connectez-vous :</label>
+                        <input type="text" id="login" name="login" value="" placeholder="identifiant"/>
+                        <input type="password" name="pass" value="" placeholder="password" />
+                        <input type="submit" name="connect" value="OK" />
+                    </form>-->
+					
+                </div>
+            </div>
+            <div id="menu-mobile-btn"></div>
+            <nav id="menu">
+                <ul>
+                    <li> <a href="./default.aspx"><span>Accueil</span></a></li>
+                    <li >
+                    	 <a href="./mes-demarches.aspx"><span>Mes démarches <br />en ligne</span></a>
+                         	
+                     </li>
+                    <li 	>
+                    	<a href="./mon-eau-quotidien.aspx"><span>Mon eau <br />au quotidien</span></a>
+                         	
+                    </li>
+                    <li >
+                    	<a href="./conseils-pratiques.aspx"><span>Conseils <br />pratiques</span></a>
+                         	
+                    </li>
+                    <li >
+                    	<a href="./veolia-mediterranee.aspx"><span>MON AGENCE<br>Veolia</span></a>
+                         	
+                    </li>
+                    <li>
+                    	<a href="javascript:;" id="lien-menu-on"><span>Mon espace <br />personnel</span></a>
+                     </li> 
+                </ul>
+            </nav>
+        </header>
+
+
+        
+        
+        <script>
+
+             $('#lien-menu-on').click(function() {
+                     if (window.matchMedia("(min-width: 729px)").matches) {
+
+                    //  $('.hover-account').fadeIn();
+                    var mmenu = $('.hover-account');
+                         if(!mmenu.is(":visible")){
+                                mmenu.slideDown();
+                                $('.fleche-ferme').fadeIn(1000);
+
+                         }else{
+                           $('.fleche-ferme').fadeOut();
+                            mmenu.slideUp();
+                         }
+                 }else{
+                      window.location.href = "mon-espace-perso.aspx";
+                  }
+  			});
+            $('.lien-menu-off').click(function() {
+            //$('.hover-account').fadeOut();
+                $('.fleche-ferme').fadeOut();
+                $('.hover-account').slideUp();
+              });
+             $('.fleche-ferme').click(function() {
+                $('.fleche-ferme').fadeOut();
+               $('.hover-account').slideUp();
+             });
+
+              $(document).ready( function() {
+               $('a.pass-oubli').click(function() {
+                $('.hover-account').slideUp();
+               });
+              $("a.pass-oubli").fancybox({
+                    fitToView	: false,
+                    width       : '90%',
+                    maxWidth	: 400,
+                    height	: '90%',
+                    maxHeight	: 450,
+                    autoSize	: false,
+                    closeClick	: true,
+                    type:'iframe'
+            });
+            });
+
+        </script>
+
+        <style>
+                .connexion{
+                    width: 293px;
+                    float: left;
+                    margin-right: 30px;
+                }
+                .inscription{
+                    width: 622px;
+                    float: left;
+                 }
+                 .subscribed-col.right-col form label, .subscribed-col form label{
+                     text-align: left;
+                     height: 23px;
+                      display: inline-block;
+                      width: 100%;
+                       margin: 5px;
+                       line-height: 30px;
+                      padding: 0;
+                      font-weight: bold;
+                 }
+                 .subscribed-col.right-col form input[type=text]{
+                     width: 220px;
+                     height: 30px;
+                     border-radius: 5px;
+                     border: 1px solid #dfdbda;
+                     padding: 5px 10px;
+                 }
+                .subscribed-col .center-margin{
+                   margin:24px auto;
+                   width: auto;
+                }
+                #global-content h1 {
+                    color: #df0024;
+                    font-family: 'fs_rufuslight_italic';
+                    font-size: 26px;
+                    /*text-align: center;*/
+                    margin-bottom: 5px;
+                }
+                 #global-content h2 {
+                    color: #df0024;
+                    font-family: 'fs_rufuslight_italic';
+                    font-size: 21px;
+                    /*text-align: center;*/
+                    margin-bottom: 5px;
+                    display: inline-block;
+                    width: auto;
+                }
+                .content-form{
+                    max-width: 277px;
+                    float: left;
+                    padding: 20px 0px 0 30px
+
+                }
+                form .content-form input[type=text] ,.subscribed-col.right-col form input[type=text],.subscribed-col.right-col form input[type=password]{
+                        width: 100%;
+                 }
+
+                .desc{
+                    border-radius: 0!important;
+                }
+                .subscribed-col.right-col form [type=submit]{
+                     width: 100%;
+                    text-align: center;
+
+                }
+
+                .img-facture{
+                    width: 317px;
+                    margin: 25px 0 0 20px;
+                    float: right;
+                    padding-right: 17px;
+                }
+                .foot-form{
+                    background: #28b7c8;
+                    float: left;
+                    width: 100%;
+                    padding: 30px;
+                    color: #FFF;
+                    margin-top: 15px;
+                }
+                .foot-form a{
+                    color:#fff!important;
+                    font-weight: bold;
+                    text-decoration: underline;
+                }
+                .foot-form label{
+                    width: auto!important;
+
+                }
+                .subscribed-col form  .foot-form [type=submit] {
+                     width: 200px;
+                    margin-left: 66px;
+                 }
+                .subscribed-col div.desc{
+                    padding: 0;
+                }
+                .subscribed-col.right-col div.desc{
+                padding: 20px;
+                }
+                .head-form{
+                    float: left;
+                    padding: 20px 20px 0;
+                }
+                div.desc h2{
+                    padding-left: 20px;
+                }
+
+                @media (max-width: 959px) {
+                    .inscription {
+                           margin: 20px auto;
+                           float: none;
+                     }
+                    .connexion{
+                        margin: 0 auto;
+                        float: none;
+                        width: 100%;
+                        max-width: 622px;
+                     }
+                    .content-title{
+                        width: 729px;
+                        text-align: center;
+                        float: none;
+                        margin: 0 auto;
+                    }
+                    .head-form h2{
+                        width: 100%!important;
+                    }
+                }
+
+                @media (max-width: 729px) {
+                    .content-title{
+                          width: 80%;
+                       }
+                    .inscription{
+                         width: 100%;
+                    }
+                     .img-facture{
+                      display: none;
+                    }
+                }
+
+        </style>
+
+
+        <div class="container-w960" id="global-content">
+            <div class="content-title">
+                <h1>Mon espace personnel</h1>
+                <p>Gérez en quelques clics vos abonnements, factures, coordonnées, consommations et paiements.</p><br>
+             </div>
+            <div class="connexion">
+                <div class="subscribed-col right-col">
+                     <div class="desc">
+                         <h2>Connexion</h2>
+                        <form action="default.aspx" method="post"  class="inscription-form" id="connexionForm">
+                             <div class="center-margin" style="">
+                            <label for="identifiant">Identifiant </label><input type="text" id="identifiant" name="login" value="" placeholder="7 chiffres" /><br />
+                            <label for="password">Mot de passe </label><input type="password"  id="password" name="pass" value="" onclick="this.value=''" autocomplete="off" /><br /> 
+                            <input type="submit" name="valider-inscription" value="Je me connecte" />
+                            <div class="clear"></div>
+                                <a href="./pop-mot-de-passe.aspx" class="pass-oubli" >Mot de passe oublié </a> <!-- pass-oubli -->
+                            <div class="clear"></div> 
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="inscription">
+                <div class="subscribed-col">
+                    <div class="desc">
+                         <div class="head-form">
+                             <h2>Création de compte</h2> &nbsp;&nbsp;&nbsp;Munissez-vous d'une facture Veolia.<br />
+                                <div class="formValidationSpan formWithBG" id="inscription-err-bloc" style=" text-align: center; display: none; margin-top: 0px; margin-right:0px;">
+                                    Impossible de finaliser votre inscription car une erreur est survenue. Merci de vérifier vos informations ou de réessayer ultérieurement.
+                                </div>
+                         </div>
+                        <form action="" id="inscription-form inscription" method="post" class="inscription-form" >
+                            <div class="content-form">
+                                    <label for="email" >Votre e-mail </label>
+                                    <input type="text" id="email" name="email" value=""  /><br />
+                                    <label for="numero-contrat" >Numéro de contrat <small>(1)</small> </label><input type="text"  id="numero-contrat" name="numero-contrat" value="" maxlength="7" placeholder="7 chiffres" class="large-insc-row"/><br />
+                                    <label for="numero-facture">Numéro de facture <small>(1)</small> </label><input type="text" id="numero-facture" name="numero-facture" value="" class="large-insc-row" /><br />
+                                    <label for="date-facture" >Date de la facture <small>(2)</small> </label><input type="text" id="date-facture" name="date-facture" value="" placeholder="JJ/MM/AAAA" class="large-insc-row" /><br />
+                             </div>
+                            <div class="img-facture"><img src="images/facture-aide.png" ></div>
+                            <div class="foot-form">
+                              <input type="checkbox" id="cgu" name="cgu" value="" />
+                                 <label for="cgu">
+                                     J'accepte les <a href="./medias/pdf/mentions-legales.pdf" target="_blank">conditions générales<br> d'utilisation des services en ligne</a>.
+                                 </label>
+                                 <input type="hidden" name="inscription-form" value="1" />
+                                 <input type="submit" name="valider-inscription" value="Valider" />
+                            </div>
+                            <div style="clear: both;"></div>
+                         </form>
+                    </div>
+                </div>
+            </div>			
+
+            <div class="clear"></div>
+        </div> <footer class="container-w960">&copy; Veolia 2015
+ 
+  <nav>
+    <ul>
+      <li><a href="./sitemap.aspx">Plan du site</a></li>
+      <li><a href="./mentions-legales.aspx">Mentions légales</a></li>
+      <li><a href="./veolia-contact.aspx">Nous contacter</a></li>
+    </ul>
+  </nav>
+  
+</footer>
+ 
+        
+        <script src="./js/FormValidation.js"></script>
+        <script>
+            <!--
+            var formValidation = new FormValidation();
+			var formValidation_connect = new FormValidation();
+			var err_check = 0;
+			
+            $(document).ready( function() {
+			
+			
+			
+				 $("a.mentions").fancybox({
+						fitToView	: false,
+						width       : '90%',
+						maxWidth	: 800,
+						height	: '90%',
+						maxHeight	: 600, 
+						autoSize	: false,
+						closeClick	: true,
+						type        :'iframe'
+				});
+				 $("a.pass-oubli").fancybox({
+								fitToView	: false,
+								width       : '90%',
+								maxWidth	: 400,
+								height	: '90%',
+								maxHeight	: 450, 
+								autoSize	: false,
+								closeClick	: true,
+								type:'iframe'
+						});
+						 $("a.facture-access").fancybox({
+								fitToView	: false,
+								width       : '90%',
+								maxWidth	: 400,
+								height	: '90%',
+								maxHeight	: 450, 
+								autoSize	: false,
+								closeClick	: true 
+						});
+				 
+				
+                $( "#date-facture" ).datepicker({
+            
+					maxDate: 0,
+                    firstDay: 1,
+                    altField: "#date",
+                    closeText: 'Fermer',
+                    prevText: 'Précédent',
+                    nextText: 'Suivant',
+                    currentText: 'Aujourd\'hui',
+                    monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                    monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+                    dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+                    dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
+                    dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+                    weekHeader: 'Sem.',
+                    dateFormat: 'dd/mm/yy',        
+                    onClose: function(date) {
+                        $('#date-facture').focus();
+                        $('#date-facture').blur();
+                    }
+                });
+    
+              
+                formValidation_connect.addRules( 'identifiant', formValidation.TYPE_TEXT, { 'min-length' : 7, 'max-length': 7, 'is_numeric' : true }, { 'onError' : { 'msg' : 'Identifiant invalide' } } );
+                formValidation_connect.addRules( 'password', formValidation.TYPE_TEXT, { 'min-length' : 2   }, { 'onError' : { 'msg' : 'Mot de passe invalide' } } );
+                formValidation.addRules( 'email', formValidation.TYPE_EMAIL, { 'min-length' : 2   }, { 'onError' : { 'msg' : 'E-mail invalide' } } );
+                formValidation.addRules('date-facture', formValidation.TYPE_DATE, { 'format': 'JJ/MM/AAAA' }, {'onError': { 'msg' : 'Date obligatoire, format : JJ/MM/AAAA' } } );
+                formValidation.addRules('numero-contrat', formValidation.TYPE_TEXT, { 'min-length' : 7, 'max-length': 7, 'is_numeric' : true },  {'onError': { 'msg' : 'Numéro de contrat invalide' } } );
+                formValidation.addRules('numero-facture', formValidation.TYPE_TEXT, { 'min-length' : 10 ,'is_numeric' : true },  {'onError': { 'msg' : 'Numéro de facture invalide' } } );
+ 				
+
+                formValidation.onError = function( obj ) {
+                    var div;
+					
+                    if( obj['states'].onError.hasOwnProperty('msg') ) {
+						div    = $('<div></div>');
+						div.addClass('formValidationSpan formValidation' + obj.id);
+						div.html( obj['states'].onError.msg );
+						$(div).insertAfter('#' + obj.id);
+                    }
+                    $('#' + obj.id).addClass('formValidationInputStyle');
+                };
+				
+                formValidation_connect.onError = function( obj ) {
+                    var div;
+                    if( err_check == -1 ) {
+						$('.formValidationSpan').remove();
+						$('.formValidationInputStyle').removeClass('formValidationInputStyle');
+						err_check = 0;
+					}
+					
+                    if( obj['states'].onError.hasOwnProperty('msg') ) {
+						if( !err_check || obj.id != "identifiant") {
+							div    = $('<div></div>');
+							div.addClass('formValidationSpan formValidation' + obj.id);
+							div.html( obj['states'].onError.msg );
+							$(div).insertAfter('#' + obj.id);
+						}
+                    }
+                    $('#' + obj.id).addClass('formValidationInputStyle');
+                };
+
+                $('.inscription-form').submit( function() {
+					var id = $(this).attr('id');
+                    /* Reset champs */
+                    $('.formValidationSpan').remove();
+                    $('.formValidationInputStyle').removeClass('formValidationInputStyle');
+					var form_id = $(this).attr('id');
+                    if( (form_id == 'connexionForm') ? formValidation_connect.validation() : formValidation.validation() ) {
+
+
+						if(form_id != 'connexionForm') {
+							if( $('#cgu').is(':checked') ) {
+								return true;
+							}
+							else 
+								alert('Veuillez accepter les conditions générales d’abonnement en ligne et d’utilisation du site.');
+						}
+						else
+							return true;
+					}
+					var obj = this;
+                   $('html, body').animate({  
+
+                        scrollTop:$(obj).offset().top  
+                    }, 'slow');      
+
+                    return false;
+
+                });
+
+                $('.inscription-form input, .inscription-form textarea').blur(function() {
+                   var id = $(this).attr('id');
+                   $('.formValidation' + id).remove();
+                   $('#' + id).removeClass('formValidationInputStyle');
+                   ($(this).parent().parent().attr('id') == 'connexionForm') ? formValidation_connect.check(id) : formValidation.check(id); 
+                }); 
+				
+				
+            });
+
+            //-->
+       </script>
+        
+        
+    </body>
+</html>
