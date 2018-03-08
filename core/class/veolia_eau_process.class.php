@@ -36,11 +36,12 @@ class veolia_eau extends eqLogic {
     /******************************* Attributs *******************************/
     /* Ajouter ici toutes vos variables propre à votre classe */
     /***************************** Methode static ****************************/
-    public static function cron() {
-        if (log::getLogLevel('veolia_eau') == 100) {
-             self::cronHourly();
-        }
-    }
+    // Si mode debug, lancer le plugin toutes les minutes
+    //public static function cron() {
+    //    if (log::getLogLevel('veolia_eau') == 100) {
+    //         self::cronHourly();
+    //    }
+    //}
 
 
     // Fonction exécutée automatiquement toutes les heures par Jeedom
@@ -225,7 +226,35 @@ class veolia_eau extends eqLogic {
                 // ex=mm/YYYY
                 // mm=mm/YYYY
                 // d=dd moins deux/trois jours
-                $releve = mktime(0, 0, 0, date("m")  , date("d")-$offsetVeoliaDate, date("Y"));
+
+                // Calcul du dernier jour du mois
+                // Si $lastdate n'est pas au dernier jour du mois
+                // et que la date calculé $releve est au mois suivant
+                // il manque la fin du mois passé. il faut passer $releve
+                // au dernier jour du mois passé (last)
+                $lastdate=$this->getConfiguration('last');
+                $lastdatenum=strtotime($lastdate);
+                $monthLast=date("F",$lastdatenum);
+                $LastDayMonth=strtotime("last day of ".$monthLast, time());
+                $EndMonth=$LastDayMonth-$lastdatenum;
+
+                // log::add('veolia_eau', 'debug',  $LastDayMonth.' '.$monthLast.' '.$lastdate);
+
+                if ($mock_test>=1){
+                  $currentdate=$this->getConfiguration('mock_date');
+                  // log::add('veolia_eau', 'debug',' $currentdate:'.$currentdate);
+                  $currentdatenum=strtotime($currentdate);
+                } else {
+                    $currentdatenum=time();
+                }
+                $releve = mktime(0, 0, 0, date("m",$currentdatenum)  , date("d",$currentdatenum)-$offsetVeoliaDate, date("Y",$currentdatenum));
+                $monthReleve = date('F',$releve);
+                // log::add('veolia_eau', 'debug',' $monthReleve:'.$monthReleve);
+
+                if ($EndMonth!=0 && $monthReleve!=$monthLast){
+                    $releve = mktime(0, 0, 0, date("m",$lastdatenum)  , date("d",$lastdatenum), date("Y",$lastdatenum));
+                    log::add('veolia_eau', 'debug',  $monthReleve.' '.$monthLast.' '.$EndMonth);
+                }
                 $month = date('m/Y',$releve);
                 $day = date('d',$releve);
                 log::add('veolia_eau', 'debug',  $month.' '.$day);

@@ -14,6 +14,7 @@ class eqLogic{
   private $last="2018-03-01";
   private $alert="#680";
   private $mock_file="veolia_sudest_data_src/veolia_html_3March.htm";
+  private $mock_date="2018-03-07";
   public function getConfiguration($config){
     if ($config=="website"){
       return $this->website;
@@ -31,6 +32,8 @@ class eqLogic{
       return $this->alert;
     }elseif ($config=="mock_file"){
       return $this->mock_file;
+    }elseif ($config=="mock_date"){
+      return $this->mock_date;
     }
     else {
       log::add('veolia_eau','debug','getConfiguration:'.$config);
@@ -54,6 +57,8 @@ class eqLogic{
         $this->alert=$value;
       }elseif ($config=="mock_file"){
         $this->mock_file=$value;
+      }elseif ($config=="mock_date"){
+        $this->mock_date=$value;
       }
       else {
         log::add('veolia_eau','debug','setConfiguration:'.$config." ".$value);
@@ -75,7 +80,9 @@ class eqLogic{
           " last:".
           $this->last.
           " alert:".
-          $this->alert
+          $this->alert.
+          " mock_date:".
+          $this->mock_date
           );
   }
   function getCmd($a,$b)
@@ -118,6 +125,7 @@ class log {
 //  }
 //}
 $instanceVeolia = new veolia_eau;
+$instanceVeolia->setConfiguration('mock_date',"2018-03-07");
 $instanceVeolia->setConfiguration('mock_file',"veolia_sudest_data/veolia_html_3March.htm");
 $instanceVeolia->displayConfig();
 $instanceVeolia->getConso(2);
@@ -139,6 +147,7 @@ $instanceVeolia->getConso(2);
 $instanceVeolia->displayConfig();
 
 $instanceVeolia = new veolia_eau;
+$instanceVeolia->setConfiguration('mock_date',"2018-03-07");
 $instanceVeolia->setConfiguration('mock_file',"veolia_sudest_data/veolia_html_Feb18.htm");
 $instanceVeolia->setConfiguration('last',"2018-01-31");
 $instanceVeolia->displayConfig();
@@ -149,13 +158,21 @@ $instanceVeolia->getConso(2);
 $instanceVeolia->displayConfig();
 
 $instanceVeolia = new veolia_eau;
+$instanceVeolia->setConfiguration('mock_date',"2018-03-03");
 $instanceVeolia->setConfiguration('mock_file',"veolia_sudest_data/veolia_html_Feb18_Non_Mesure.htm");
 $instanceVeolia->setConfiguration('last',"2018-01-31");
 $instanceVeolia->displayConfig();
 $instanceVeolia->getConso(2);
 $instanceVeolia->displayConfig();
-$instanceVeolia->setConfiguration('mock_file',"veolia_sudest_data/veolia_html_3March.htm");
+$instanceVeolia->setConfiguration('mock_date',"2018-03-07");
+//$instanceVeolia->setConfiguration('mock_file',"veolia_sudest_data/veolia_html_3March.htm");
 $instanceVeolia->getConso(3);
+$instanceVeolia->displayConfig();
+$instanceVeolia->setConfiguration('mock_file',"veolia_sudest_data/veolia_html_Feb18.htm");
+$instanceVeolia->getConso(2);
+$instanceVeolia->displayConfig();
+$instanceVeolia->setConfiguration('mock_file',"veolia_sudest_data/veolia_html_3March.htm");
+$instanceVeolia->getConso(2);
 $instanceVeolia->displayConfig();
 
 // Test avec l access au site Veolia - Penser a MAJ les ID/password

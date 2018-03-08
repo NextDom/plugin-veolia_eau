@@ -1,5 +1,10 @@
 
-veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:0 last:2018-03-01 alert:#680
+veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:0 last:2018-03-01 alert:#680 mock_date:2018-03-07
+
+
+
+
+
 
 
 
@@ -73,7 +78,12 @@ veolia_eau debug save compteur: 400
 
 veolia_eau debug save last: 2018-03-01
 
-veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:400 last:2018-03-03 alert:#680
+veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:400 last:2018-03-03 alert:#680 mock_date:2018-03-07
+
+
+
+
+
 
 
 
@@ -147,9 +157,14 @@ veolia_eau debug save compteur: 400
 
 veolia_eau debug save last: 2018-03-03
 
-veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:400 last:2018-03-03 alert:#680
+veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:400 last:2018-03-03 alert:#680 mock_date:2018-03-07
 
-veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:400 last:2018-03-03 alert:#680
+veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:400 last:2018-03-03 alert:#680 mock_date:2018-03-07
+
+
+
+
+
 
 
 
@@ -229,7 +244,12 @@ veolia_eau debug save compteur: 800
 
 veolia_eau debug save last: 2018-03-03
 
-veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:800 last:2018-03-04 alert:#680
+veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:800 last:2018-03-04 alert:#680 mock_date:2018-03-07
+
+
+
+
+
 
 
 
@@ -309,7 +329,12 @@ veolia_eau debug save compteur: 800
 
 veolia_eau debug save last: 2018-03-04
 
-veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:800 last:2018-03-04 alert:#680
+veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:800 last:2018-03-04 alert:#680 mock_date:2018-03-07
+
+
+
+
+
 
 
 
@@ -349,9 +374,14 @@ veolia_eau debug execCmd:Array
 
 veolia_eau debug save compteur: 800
 
-veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:800 last:2018-03-04 alert:#680
+veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:800 last:2018-03-04 alert:#680 mock_date:2018-03-07
 
-veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:0 last:2018-01-31 alert:#680
+veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:0 last:2018-01-31 alert:#680 mock_date:2018-03-07
+
+
+
+
+
 
 
 
@@ -559,7 +589,12 @@ veolia_eau debug save compteur: 8060
 
 veolia_eau debug save last: 2018-01-31
 
-veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:8060 last:2018-02-28 alert:#680
+veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:8060 last:2018-02-28 alert:#680 mock_date:2018-03-07
+
+
+
+
+
 
 
 
@@ -633,17 +668,22 @@ veolia_eau debug save compteur: 8660
 
 veolia_eau debug save last: 2018-02-28
 
-veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:8660 last:2018-03-03 alert:#680
+veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:8660 last:2018-03-03 alert:#680 mock_date:2018-03-07
 
-veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:0 last:2018-01-31 alert:#680
-
-
+veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:0 last:2018-01-31 alert:#680 mock_date:2018-03-03
 
 
 
 
 
-veolia_eau debug 03/2018 04
+
+
+
+
+
+
+
+veolia_eau debug 02/2018 28
 
 veolia_eau debug ### LOGIN ON https://www.eau-services.com/default.aspx ###
 
@@ -853,7 +893,468 @@ veolia_eau debug save compteur: 7857
 
 veolia_eau debug save last: 2018-01-31
 
-veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:7857 last:2018-02-27 alert:#680
+veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:7857 last:2018-02-27 alert:#680 mock_date:2018-03-03
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+veolia_eau debug March February 86400
+
+
+
+veolia_eau debug 02/2018 27
+
+veolia_eau debug ### LOGIN ON https://www.eau-services.com/default.aspx ###
+
+veolia_eau debug cURL response : tbd
+
+veolia_eau debug cURL errno : 0
+
+veolia_eau debug ### GO TO CONSOMMATION PAGE ###
+
+veolia_eau debug cURL response : 1
+
+veolia_eau debug cURL errno : 0
+
+veolia_eau debug alert: 680
+
+veolia_eau debug ### TRAITE CONSO CSV 2 ###
+
+veolia_eau debug last1: 2018-02-27
+
+veolia_eau debug 169,01/02/2018
+
+veolia_eau debug 2018-02-01 169 M 7857 7857
+
+veolia_eau debug 243,02/02/2018
+
+veolia_eau debug 2018-02-02 243 M 7857 7857
+
+veolia_eau debug 221,03/02/2018
+
+veolia_eau debug 2018-02-03 221 M 7857 7857
+
+veolia_eau debug 682,04/02/2018
+
+veolia_eau debug 2018-02-04 682 M 7857 7857
+
+veolia_eau debug 314,05/02/2018
+
+veolia_eau debug 2018-02-05 314 M 7857 7857
+
+veolia_eau debug 257,06/02/2018
+
+veolia_eau debug 2018-02-06 257 M 7857 7857
+
+veolia_eau debug 317,07/02/2018
+
+veolia_eau debug 2018-02-07 317 M 7857 7857
+
+veolia_eau debug 159,08/02/2018
+
+veolia_eau debug 2018-02-08 159 M 7857 7857
+
+veolia_eau debug 320,09/02/2018
+
+veolia_eau debug 2018-02-09 320 M 7857 7857
+
+veolia_eau debug 217,10/02/2018
+
+veolia_eau debug 2018-02-10 217 M 7857 7857
+
+veolia_eau debug 342,11/02/2018
+
+veolia_eau debug 2018-02-11 342 M 7857 7857
+
+veolia_eau debug 322,12/02/2018
+
+veolia_eau debug 2018-02-12 322 M 7857 7857
+
+veolia_eau debug 306,13/02/2018
+
+veolia_eau debug 2018-02-13 306 M 7857 7857
+
+veolia_eau debug 485,14/02/2018
+
+veolia_eau debug 2018-02-14 485 M 7857 7857
+
+veolia_eau debug 189,15/02/2018
+
+veolia_eau debug 2018-02-15 189 M 7857 7857
+
+veolia_eau debug 219,16/02/2018
+
+veolia_eau debug 2018-02-16 219 M 7857 7857
+
+veolia_eau debug 212,17/02/2018
+
+veolia_eau debug 2018-02-17 212 M 7857 7857
+
+veolia_eau debug 689,18/02/2018
+
+veolia_eau debug 2018-02-18 689 M 7857 7857
+
+veolia_eau debug 204,19/02/2018
+
+veolia_eau debug 2018-02-19 204 M 7857 7857
+
+veolia_eau debug 192,20/02/2018
+
+veolia_eau debug 2018-02-20 192 M 7857 7857
+
+veolia_eau debug 570,21/02/2018
+
+veolia_eau debug 2018-02-21 570 M 7857 7857
+
+veolia_eau debug 277,22/02/2018
+
+veolia_eau debug 2018-02-22 277 M 7857 7857
+
+veolia_eau debug 165,23/02/2018
+
+veolia_eau debug 2018-02-23 165 M 7857 7857
+
+veolia_eau debug 275,24/02/2018
+
+veolia_eau debug 2018-02-24 275 M 7857 7857
+
+veolia_eau debug 170,25/02/2018
+
+veolia_eau debug 2018-02-25 170 M 7857 7857
+
+veolia_eau debug 186,26/02/2018
+
+veolia_eau debug 2018-02-26 186 M 7857 7857
+
+veolia_eau debug 155,27/02/2018
+
+veolia_eau debug 2018-02-27 155 M 7857 7857
+
+veolia_eau debug 0,Nonmesurée
+
+veolia_eau debug valeur non mesurée
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:02/2018
+
+veolia_eau error valeur non mesurée en fin de mois: la mesure sera perdu demain, il faut la recuperer avant minuit ou ensuite a la main et corriger la valeur dans history ainsi que la valeur compteur dans eqLogic
+
+veolia_eau debug Date: 2018-02-01 / Index: 7857 / Conso: 169 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-02 / Index: 7857 / Conso: 243 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-03 / Index: 7857 / Conso: 221 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-04 / Index: 7857 / Conso: 682 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-05 / Index: 7857 / Conso: 314 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-06 / Index: 7857 / Conso: 257 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-07 / Index: 7857 / Conso: 317 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-08 / Index: 7857 / Conso: 159 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-09 / Index: 7857 / Conso: 320 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-10 / Index: 7857 / Conso: 217 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-11 / Index: 7857 / Conso: 342 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-12 / Index: 7857 / Conso: 322 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-13 / Index: 7857 / Conso: 306 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-14 / Index: 7857 / Conso: 485 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-15 / Index: 7857 / Conso: 189 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-16 / Index: 7857 / Conso: 219 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-17 / Index: 7857 / Conso: 212 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-18 / Index: 7857 / Conso: 689 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-19 / Index: 7857 / Conso: 204 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-20 / Index: 7857 / Conso: 192 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-21 / Index: 7857 / Conso: 570 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-22 / Index: 7857 / Conso: 277 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-23 / Index: 7857 / Conso: 165 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-24 / Index: 7857 / Conso: 275 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-25 / Index: 7857 / Conso: 170 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-26 / Index: 7857 / Conso: 186 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-27 / Index: 7857 / Conso: 155 / Type de relevé: M
+
+veolia_eau debug getConfiguration:maxday
+
+veolia_eau debug getConfiguration:maxmonth
+
+veolia_eau debug Conso mensuelle: 7857 litres
+
+veolia_eau debug execCmd:Array
+
+veolia_eau debug save compteur: 7857
+
+veolia_eau debug save last: 2018-02-27
+
+veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:7857 last:2018-02-27 alert:#680 mock_date:2018-03-07
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+veolia_eau debug March February 86400
+
+
+
+veolia_eau debug 02/2018 27
+
+veolia_eau debug ### LOGIN ON https://www.eau-services.com/default.aspx ###
+
+veolia_eau debug cURL response : tbd
+
+veolia_eau debug cURL errno : 0
+
+veolia_eau debug ### GO TO CONSOMMATION PAGE ###
+
+veolia_eau debug cURL response : 1
+
+veolia_eau debug cURL errno : 0
+
+veolia_eau debug alert: 680
+
+veolia_eau debug ### TRAITE CONSO CSV 2 ###
+
+veolia_eau debug last1: 2018-02-27
+
+veolia_eau debug 169,01/02/2018
+
+veolia_eau debug 2018-02-01 169 M 7857 7857
+
+veolia_eau debug 243,02/02/2018
+
+veolia_eau debug 2018-02-02 243 M 7857 7857
+
+veolia_eau debug 221,03/02/2018
+
+veolia_eau debug 2018-02-03 221 M 7857 7857
+
+veolia_eau debug 682,04/02/2018
+
+veolia_eau debug 2018-02-04 682 M 7857 7857
+
+veolia_eau debug 314,05/02/2018
+
+veolia_eau debug 2018-02-05 314 M 7857 7857
+
+veolia_eau debug 257,06/02/2018
+
+veolia_eau debug 2018-02-06 257 M 7857 7857
+
+veolia_eau debug 317,07/02/2018
+
+veolia_eau debug 2018-02-07 317 M 7857 7857
+
+veolia_eau debug 159,08/02/2018
+
+veolia_eau debug 2018-02-08 159 M 7857 7857
+
+veolia_eau debug 320,09/02/2018
+
+veolia_eau debug 2018-02-09 320 M 7857 7857
+
+veolia_eau debug 217,10/02/2018
+
+veolia_eau debug 2018-02-10 217 M 7857 7857
+
+veolia_eau debug 342,11/02/2018
+
+veolia_eau debug 2018-02-11 342 M 7857 7857
+
+veolia_eau debug 322,12/02/2018
+
+veolia_eau debug 2018-02-12 322 M 7857 7857
+
+veolia_eau debug 306,13/02/2018
+
+veolia_eau debug 2018-02-13 306 M 7857 7857
+
+veolia_eau debug 485,14/02/2018
+
+veolia_eau debug 2018-02-14 485 M 7857 7857
+
+veolia_eau debug 189,15/02/2018
+
+veolia_eau debug 2018-02-15 189 M 7857 7857
+
+veolia_eau debug 219,16/02/2018
+
+veolia_eau debug 2018-02-16 219 M 7857 7857
+
+veolia_eau debug 212,17/02/2018
+
+veolia_eau debug 2018-02-17 212 M 7857 7857
+
+veolia_eau debug 689,18/02/2018
+
+veolia_eau debug 2018-02-18 689 M 7857 7857
+
+veolia_eau debug 204,19/02/2018
+
+veolia_eau debug 2018-02-19 204 M 7857 7857
+
+veolia_eau debug 192,20/02/2018
+
+veolia_eau debug 2018-02-20 192 M 7857 7857
+
+veolia_eau debug 570,21/02/2018
+
+veolia_eau debug 2018-02-21 570 M 7857 7857
+
+veolia_eau debug 277,22/02/2018
+
+veolia_eau debug 2018-02-22 277 M 7857 7857
+
+veolia_eau debug 165,23/02/2018
+
+veolia_eau debug 2018-02-23 165 M 7857 7857
+
+veolia_eau debug 275,24/02/2018
+
+veolia_eau debug 2018-02-24 275 M 7857 7857
+
+veolia_eau debug 170,25/02/2018
+
+veolia_eau debug 2018-02-25 170 M 7857 7857
+
+veolia_eau debug 186,26/02/2018
+
+veolia_eau debug 2018-02-26 186 M 7857 7857
+
+veolia_eau debug 155,27/02/2018
+
+veolia_eau debug 2018-02-27 155 M 7857 7857
+
+veolia_eau debug 203,28/02/2018
+
+veolia_eau debug 2018-02-28 203 M 8060 8060
+
+veolia_eau debug Date: 2018-02-01 / Index: 7857 / Conso: 169 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-02 / Index: 7857 / Conso: 243 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-03 / Index: 7857 / Conso: 221 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-04 / Index: 7857 / Conso: 682 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-05 / Index: 7857 / Conso: 314 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-06 / Index: 7857 / Conso: 257 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-07 / Index: 7857 / Conso: 317 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-08 / Index: 7857 / Conso: 159 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-09 / Index: 7857 / Conso: 320 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-10 / Index: 7857 / Conso: 217 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-11 / Index: 7857 / Conso: 342 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-12 / Index: 7857 / Conso: 322 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-13 / Index: 7857 / Conso: 306 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-14 / Index: 7857 / Conso: 485 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-15 / Index: 7857 / Conso: 189 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-16 / Index: 7857 / Conso: 219 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-17 / Index: 7857 / Conso: 212 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-18 / Index: 7857 / Conso: 689 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-19 / Index: 7857 / Conso: 204 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-20 / Index: 7857 / Conso: 192 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-21 / Index: 7857 / Conso: 570 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-22 / Index: 7857 / Conso: 277 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-23 / Index: 7857 / Conso: 165 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-24 / Index: 7857 / Conso: 275 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-25 / Index: 7857 / Conso: 170 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-26 / Index: 7857 / Conso: 186 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-27 / Index: 7857 / Conso: 155 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-28 / Index: 8060 / Conso: 203 / Type de relevé: M
+
+veolia_eau debug getConfiguration:maxday
+
+veolia_eau debug getConfiguration:maxmonth
+
+veolia_eau debug Conso mensuelle: 8060 litres
+
+veolia_eau debug execCmd:Array
+
+veolia_eau debug save compteur: 8060
+
+veolia_eau debug save last: 2018-02-27
+
+veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:8060 last:2018-02-28 alert:#680 mock_date:2018-03-07
+
+
+
+
+
 
 
 
@@ -879,19 +1380,19 @@ veolia_eau debug alert: 680
 
 veolia_eau debug ### TRAITE CONSO CSV 2 ###
 
-veolia_eau debug last1: 2018-02-27
+veolia_eau debug last1: 2018-02-28
 
 veolia_eau debug 200,01/03/2018
 
-veolia_eau debug 2018-03-01 200 M 8057 8057
+veolia_eau debug 2018-03-01 200 M 8260 8260
 
 veolia_eau debug 100,02/03/2018
 
-veolia_eau debug 2018-03-02 100 M 8157 8157
+veolia_eau debug 2018-03-02 100 M 8360 8360
 
 veolia_eau debug 300,03/03/2018
 
-veolia_eau debug 2018-03-03 300 M 8457 8457
+veolia_eau debug 2018-03-03 300 M 8660 8660
 
 veolia_eau debug 0,Nonmesurée,0,Nonmesurée,
 
@@ -907,21 +1408,13 @@ veolia_eau debug valeur non mesurée
 
 
 
+veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
 
+veolia_eau debug Date: 2018-03-01 / Index: 8260 / Conso: 200 / Type de relevé: M
 
+veolia_eau debug Date: 2018-03-02 / Index: 8360 / Conso: 100 / Type de relevé: M
 
-
-
-
-veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:02/2018
-
-veolia_eau error valeur non mesurée en fin de mois: la mesure sera perdu demain, il faut la recuperer avant minuit ou ensuite a la main et corriger la valeur dans history ainsi que la valeur compteur dans eqLogic
-
-veolia_eau debug Date: 2018-03-01 / Index: 8057 / Conso: 200 / Type de relevé: M
-
-veolia_eau debug Date: 2018-03-02 / Index: 8157 / Conso: 100 / Type de relevé: M
-
-veolia_eau debug Date: 2018-03-03 / Index: 8457 / Conso: 300 / Type de relevé: M
+veolia_eau debug Date: 2018-03-03 / Index: 8660 / Conso: 300 / Type de relevé: M
 
 veolia_eau debug getConfiguration:maxday
 
@@ -931,8 +1424,8 @@ veolia_eau debug Conso mensuelle: 600 litres
 
 veolia_eau debug execCmd:Array
 
-veolia_eau debug save compteur: 8457
+veolia_eau debug save compteur: 8660
 
-veolia_eau debug save last: 2018-02-27
+veolia_eau debug save last: 2018-02-28
 
-veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:8457 last:2018-03-03 alert:#680
+veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:8660 last:2018-03-03 alert:#680 mock_date:2018-03-07
