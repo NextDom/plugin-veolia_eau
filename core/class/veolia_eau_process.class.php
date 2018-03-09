@@ -461,7 +461,7 @@ class veolia_eau extends eqLogic {
 
         $consomonth = [];
         $datasFetched = [];
-        $conso = [];
+        $conso = 0;
 
         $alert = str_replace('#','',$this->getConfiguration('alert'));
         log::add('veolia_eau', 'debug', 'alert: '. $alert);
@@ -493,8 +493,7 @@ class veolia_eau extends eqLogic {
 				// --
                 $html = file_get_contents($htm_file);
                 $info = explode("dataPoints: [", $html,2);
-                // TODO: gerer le cas ou info est vide
-                if (strlen($info[1]) == 0) { //dataPoints pas dans le HTML
+                if (count($info) == 1) { //dataPoints pas dans le HTML
                   log::add('veolia_eau', 'error', 'dataPoints: pas trouvé dans la reponse de Veolia');
                   $pos = strrpos($info[0], "Nous nous excusons pour la");
                   if ($pos != false) { // note: three equal signs
@@ -542,7 +541,6 @@ class veolia_eau extends eqLogic {
                       log::add('veolia_eau', 'debug', ' $nm_nextmonth:'.$nm_nextmonth.' $nm_month:'.$nm_month);
 					  if ($nm_month != $nm_nextmonth) {
 					    log::add('veolia_eau', 'error', 'valeur non mesurée en fin de mois: la mesure sera perdu demain, il faut la recuperer avant minuit ou ensuite a la main et corriger la valeur dans history ainsi que la valeur compteur dans eqLogic');
-					    // TODO: gerer ce cas automatiquement
 					  }
 					  break;
 					}
