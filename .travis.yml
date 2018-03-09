@@ -4,7 +4,8 @@ php:
 script:
   # - find . -type f -name *.php | xargs -n1 php -l | grep -v "No syntax errors detected in"
   - cd ${TRAVIS_BUILD_DIR}/tests;./RunVeoliaTests.sh
-  - git add files
-  - git commit -a -m "Travis-ci"
-  - git push origin HEAD:TravisResults $GIT_USERNAME:$GH_TOKEN
+  - cat veolia_sudest_data/testVeoliaSudEst.txt
+#  - git add files
+#  - git commit -a -m "Travis-ci"
+#  - git push origin HEAD:TravisResults $GIT_USERNAME:$GH_TOKEN
 # script: cd ${TRAVIS_BUILD_DIR}/tests;./RunVeoliaTestsSimple.sh
