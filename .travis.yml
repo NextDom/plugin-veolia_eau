@@ -2,4 +2,4 @@ language: php
 php:
   - 5.6
 script: find . -type f -name *.php | xargs -n1 php -l
-script: cd ${TRAVIS_BUILD_DIR};./tests/RunVeoliaTests.sh
+script: cd ${TRAVIS_BUILD_DIR};pwd;ls -altr;${TRAVIS_BUILD_DIR}/tests/RunVeoliaTests.sh;pwd
