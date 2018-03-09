@@ -8,7 +8,7 @@ require_once '../core/class/veolia_eau_process.class.php' ;
 class eqLogic{
   private $website = 2;
   private $login = 1;
-  private $password = PSW1;
+  private $password = "PSW1";
   private $depart = 0;
   private $compteur = 0;
   private $last="2018-03-01";
@@ -105,7 +105,7 @@ class cmd {
 }
 
 class log {
-  public function add($plugin,$level,$message)
+  static public function add($plugin,$level,$message)
   {
     echo "\n".$plugin." ".$level." ".$message."\n";
   }

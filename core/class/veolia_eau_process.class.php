@@ -217,6 +217,7 @@ class veolia_eau extends eqLogic {
 		$getConsoInHtmlFile = true;
         $website=intval($this->getConfiguration('website'));
         $offsetVeoliaDate=3;
+        $url_token=0; // n etait pas initialisé dans tous les cas
         switch ($website) {
             case 2:
                 $url_login = 'https://www.eau-services.com/default.aspx';
