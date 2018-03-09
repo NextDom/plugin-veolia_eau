@@ -9,3 +9,15 @@ script:
 #  - git commit -a -m "Travis-ci"
 #  - git push origin HEAD:TravisResults $GIT_USERNAME:$GH_TOKEN
 # script: cd ${TRAVIS_BUILD_DIR}/tests;./RunVeoliaTestsSimple.sh
+deploy:
+     provider: releases
+     api_key:
+         secure: $GH_TOKEN
+     file: 
+         - veolia_sudest_data/testVeoliaSudEst.txt
+     skip_cleanup: true
+     on: 
+       repo: rjullien/plugin-veolia_eau
+       branches:
+          only:
+          - master 
