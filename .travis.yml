@@ -4,20 +4,25 @@ php:
 script:
   # - find . -type f -name *.php | xargs -n1 php -l | grep -v "No syntax errors detected in"
   - cd ${TRAVIS_BUILD_DIR}/tests;./RunVeoliaTests.sh
-  - cat veolia_sudest_data/testVeoliaSudEst.txt
+  - diff -B veolia_sudest_data/testVeoliaSudEst.txt veolia_sudest_data_src/testVeoliaSudEst.txt
+#  - cat veolia_sudest_data/testVeoliaSudEst.txt
 #  - git add files
 #  - git commit -a -m "Travis-ci"
 #  - git push origin HEAD:TravisResults $GIT_USERNAME:$GH_TOKEN
 # script: cd ${TRAVIS_BUILD_DIR}/tests;./RunVeoliaTestsSimple.sh
+after_failure:
+    - grep "displayConfig" veolia_sudest_data/testVeoliaSudEst.txt > results.txt
+    - grep "displayConfig" veolia_sudest_data_src/testVeoliaSudEst.txt > base.txt
+    - diff  base.txt results.txt
 deploy:
      provider: releases
      api_key:
          secure: $GH_TOKEN
-     file: 
+     file:
          - veolia_sudest_data/testVeoliaSudEst.txt
      skip_cleanup: true
-     on: 
+     on:
        repo: rjullien/plugin-veolia_eau
        branches:
           only:
-          - master 
+          - master
