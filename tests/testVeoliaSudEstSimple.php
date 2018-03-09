@@ -94,7 +94,7 @@ class eqLogic{
   }
 }
 class cmd {
-  public function byId($argument)
+  static public function byId($argument)
   {
     return new cmd;
   }

@@ -446,7 +446,10 @@ class veolia_eau extends eqLogic {
 		  } else {
 			log::add('veolia_eau', 'error', 'error on creating file "'.$data_file.'"');
 		  }
-        }
+      } else {
+          $data_file=""; // remove travis-ci undefined variable error
+      }
+
 		curl_close($ch);
 
         //traitement du xls
