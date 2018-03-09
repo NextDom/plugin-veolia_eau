@@ -7,3 +7,5 @@ sftp-config.json
 tests/veolia_sudest_data_src_init
 tests/veolia_sudest_data/*.htm
 tests/veolia_sudest_data_reprocess
+
+tests/veolia_sudest_data_src/testVeoliaSudEstTravis.txt
