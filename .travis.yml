@@ -1,9 +1,11 @@
-keep-history: true
 language: php
 php:
   - 5.6
 script:
   - find . -type f -name *.php | xargs -n1 php -l
   - cd ${TRAVIS_BUILD_DIR}/tests;./RunVeoliaTests.sh
-  - cd ${TRAVIS_BUILD_DIR};git push
 # script: cd ${TRAVIS_BUILD_DIR}/tests;./RunVeoliaTestsSimple.sh
+deploy:
+  skip-cleanup: true
+  keep-history: true
+  - git push origin HEAD:TravisResults
