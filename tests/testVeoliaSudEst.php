@@ -15,6 +15,8 @@ class eqLogic{
   private $alert="#680";
   private $mock_file="veolia_sudest_data_src/veolia_html_3March.htm";
   private $mock_date="2018-03-07";
+  private $maxday=1000;
+  private $maxmonth=10000;
   public function getConfiguration($config){
     if ($config=="website"){
       return $this->website;
@@ -34,6 +36,10 @@ class eqLogic{
       return $this->mock_file;
     }elseif ($config=="mock_date"){
       return $this->mock_date;
+    }elseif ($config=="maxday"){
+      return $this->maxday;
+    }elseif ($config=="maxmonth"){
+      return $this->maxmonth;
     }
     else {
       log::add('veolia_eau','debug','getConfiguration:'.$config);

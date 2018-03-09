@@ -66,14 +66,6 @@ veolia_eau debug Date: 2018-03-02 / Index: 100 / Conso: 100 / Type de relevé: M
 
 veolia_eau debug Date: 2018-03-03 / Index: 400 / Conso: 300 / Type de relevé: M
 
-veolia_eau debug getConfiguration:maxday
-
-veolia_eau debug getConfiguration:maxmonth
-
-veolia_eau debug Conso mensuelle: 600 litres
-
-veolia_eau debug execCmd:Array
-
 veolia_eau debug save compteur: 400
 
 veolia_eau debug save last: 2018-03-01
@@ -144,14 +136,6 @@ veolia_eau debug Date: 2018-03-01 / Index: 400 / Conso: 200 / Type de relevé: M
 veolia_eau debug Date: 2018-03-02 / Index: 400 / Conso: 100 / Type de relevé: M
 
 veolia_eau debug Date: 2018-03-03 / Index: 400 / Conso: 300 / Type de relevé: M
-
-veolia_eau debug getConfiguration:maxday
-
-veolia_eau debug getConfiguration:maxmonth
-
-veolia_eau debug Conso mensuelle: 600 litres
-
-veolia_eau debug execCmd:Array
 
 veolia_eau debug save compteur: 400
 
@@ -231,14 +215,6 @@ veolia_eau debug Date: 2018-03-02 / Index: 400 / Conso: 100 / Type de relevé: M
 veolia_eau debug Date: 2018-03-03 / Index: 400 / Conso: 300 / Type de relevé: M
 
 veolia_eau debug Date: 2018-03-04 / Index: 800 / Conso: 400 / Type de relevé: M
-
-veolia_eau debug getConfiguration:maxday
-
-veolia_eau debug getConfiguration:maxmonth
-
-veolia_eau debug Conso mensuelle: 1000 litres
-
-veolia_eau debug execCmd:Array
 
 veolia_eau debug save compteur: 800
 
@@ -317,14 +293,6 @@ veolia_eau debug Date: 2018-03-03 / Index: 800 / Conso: 300 / Type de relevé: M
 
 veolia_eau debug Date: 2018-03-04 / Index: 800 / Conso: 400 / Type de relevé: M
 
-veolia_eau debug getConfiguration:maxday
-
-veolia_eau debug getConfiguration:maxmonth
-
-veolia_eau debug Conso mensuelle: 1000 litres
-
-veolia_eau debug execCmd:Array
-
 veolia_eau debug save compteur: 800
 
 veolia_eau debug save last: 2018-03-04
@@ -363,14 +331,6 @@ veolia_eau debug ### TRAITE CONSO CSV 2 ###
 veolia_eau debug last1: 2018-03-04
 
 veolia_eau error dataPoints: pas trouvé dans la reponse de Veolia
-
-veolia_eau debug getConfiguration:maxday
-
-veolia_eau debug getConfiguration:maxmonth
-
-veolia_eau debug Conso mensuelle: 0 litres
-
-veolia_eau debug execCmd:Array
 
 veolia_eau debug save compteur: 800
 
@@ -577,14 +537,6 @@ veolia_eau debug Date: 2018-02-27 / Index: 7857 / Conso: 155 / Type de relevé: 
 
 veolia_eau debug Date: 2018-02-28 / Index: 8060 / Conso: 203 / Type de relevé: M
 
-veolia_eau debug getConfiguration:maxday
-
-veolia_eau debug getConfiguration:maxmonth
-
-veolia_eau debug Conso mensuelle: 8060 litres
-
-veolia_eau debug execCmd:Array
-
 veolia_eau debug save compteur: 8060
 
 veolia_eau debug save last: 2018-01-31
@@ -655,14 +607,6 @@ veolia_eau debug Date: 2018-03-01 / Index: 8260 / Conso: 200 / Type de relevé: 
 veolia_eau debug Date: 2018-03-02 / Index: 8360 / Conso: 100 / Type de relevé: M
 
 veolia_eau debug Date: 2018-03-03 / Index: 8660 / Conso: 300 / Type de relevé: M
-
-veolia_eau debug getConfiguration:maxday
-
-veolia_eau debug getConfiguration:maxmonth
-
-veolia_eau debug Conso mensuelle: 600 litres
-
-veolia_eau debug execCmd:Array
 
 veolia_eau debug save compteur: 8660
 
@@ -880,14 +824,6 @@ veolia_eau debug Date: 2018-02-25 / Index: 7516 / Conso: 170 / Type de relevé: 
 veolia_eau debug Date: 2018-02-26 / Index: 7702 / Conso: 186 / Type de relevé: M
 
 veolia_eau debug Date: 2018-02-27 / Index: 7857 / Conso: 155 / Type de relevé: M
-
-veolia_eau debug getConfiguration:maxday
-
-veolia_eau debug getConfiguration:maxmonth
-
-veolia_eau debug Conso mensuelle: 7857 litres
-
-veolia_eau debug execCmd:Array
 
 veolia_eau debug save compteur: 7857
 
@@ -1118,14 +1054,6 @@ veolia_eau debug Date: 2018-02-26 / Index: 7857 / Conso: 186 / Type de relevé: 
 
 veolia_eau debug Date: 2018-02-27 / Index: 7857 / Conso: 155 / Type de relevé: M
 
-veolia_eau debug getConfiguration:maxday
-
-veolia_eau debug getConfiguration:maxmonth
-
-veolia_eau debug Conso mensuelle: 7857 litres
-
-veolia_eau debug execCmd:Array
-
 veolia_eau debug save compteur: 7857
 
 veolia_eau debug save last: 2018-02-27
@@ -1337,14 +1265,6 @@ veolia_eau debug Date: 2018-02-27 / Index: 7857 / Conso: 155 / Type de relevé: 
 
 veolia_eau debug Date: 2018-02-28 / Index: 8060 / Conso: 203 / Type de relevé: M
 
-veolia_eau debug getConfiguration:maxday
-
-veolia_eau debug getConfiguration:maxmonth
-
-veolia_eau debug Conso mensuelle: 8060 litres
-
-veolia_eau debug execCmd:Array
-
 veolia_eau debug save compteur: 8060
 
 veolia_eau debug save last: 2018-02-27
@@ -1415,14 +1335,6 @@ veolia_eau debug Date: 2018-03-01 / Index: 8260 / Conso: 200 / Type de relevé: 
 veolia_eau debug Date: 2018-03-02 / Index: 8360 / Conso: 100 / Type de relevé: M
 
 veolia_eau debug Date: 2018-03-03 / Index: 8660 / Conso: 300 / Type de relevé: M
-
-veolia_eau debug getConfiguration:maxday
-
-veolia_eau debug getConfiguration:maxmonth
-
-veolia_eau debug Conso mensuelle: 600 litres
-
-veolia_eau debug execCmd:Array
 
 veolia_eau debug save compteur: 8660
 

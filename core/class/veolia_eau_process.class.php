@@ -492,6 +492,7 @@ class veolia_eau extends eqLogic {
 				// --
                 $html = file_get_contents($htm_file);
                 $info = explode("dataPoints: [", $html,2);
+                // TODO: gerer le cas ou info est vide
                 if (strlen($info[1]) == 0) { //dataPoints pas dans le HTML
                   log::add('veolia_eau', 'error', 'dataPoints: pas trouvé dans la reponse de Veolia');
                   $pos = strrpos($info[0], "Nous nous excusons pour la");
