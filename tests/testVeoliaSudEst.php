@@ -14,7 +14,7 @@ class eqLogic{
   private $last="2018-03-01";
   private $alert="#680";
   private $mock_file="veolia_sudest_data_src/veolia_html_3March.htm";
-  private $mock_date="2018-03-07";
+  private $mock_date="2018-03-01";
   private $maxday=1000;
   private $maxmonth=10000;
   public function getConfiguration($config){
