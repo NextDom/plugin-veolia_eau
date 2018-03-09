@@ -8,4 +8,4 @@ script:
 deploy:
   skip-cleanup: true
   keep-history: true
-  - git push origin HEAD:TravisResults
+  git push origin HEAD:TravisResults
