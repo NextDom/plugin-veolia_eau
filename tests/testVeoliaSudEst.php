@@ -73,7 +73,7 @@ class eqLogic{
   }
   public function displayConfig(){
          log::add('veolia_eau','debug','displayConfig:'.
-         " website-:".
+         " website:".
           $this->website.
           " login:".
           $this->login.
