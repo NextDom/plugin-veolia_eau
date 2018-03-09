@@ -9,3 +9,13 @@ tests/veolia_sudest_data/*.htm
 tests/veolia_sudest_data_reprocess
 
 tests/veolia_sudest_data_src/testVeoliaSudEstTravis.txt
+
+core/class/veolia_eau_process_oct.class.php
+
+core/class/veolia_eau_process_dec.class.php
+
+core/class/veolia_eau_process_feb.class.php
+
+core/class/veolia_eau_process_jan.class.php
+
+core/class/veolia_eau_process_nov.class.php

@@ -236,7 +236,7 @@ class veolia_eau extends eqLogic {
                 $lastdate=$this->getConfiguration('last');
                 $lastdatenum=strtotime($lastdate);
                 $monthLast=date("F",$lastdatenum);
-                $LastDayMonth=strtotime("last day of ".$monthLast, time());
+                $LastDayMonth=strtotime("last day of ".$monthLast, $lastdatenum);
                 $EndMonth=$LastDayMonth-$lastdatenum;
 
                 // log::add('veolia_eau', 'debug',  $LastDayMonth.' '.$monthLast.' '.$lastdate);
@@ -729,7 +729,7 @@ class veolia_eau extends eqLogic {
         }
         if (!empty($date)) {
              if ($date >=$lastdate){
-               log::add('veolia_eau', 'debug', 'save last: '. $lastdate);
+               log::add('veolia_eau', 'debug', 'save last: '. $date);
                $this->setConfiguration('last', $date);
                $this->save(true);
              }
