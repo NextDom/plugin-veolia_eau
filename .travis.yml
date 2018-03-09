@@ -1,6 +1,9 @@
 language: php
 php:
   - 5.6
+branches:
+  only:
+    - master
 script:
   # - find . -type f -name *.php | xargs -n1 php -l | grep -v "No syntax errors detected in"
   - cd ${TRAVIS_BUILD_DIR}/tests;./RunVeoliaTests.sh
