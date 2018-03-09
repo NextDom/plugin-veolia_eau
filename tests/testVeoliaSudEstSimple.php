@@ -100,7 +100,7 @@ class cmd {
   }
   public function execCmd($cmd)
   {
-    log::add('veolia_eau','debug','execCmd:'.$cmd);
+    log::add('veolia_eau','debug','execCmd:'.serialize($cmd));
   }
 }
 

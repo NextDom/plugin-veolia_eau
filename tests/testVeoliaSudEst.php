@@ -94,13 +94,13 @@ class eqLogic{
   }
 }
 class cmd {
-  public function byId($argument)
+  static public function byId($argument)
   {
     return new cmd;
   }
   public function execCmd($cmd)
   {
-    log::add('veolia_eau','debug','execCmd:'.$cmd);
+    log::add('veolia_eau','debug','execCmd:'.serialize($cmd));
   }
 }
 
