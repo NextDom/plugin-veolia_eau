@@ -461,6 +461,7 @@ class veolia_eau extends eqLogic {
 
         $consomonth = [];
         $datasFetched = [];
+        $$conso = [];
 
         $alert = str_replace('#','',$this->getConfiguration('alert'));
         log::add('veolia_eau', 'debug', 'alert: '. $alert);
