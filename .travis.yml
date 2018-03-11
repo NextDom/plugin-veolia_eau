@@ -5,8 +5,7 @@ branches:
   only:
     - master
 before_script:
-    - cd ${TRAVIS_BUILD_DIR}
-    - find . -type f -name *.php | xargs -n1 php -l | grep -v "No syntax errors detected in"
+    - find . -type f -name *.php | xargs -n1 php -l
 script:
   # - find . -type f -name *.php | xargs -n1 php -l | grep -v "No syntax errors detected in"
   - cd ${TRAVIS_BUILD_DIR}/tests;./RunVeoliaTests.sh
