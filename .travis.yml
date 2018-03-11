@@ -4,6 +4,8 @@ php:
 branches:
   only:
     - master
+before_script:
+    - find . -type f -name *.php | xargs -n1 php -l | grep -v "No syntax errors detected in"
 script:
   # - find . -type f -name *.php | xargs -n1 php -l | grep -v "No syntax errors detected in"
   - cd ${TRAVIS_BUILD_DIR}/tests;./RunVeoliaTests.sh
@@ -13,10 +15,17 @@ script:
 #  - git commit -a -m "Travis-ci"
 #  - git push origin HEAD:TravisResults $GIT_USERNAME:$GH_TOKEN
 # script: cd ${TRAVIS_BUILD_DIR}/tests;./RunVeoliaTestsSimple.sh
+after_success:
+    # TBD
+    - cd ${TRAVIS_BUILD_DIR}/tests
+    - ls -latr
 after_failure:
+    - cd ${TRAVIS_BUILD_DIR}/tests
+    - cat veolia_sudest_data/testVeoliaSudEst.txt
     - grep "displayConfig" veolia_sudest_data/testVeoliaSudEst.txt > results.txt
     - grep "displayConfig" veolia_sudest_data_src/testVeoliaSudEst.txt > base.txt
     - diff  base.txt results.txt
+    - ls -latr
 deploy:
      provider: releases
      api_key:
