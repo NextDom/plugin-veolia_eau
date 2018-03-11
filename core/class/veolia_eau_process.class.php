@@ -212,6 +212,7 @@ class veolia_eau extends eqLogic {
         // $mock_test=2: Run automated tests with mocked files
         // $mock_test=3: Run automated tests with mocked files and change of month
 		$cookie_file = sys_get_temp_dir().'/veolia_php_cookies_'.uniqid();
+        // log::add('veolia_eau', 'debug',  $cookie_file );
 		static::secure_touch($cookie_file);
 
 		$getConsoInHtmlFile = true;
