@@ -844,7 +844,7 @@ veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteu
 
 
 
-veolia_eau debug March February 86400
+veolia_eau debug Detection de retard de veolia en fin de mois, on attend la mesure: March February 86400
 
 
 
@@ -1073,7 +1073,7 @@ veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteu
 
 
 
-veolia_eau debug March February 86400
+veolia_eau debug Detection de retard de veolia en fin de mois, on attend la mesure: March February 86400
 
 
 

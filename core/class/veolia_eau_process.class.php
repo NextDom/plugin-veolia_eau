@@ -255,7 +255,7 @@ class veolia_eau extends eqLogic {
                 if ($EndMonth!=0 && $monthReleve!=$monthLast){
                     $releve = mktime(0, 0, 0, date("m",$lastdatenum)  , date("d",$lastdatenum), date("Y",$lastdatenum));
                     if($currentdatenum-$lastdatenum>5*24*3600) { # on attend la musure 5 jours
-                       log::add('veolia_eau', 'debug','Detection de retard de velia en fin de mois, on attend la mesure'.  $monthReleve.' '.$monthLast.' '.$EndMonth);
+                       log::add('veolia_eau', 'debug','Detection de retard de veolia en fin de mois, on attend la mesure: '.  $monthReleve.' '.$monthLast.' '.$EndMonth);
                     } else {
                        log::add('veolia_eau', 'error',  'Mesure du '.date('Y-m-d',$releve).' perdu, pas disponible chez veolia');
                     }
