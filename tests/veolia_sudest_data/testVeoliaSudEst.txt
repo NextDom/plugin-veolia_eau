@@ -1,17 +1,6 @@
 
 veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:0 last:2018-03-01 alert:#680 mock_date:2018-03-07
 
-
-
-
-
-
-
-
-
-
-
-
 veolia_eau debug 03/2018 04
 
 veolia_eau debug ### LOGIN ON https://www.eau-services.com/default.aspx ###
@@ -48,16 +37,6 @@ veolia_eau debug 0,Nonmesurée,0,Nonmesurée,
 
 veolia_eau debug valeur non mesurée
 
-
-
-
-
-
-
-
-
-
-
 veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
 
 veolia_eau debug Date: 2018-03-01 / Index: 0 / Conso: 200 / Type de relevé: M
@@ -71,17 +50,6 @@ veolia_eau debug save compteur: 400
 veolia_eau debug save last: 2018-03-03
 
 veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:400 last:2018-03-03 alert:#680 mock_date:2018-03-07
-
-
-
-
-
-
-
-
-
-
-
 
 veolia_eau debug 03/2018 04
 
@@ -119,16 +87,6 @@ veolia_eau debug 0,Nonmesurée,0,Nonmesurée,
 
 veolia_eau debug valeur non mesurée
 
-
-
-
-
-
-
-
-
-
-
 veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
 
 veolia_eau debug Date: 2018-03-01 / Index: 400 / Conso: 200 / Type de relevé: M
@@ -144,17 +102,6 @@ veolia_eau debug save last: 2018-03-03
 veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:400 last:2018-03-03 alert:#680 mock_date:2018-03-07
 
 veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:400 last:2018-03-03 alert:#680 mock_date:2018-03-07
-
-
-
-
-
-
-
-
-
-
-
 
 veolia_eau debug 03/2018 04
 
@@ -196,16 +143,6 @@ veolia_eau debug 0,Nonmesurée,
 
 veolia_eau debug valeur non mesurée
 
-
-
-
-
-
-
-
-
-
-
 veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
 
 veolia_eau debug Date: 2018-03-01 / Index: 400 / Conso: 200 / Type de relevé: M
@@ -221,17 +158,6 @@ veolia_eau debug save compteur: 800
 veolia_eau debug save last: 2018-03-04
 
 veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:800 last:2018-03-04 alert:#680 mock_date:2018-03-07
-
-
-
-
-
-
-
-
-
-
-
 
 veolia_eau debug 03/2018 04
 
@@ -273,16 +199,6 @@ veolia_eau debug 0,Nonmesurée,
 
 veolia_eau debug valeur non mesurée
 
-
-
-
-
-
-
-
-
-
-
 veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
 
 veolia_eau debug Date: 2018-03-01 / Index: 800 / Conso: 200 / Type de relevé: M
@@ -298,17 +214,6 @@ veolia_eau debug save compteur: 800
 veolia_eau debug save last: 2018-03-04
 
 veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:800 last:2018-03-04 alert:#680 mock_date:2018-03-07
-
-
-
-
-
-
-
-
-
-
-
 
 veolia_eau debug 03/2018 04
 
@@ -337,17 +242,6 @@ veolia_eau debug save compteur: 800
 veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:800 last:2018-03-04 alert:#680 mock_date:2018-03-07
 
 veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:0 last:2018-01-31 alert:#680 mock_date:2018-03-07
-
-
-
-
-
-
-
-
-
-
-
 
 veolia_eau debug 03/2018 04
 
@@ -543,17 +437,6 @@ veolia_eau debug save last: 2018-02-28
 
 veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:8060 last:2018-02-28 alert:#680 mock_date:2018-03-07
 
-
-
-
-
-
-
-
-
-
-
-
 veolia_eau debug 03/2018 04
 
 veolia_eau debug ### LOGIN ON https://www.eau-services.com/default.aspx ###
@@ -590,16 +473,6 @@ veolia_eau debug 0,Nonmesurée,0,Nonmesurée,
 
 veolia_eau debug valeur non mesurée
 
-
-
-
-
-
-
-
-
-
-
 veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
 
 veolia_eau debug Date: 2018-03-01 / Index: 8260 / Conso: 200 / Type de relevé: M
@@ -615,17 +488,6 @@ veolia_eau debug save last: 2018-03-03
 veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:8660 last:2018-03-03 alert:#680 mock_date:2018-03-07
 
 veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:0 last:2018-01-31 alert:#680 mock_date:2018-03-03
-
-
-
-
-
-
-
-
-
-
-
 
 veolia_eau debug 02/2018 28
 
@@ -759,16 +621,6 @@ veolia_eau debug 0,Nonmesurée
 
 veolia_eau debug valeur non mesurée
 
-
-
-
-
-
-
-
-
-
-
 veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
 
 veolia_eau debug Date: 2018-02-01 / Index: 169 / Conso: 169 / Type de relevé: M
@@ -831,22 +683,7 @@ veolia_eau debug save last: 2018-02-27
 
 veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:7857 last:2018-02-27 alert:#680 mock_date:2018-03-03
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 veolia_eau debug Detection de retard de veolia en fin de mois, on attend la mesure: March February 86400
-
-
 
 veolia_eau debug 02/2018 27
 
@@ -980,22 +817,6 @@ veolia_eau debug 0,Nonmesurée
 
 veolia_eau debug valeur non mesurée
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:02/2018
 
 veolia_eau error valeur non mesurée en fin de mois: la mesure sera perdu demain, il faut la recuperer avant minuit ou ensuite a la main et corriger la valeur dans history ainsi que la valeur compteur dans eqLogic
@@ -1060,22 +881,7 @@ veolia_eau debug save last: 2018-02-27
 
 veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:7857 last:2018-02-27 alert:#680 mock_date:2018-03-07
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 veolia_eau debug Detection de retard de veolia en fin de mois, on attend la mesure: March February 86400
-
-
 
 veolia_eau debug 02/2018 27
 
@@ -1271,17 +1077,6 @@ veolia_eau debug save last: 2018-02-28
 
 veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:8060 last:2018-02-28 alert:#680 mock_date:2018-03-07
 
-
-
-
-
-
-
-
-
-
-
-
 veolia_eau debug 03/2018 04
 
 veolia_eau debug ### LOGIN ON https://www.eau-services.com/default.aspx ###
@@ -1317,16 +1112,6 @@ veolia_eau debug 2018-03-03 300 M 8660 8660
 veolia_eau debug 0,Nonmesurée,0,Nonmesurée,
 
 veolia_eau debug valeur non mesurée
-
-
-
-
-
-
-
-
-
-
 
 veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
 
