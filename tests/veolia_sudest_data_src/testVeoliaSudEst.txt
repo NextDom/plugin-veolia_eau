@@ -39,11 +39,15 @@ veolia_eau debug valeur non mesurée
 
 veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
 
+veolia_eau error Valeur non mesurée, une mesure est perdu
+
 veolia_eau debug 0,Nonmesurée,
 
 veolia_eau debug valeur non mesurée
 
 veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
+
+veolia_eau error Valeur non mesurée, une mesure est perdu
 
 veolia_eau debug Date: 2018-03-01 / Index: 0 / Conso: 200 / Type de relevé: M
 
@@ -95,11 +99,15 @@ veolia_eau debug valeur non mesurée
 
 veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
 
+veolia_eau error Valeur non mesurée, une mesure est perdu
+
 veolia_eau debug 0,Nonmesurée,
 
 veolia_eau debug valeur non mesurée
 
 veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
+
+veolia_eau error Valeur non mesurée, une mesure est perdu
 
 veolia_eau debug Date: 2018-03-01 / Index: 400 / Conso: 200 / Type de relevé: M
 
@@ -156,6 +164,8 @@ veolia_eau debug 0,Nonmesurée,
 veolia_eau debug valeur non mesurée
 
 veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
+
+veolia_eau error Valeur non mesurée, une mesure est perdu
 
 veolia_eau debug Date: 2018-03-01 / Index: 400 / Conso: 200 / Type de relevé: M
 
@@ -212,6 +222,8 @@ veolia_eau debug 0,Nonmesurée,
 veolia_eau debug valeur non mesurée
 
 veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
+
+veolia_eau error Valeur non mesurée, une mesure est perdu
 
 veolia_eau debug Date: 2018-03-01 / Index: 800 / Conso: 200 / Type de relevé: M
 
@@ -487,11 +499,15 @@ veolia_eau debug valeur non mesurée
 
 veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
 
+veolia_eau error Valeur non mesurée, une mesure est perdu
+
 veolia_eau debug 0,Nonmesurée,
 
 veolia_eau debug valeur non mesurée
 
 veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
+
+veolia_eau error Valeur non mesurée, une mesure est perdu
 
 veolia_eau debug Date: 2018-03-01 / Index: 8260 / Conso: 200 / Type de relevé: M
 
@@ -640,6 +656,8 @@ veolia_eau debug 0,Nonmesurée
 veolia_eau debug valeur non mesurée
 
 veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
+
+veolia_eau error Valeur non mesurée, une mesure est perdu
 
 veolia_eau debug Date: 2018-02-01 / Index: 169 / Conso: 169 / Type de relevé: M
 
@@ -837,7 +855,9 @@ veolia_eau debug valeur non mesurée
 
 veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:02/2018
 
-veolia_eau error valeur non mesurée en fin de mois: la mesure sera perdu demain, il faut la recuperer avant minuit ou ensuite a la main et corriger la valeur dans history ainsi que la valeur compteur dans eqLogic
+veolia_eau error valeur non mesurée en fin de mois
+
+veolia_eau error Valeur non mesurée, une mesure est perdu
 
 veolia_eau debug Date: 2018-02-01 / Index: 7857 / Conso: 169 / Type de relevé: M
 
@@ -1133,11 +1153,15 @@ veolia_eau debug valeur non mesurée
 
 veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
 
+veolia_eau error Valeur non mesurée, une mesure est perdu
+
 veolia_eau debug 0,Nonmesurée,
 
 veolia_eau debug valeur non mesurée
 
 veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
+
+veolia_eau error Valeur non mesurée, une mesure est perdu
 
 veolia_eau debug Date: 2018-03-01 / Index: 8260 / Conso: 200 / Type de relevé: M
 
@@ -1191,11 +1215,15 @@ veolia_eau debug valeur non mesurée
 
 veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
 
+veolia_eau error Valeur non mesurée, une mesure est perdu
+
 veolia_eau debug 0,Nonmesurée
 
 veolia_eau debug valeur non mesurée
 
 veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
+
+veolia_eau error Valeur non mesurée, une mesure est perdu
 
 veolia_eau debug 233,05/03/2018
 
