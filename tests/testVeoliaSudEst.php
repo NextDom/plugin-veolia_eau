@@ -70,6 +70,14 @@ $instanceVeolia->setConfiguration('mock_file',"veolia_sudest_data/veolia_html_3M
 $instanceVeolia->getConso(2);
 $instanceVeolia->displayConfig();
 
+$instanceVeolia = new veolia_eau;
+$instanceVeolia->setConfiguration('last',"2018-03-09");
+$instanceVeolia->setConfiguration('mock_date',"2018-03-12");
+$instanceVeolia->setConfiguration('mock_file',"veolia_sudest_data/veolia_html_11Mar-NonMesureMilieu.htm");
+$instanceVeolia->displayConfig();
+$instanceVeolia->getConso(2);
+
+
 // Test avec l access au site Veolia - Penser a MAJ les ID/password
 //$instanceVeolia->setConfiguration('login',"xx");
 //$instanceVeolia->setConfiguration('password',"xx");
