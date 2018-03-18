@@ -23,3 +23,5 @@ core/class/veolia_eau_process_nov.class.php
 core/class/veolia_eau_process_mar.class.php
 
 tests/testVeoliaSudEstReneNoCommit.php
+
+core/class/veolia_eau_process_mar_old.class.php

@@ -546,9 +546,12 @@ class veolia_eau extends eqLogic {
 					  $nm_nextmonth = date('m/Y',$nm_nextreleve);
                       log::add('veolia_eau', 'debug', ' $nm_nextmonth:'.$nm_nextmonth.' $nm_month:'.$nm_month);
 					  if ($nm_month != $nm_nextmonth) {
-					    log::add('veolia_eau', 'error', 'valeur non mesurée en fin de mois');
-					  }
-	                log::add('veolia_eau', 'error', 'Valeur non mesurée, une mesure est perdu');
+   				        log::add('veolia_eau', 'error', 'valeur non mesurée en fin de mois');
+                      }
+                      if ($date>$lastdate) {
+                        # Ne pas mettre l'erreur plusieurs fois dans le mois
+                        log::add('veolia_eau', 'error', 'Valeur non mesurée, une mesure est perdu');
+                      }
                     continue;
 				    }
 
