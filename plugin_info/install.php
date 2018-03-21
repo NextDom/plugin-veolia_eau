@@ -19,16 +19,11 @@
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 function veolia_eau_install() {
-    
 }
 
 function veolia_eau_update() {
-    
 }
-
 
 function veolia_eau_remove() {
-    
 }
 
-?>

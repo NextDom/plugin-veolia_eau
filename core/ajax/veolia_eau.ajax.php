@@ -23,9 +23,11 @@ try {
     if (!isConnect('admin')) {
         throw new \Exception(__('401 - Accès non autorisé', __FILE__));
     }
+
     // action qui permet d'obtenir l'ensemble des eqLogic
     if (init('action') == 'getAll') {
         $eqLogics = eqLogic::byType('veolia_eau');
+
         // la liste des équipements
         foreach ($eqLogics as $eqLogic) {
             $data['id'] = $eqLogic->getId();
@@ -35,6 +37,7 @@ try {
         }
         ajax::success($return);
     }
+
     // action qui permet d'effectuer la sauvegarde des donéée en asynchrone
     if (init('action') == 'saveStack') {
         $params = init('params');
@@ -46,4 +49,4 @@ try {
 } catch (\Exception $e) {
     ajax::error(displayExeption($e), $e->getCode());
 }
- 
+
