@@ -1,0 +1,1139 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="ISO-8859-1">
+        <!--[if lt IE 9]>
+            <script src="./js/html5shiv.js"></script>
+            <script src="./js/css3mediaqueries.js"></script>
+        <![endif]-->
+        <title>Surveiller ma consommation avec Télérelevé - Veolia</title>
+		<link rel="shortcut icon" type="image/x-icon" href="./images/favicon.ico" />
+		<link href="./js/fancybox/jquery.fancybox.css" media="all" rel="stylesheet" />
+		<link rel="stylesheet" href="./css/jquery.ui.1.11.0.css">
+        <script src="./js/jquery.1.8.2.min.js"></script>
+		 <script src="./js/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+        <script src="./js/mobile-menu.js"></script>
+        <script src="./js/jquery.bxslider.min.js"></script>
+        <link href="./css/jquery.bxslider.css" rel="stylesheet" />
+        <link href="./css/font.css" rel="stylesheet" media="all" />
+        <link href="./css/base.css" rel="stylesheet" media="all" />
+        <link href="./css/grid-2x2.css" rel="stylesheet" media="all" />
+        <link href="./css/grid-2x2-account.css" rel="stylesheet" media="all" />
+        <link href="./css/style.css" rel="stylesheet" media="all" />
+        <link rel="stylesheet" href="./css/responsive-table.css">
+        <link rel="stylesheet" href="./css/no-more-table.css">
+        <link href="./css/FormValidation.css" rel="stylesheet" media="all" />
+		<script src="./js/jquery-ui.js"></script>
+		<style>
+			#conso-jour-table { max-width: 570px; margin-bottom: 20px; }
+			.canvasjs-chart-credit { display: none }
+			.prec { background-image: url('images/arrow-white-left.png'); background-position: 10px center;     padding-left: 30px; text-align: right; padding-right: 15px; }
+			.alerte_historic_nb { display: inline-block; position: relative;  }
+			.alerte_historic_nb span {
+				display: block;
+				margin-right: 10px;
+				background: url('./images/picto-espace/rond-rouge.png') no-repeat center center;
+				text-align: center;
+				min-width: 19px;
+				min-height: 18px;
+				font-size:11px;
+				color: #FFF;
+				position: absolute;
+				top: -5px;
+				right: -20px;
+			}
+			#juniors-bloc .large-list.withoutBottBord li { text-align: left; }
+			.alerte-step-form-jour ul, .alerte-step-form-mens ul { margin-bottom: 10px; font-weight: bold; }
+			.alerte-step-form-mens ul { margin-bottom: 10px; font-weight: bold; }
+		</style>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no" />
+    </head>
+    <body>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-338825-7', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+<style>
+
+    div.hover-account{
+                position: absolute;
+                background: url("./images/bandeau-co-bg.png") no-repeat top left;
+                width: 297px;
+                height: 547px;
+                top: 1px;
+                right: -40px;
+                z-index: 9999;
+                display: none;
+                border-radius: 0 0 25px 25px;
+        }
+        div.hover-account form input[type=text] {
+            width: 220px;
+            height: 30px;
+            border-radius: 5px;
+            border: 1px solid #dfdbda;
+            padding: 5px 10px;
+        }
+       div.hover-account form input[type=password] {
+            width: 220px;
+            height: 30px;
+            border-radius: 5px;
+            border: 1px solid #dfdbda;
+            padding: 5px 10px;
+       }
+       div.hover-account  form [type=submit] {
+            background-color: #df0024;
+            color: #FFF;
+            border: 0;
+            border-radius: 10px;
+            height: 35px;
+            width: 230px;
+            float: right;
+            margin-top: 25px;
+            margin-bottom: 20px;
+       }
+        div.hover-account   a.lien-btn-h {
+                 background-color: #df0024;
+                 color: #FFF;
+                 border: 0;
+                 border-radius: 10px;
+                 height: 35px;
+                 width: 230px;
+                 float: right;
+                 margin-top: 0;
+                 padding: 8px 0;
+                 text-align: center;
+        }
+        div.hover-account   a.lien-btn-h:hover,div.hover-account  form [type=submit]:hover {
+           background-color: #a40016;
+        }
+       div.hover-account p.identifiant-client{
+            text-align: center;
+           font-size: 14px;
+       }
+       div.hover-account.not-connected{
+
+       }
+       div.hover-account .lien-menu-off{
+            display: block;
+            width: 296px;
+            height: 82px;
+            position: absolute;
+            top: 90px;
+       }
+
+       div.hover-account .container-forms {
+            display: block;
+            width: 297px;
+            padding: 0 35px;
+            top: 172px;
+            position: absolute;
+       }
+      div.hover-account ul.liens {
+                margin: 20px 0 0;
+       }
+       div.hover-account ul.liens li{
+                  display: inline-block;
+                  margin: 15px 0 0;
+             }
+     div.hover-account ul.liens li a{
+          text-align: left;
+          font-weight: bold;
+
+       }
+
+       div.hover-account ul.liens li [class^="iconf-"]:before, [class*=" iconf-"]:before {
+            margin: 0 15px 0 15px;
+            font-weight: bold;
+            font-size: 17px;
+
+
+       }
+       div.hover-account form a.pass-oubli{
+            color: #df0024;
+            float: right;
+       }
+
+       .hover-account a.fleche-ferme:before{
+                transform: rotateX(180deg);
+                font-size: 20px;
+       }
+
+       .hover-account a.fleche-ferme{
+            position: absolute;
+            margin: 0 auto;
+            display: block;
+            float: none;
+            width: 50px;
+            color: #808080;
+            bottom: 25px;
+            right: 0;
+            left: 0;
+            display: none;
+       }
+
+       header .connect-area .user-info{
+            z-index: 999;
+            right: -40px;
+           width: 295px;
+           height: 91px;
+           text-align: center;
+           padding-top: 15px;
+           padding-left: 14px;/* fix pour que ce soit centré à "espace perso*/
+            background: rgb(231,231,231);
+            background:  -moz-linear-gradient(top, rgba(231,231,231,1) 0%, rgba(255,255,255,0) 50%);
+            background:    -webkit-gradient(linear, left top, left bottom, from(rgba(242,242,242,1)), to(rgba(255,255,255,0)), color-stop(0.50, #eee));
+            background:   linear-gradient(to bottom, rgba(231,231,231,1) 0%,rgba(255,255,255,0) 50%);
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e7e7e7', endColorstr='#ffffff',GradientType=0 );
+       }
+       header .connect-area .user-info i:before{
+            color:#808080;
+            font-size: 18px;
+       }
+       .connect-area span {
+           font-family: "fs_rufusregular";
+           display: inline-block;
+           margin-top: 2px;
+           background: none;
+           padding-left: 0;
+           padding-top: 0;
+           font-size: 14px;
+       }
+
+
+
+       /*Responsive */
+@media (max-width: 959px) {
+       div.hover-account {
+           background: #f2f2f2 ;
+           width: 267px;
+           height: 377px;
+           top: 171px;
+           right: 0;
+           border-radius: 0 0 25px 25px;
+           /* color: #f2f2f2; */
+       }
+       div.hover-account .container-forms {
+           width: 100%;
+           padding: 25px 25px;
+           top: 0;
+        }
+        div.hover-account   a.lien-btn-h{
+            max-width: 100%;
+            min-width: 100%;
+        }
+}
+
+@media (max-width: 729px) {
+       div.hover-account {
+          display: none!important;
+       }
+}
+
+</style>
+
+<script src="./js/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+<link href="./js/fancybox/jquery.fancybox.css" media="all" rel="stylesheet" />
+
+
+<div class="container-w960" style="position: relative;">
+    <div class="hover-account connected">
+        <a href="javascript:;" class="lien-menu-off"></a>
+
+         <div class="container-forms" >
+
+              <p class="identifiant-client">Identifiant client : <strong>3219734</strong></p>
+              <ul class="liens">
+                  <li> <a href="mon-espace-perso.aspx" class="lien-btn-h" ><span class="iconf-espace-perso"></span>Mon espace personnel</a></li>
+                  <li> <a href="mon-espace-compte-consulter-facture.aspx" class="lien-btn-h" ><span class="iconf-factures"></span>Mes factures</a></li>
+                  <li> <a href="mon-espace-compte-historique.aspx" class="lien-btn-h" ><span class="iconf-consommations"></span>Mes consommations</a></li>
+                  <li> <a href="default.aspx?logout=1" class="lien-btn-h" ><span class="iconf-cadenas"></span>Déconnexion</a></li>
+              </ul>
+
+         </div>
+
+
+                  <a href="javascript:;" class="fleche-ferme iconf-fleche" ></a>
+
+
+    </div>
+
+</div>
+<header>
+            <div class="container-w960">
+                <a href="./default.aspx" title="Veolia" id="logo">
+                    <img src="./images/logo-veolia.png" alt="Logo Veolia" />
+                </a>
+                <div class="connect-area">
+
+
+                    <div class="user-info">
+                        <i class="iconf-cadenas"></i><br>
+                        <span>JULLIEN RENÉ</span>
+                       <!-- <a href="./default.aspx?logout=1">Déconnexion</a>-->
+                    </div>
+
+                </div>
+            </div>
+            <div id="menu-mobile-btn"></div>
+            <nav id="menu">
+                <ul>
+                    <li> <a href="./default.aspx"><span>Accueil</span></a></li>
+                    <li >
+                    	 <a href="./mes-demarches.aspx"><span>Mes démarches <br />en ligne</span></a>
+
+                     </li>
+                    <li 	>
+                    	<a href="./mon-eau-quotidien.aspx"><span>Mon eau <br />au quotidien</span></a>
+
+                    </li>
+                    <li >
+                    	<a href="./conseils-pratiques.aspx"><span>Conseils <br />pratiques</span></a>
+
+                    </li>
+                    <li >
+                    	<a href="./veolia-mediterranee.aspx"><span>MON AGENCE<br>Veolia</span></a>
+
+                    </li>
+                    <li>
+                    	<a href="javascript:;" id="lien-menu-on"><span>Mon espace <br />personnel</span></a>
+                     </li>
+                </ul>
+            </nav>
+        </header>
+
+
+
+
+        <script>
+
+             $('#lien-menu-on').click(function() {
+                     if (window.matchMedia("(min-width: 729px)").matches) {
+
+                    //  $('.hover-account').fadeIn();
+                    var mmenu = $('.hover-account');
+                         if(!mmenu.is(":visible")){
+                                mmenu.slideDown();
+                                $('.fleche-ferme').fadeIn(1000);
+
+                         }else{
+                           $('.fleche-ferme').fadeOut();
+                            mmenu.slideUp();
+                         }
+                 }else{
+                      window.location.href = "mon-espace-perso.aspx";
+                  }
+  			});
+            $('.lien-menu-off').click(function() {
+            //$('.hover-account').fadeOut();
+                $('.fleche-ferme').fadeOut();
+                $('.hover-account').slideUp();
+              });
+             $('.fleche-ferme').click(function() {
+                $('.fleche-ferme').fadeOut();
+               $('.hover-account').slideUp();
+             });
+
+              $(document).ready( function() {
+               $('a.pass-oubli').click(function() {
+                $('.hover-account').slideUp();
+               });
+              $("a.pass-oubli").fancybox({
+                    fitToView	: false,
+                    width       : '90%',
+                    maxWidth	: 400,
+                    height	: '90%',
+                    maxHeight	: 450,
+                    autoSize	: false,
+                    closeClick	: true,
+                    type:'iframe'
+            });
+            });
+
+        </script>
+        <div class="container-w960 p-conseil-pratique" id="global-content">
+            <div class="col-w190 col-left">
+
+
+<div id="sub-menu-account">
+    <a href="./mon-espace-perso.aspx" class="li-style main">Mon espace <span>perso</span></a>
+    <ul>
+        <li class="li-style orange">
+            <a href="#" class="main-categorie"><span>Mon compte client</span></a>
+             <ul>
+                <li  ><a href="./mon-espace-compte-modification.aspx">Modifier mon compte</a></li>
+                <li  ><a href="./mon-espace-compte-dialogue.aspx">Dialoguer avec Veolia</a></li>
+                <li  ><a href="mon-espace-compte-rdv.aspx">Gérer mes rendez-vous</a></li>
+                <li  ><a href="./mon-espace-compte-resiliation.aspx">Résilier un contrat</a></li>
+        	<li><a href="./facture-internet.aspx">Facture électronique</a></li>
+		<li><a href="./aquamemo.aspx">Aquamemo</a></li>
+	    </ul>
+        </li>
+        <li class="li-style blue">
+            <a href="#" class="main-categorie"><span>Mes factures</span></a>
+            <ul>
+                <li  ><a href="./mon-espace-compte-payer-facture.aspx">Payer mes factures</a></li>
+                <li  ><a href="./mon-espace-compte-consulter-facture.aspx">Consulter mes factures</a></li>
+                <li  ><a href="./mon-espace-compte-mes-operations.aspx">Voir mes opérations</a></li>
+                <li  ><a href="./mon-espace-compte-coordonne-bancaires.aspx">Coordonnées bancaires</a></li>
+                <li  ><a href="./mon-espace-compte-mode-paiement.aspx">Mode de paiement</a></li>
+            </ul>
+
+        </li>
+        <li class="li-style purple">
+                <a href="#" class="main-categorie"><span>Mes consommations</span></a>
+                <ul>
+                    <li  ><a href="./mon-espace-compte-historique.aspx">Voir mon historique</a></li>
+                    <li  ><a href="./mon-espace-compte-releve.aspx">Transmettre mon relevé de compteur</a></li>
+
+			 <li  class="select"  ><a href="./mon-espace-suivi-personnalise.aspx">Surveiller ma conso avec Télérelevé</a></li>
+
+		</ul>
+        </li>
+        <li class="li-style green">
+            <a href="#" class="main-categorie"><span>Mon eau au quotidien</span></a>
+            <ul>
+                <li  ><a href="./mon-espace-compte-origine-qualite.aspx">Eau et assainissement </a></li>
+                <li  ><a href="./mon-espace-compte-travaux-incident.aspx">Travaux / incidents</a></li>
+               <!-- <li  ><a href="./mon-espace-compte-signaler-probleme.aspx">Signaler un problème</a></li>-->
+            </ul>
+        </li>
+    </ul>
+</div>
+            </div>
+            <div class="col-w750 col-center">
+                <nav class="fil-ariane">
+                    <ul>
+                        <li><a href="./default.aspx">Accueil</a></li>
+                        <li><a href="./mon-espace-perso.aspx">Mon espace personnel</a></li>
+                        <li><a href="./mon-espace-suivi-personnalise.aspx">Suivi personnalis&eacute;</a></li>
+                    </ul>
+                </nav>
+                <div class="entete-cat">
+                    <h2>Surveiller ma conso avec Télérelevé</h2>
+              </div>
+              <hr>
+
+                <div>
+                    <!--<h4>Consultation de vos relev&eacute;s de compteurs d&rsquo;eau &agrave; distance</h4>//-->
+					<div style="padding-bottom: 10px;">
+
+					Mois de <strong>Février 2018</strong>
+
+
+					</div>
+					<form action="" method="get" id="chart-change-result">
+                        <input type="hidden" name="mm" value = "2/2018" />
+                        <input type="hidden" name="d" value = "" />
+						<div style="padding: 20px 20px; background-color: #D5D7D9; ">
+							<div style="display: inline-block; width: 33%; float: left;">
+								<select name="type-affichage" id="type-affichage" style="width: 100%;  padding: 0 10px;">
+
+
+									<option value="0">Affichage graphique</option>
+									<option value="1">Affichage tableau</option>
+								</select>
+							</div>
+							<div class="mobile-cent-pour-cent" style="display: inline-block; width: 33%; text-align: center;">
+
+
+								<label for="chart-change-result-unite"  style="margin: 0; padding-left: 10px;  padding-right: 5px;"><b>Unité :</b></label>
+								<input type="radio" name="unite" value="m3"  litre onclick="submit();">m<sup>3</sup> <input type="radio" name="unite" value="litre" checked onclick="submit();">litre
+							</div>
+							<div class="hidden-mobile" style="display: inline-block; width: 33%; float: right;">
+								<a href="?ex=2/2018&mm=2/2018&d=" style="background-color:#df0024; border-radius: 5px; padding: 10px 20px; font-size: 17px; cursor: pointer; color: #FFF;">
+									Exporter les données
+								</a>
+							</div>
+						</div>
+					</form>
+
+					 <div id="tableur" style="display: none;">
+						  <br />
+						  <table class="responsive">
+                                <tr>
+                                    <th>Période (jour/heure)</th>
+                                    <th class="large">Volume (litre)</th>
+                                </tr>
+
+                                    <tr>
+                                       <td>01/02/2018</td>
+                                       <td>169</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>02/02/2018</td>
+                                       <td>243</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>03/02/2018</td>
+                                       <td>221</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>04/02/2018</td>
+                                       <td>682</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>05/02/2018</td>
+                                       <td>314</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>06/02/2018</td>
+                                       <td>257</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>07/02/2018</td>
+                                       <td>317</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>08/02/2018</td>
+                                       <td>159</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>09/02/2018</td>
+                                       <td>320</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>10/02/2018</td>
+                                       <td>217</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>11/02/2018</td>
+                                       <td>342</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>12/02/2018</td>
+                                       <td>322</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>13/02/2018</td>
+                                       <td>306</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>14/02/2018</td>
+                                       <td>485</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>15/02/2018</td>
+                                       <td>189</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>16/02/2018</td>
+                                       <td>219</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>17/02/2018</td>
+                                       <td>212</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>18/02/2018</td>
+                                       <td>689</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>19/02/2018</td>
+                                       <td>204</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>20/02/2018</td>
+                                       <td>192</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>21/02/2018</td>
+                                       <td>570</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>22/02/2018</td>
+                                       <td>277</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>23/02/2018</td>
+                                       <td>165</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>24/02/2018</td>
+                                       <td>275</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>25/02/2018</td>
+                                       <td>170</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>26/02/2018</td>
+                                       <td>186</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>27/02/2018</td>
+                                       <td>155</td>
+                                    </tr>
+
+                                    <tr>
+                                       <td>28/02/2018</td>
+                                       <td>203</td>
+                                    </tr>
+
+                            </table>
+					 </div>
+					 <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+					 <div style="position: relative; text-align: center; height: 46px; padding-top: 16px;">
+						<a href="?mm=1/2018&d=" class="red-square-button prec" style="left: 15px; right: auto; bottom: 0; text-transform: none; width: 130px;">Précédent</a>&nbsp;&nbsp;<span class="mobile-cent-pour-cent" style="margin-top: 10px" >Volume total : 7857 litres</span><a href="?mm=3/2018&d=" class="red-square-button" style="width: 130px; background-position: 110px center; bottom: 0;text-transform: none; right: 15px; margin-right: 0;">Suivant</a>
+					 </div>
+					 <br />
+					<div id="juniors-bloc">
+						<ul class="large-list withoutBottBord">
+							<li>
+								<a href="#" class="cat-title">Créer une <span>alerte journalière</span></a>
+								<div class="faq-content">
+									<form action="#" method="GET" id="emmenage-step-form" class="alerte-step-form-jour"style="text-align: left; width: 100%; margin: 0; " >
+										<div style=" background-color: #D5D7D9; padding: 40px; padding-top: 20px; padding-bottom: 20px;">
+											<div id="conso-jour-err" class="formValidationSpan formValidation" style="text-align: left;">
+												<ul>
+													<li></li>
+												</ul>
+											</div>
+											Nom de l'alerte <input type="text" name="conso-libelle" id="conso-jour-libelle" value="" style="width: 439px;"/><br />
+											Période de surveillance du <input readonly="readonly" type="text" name="conso-jour-debut" id="conso-jour-debut" value="" style="width: 171px;" class="date-picker" /> au <input readonly="readonly" type="text" name="conso-jour-fin" id="conso-jour-fin" value="" style="width: 171px;"class=" date-picker" /><br />
+											Valeur plafond <input type="text" name="conso-jour" id="conso-jour-seuil" value="" style="width: 136px;" />
+											litres <select name="conso-jour-frequence" style="width: 120px;">
+													<option value="jour">par jour</option>
+													<option value="heure">par heure</option>
+												   </select>
+											de <input type="text" name="conso-jour-heure-debut" id="conso-jour-hdebut" value="1" style="width: 48px;" maxlength="2"> h à <input type="text" name="conso-jour-heure-fin" style="width: 48px;" maxlength="2" value="24" id="conso-jour-hfin"> h<br />
+										</div>
+										<div style="position: relative;  margin-top: 20px;">
+											<span style="display: block; margin-right: 20px;float: left; margin-left: 48px;">Jours</span>
+											<table id="conso-jour-table">
+												<tr>
+													<th>L</th>
+													<th>M</th>
+													<th>M</th>
+													<th>J</th>
+													<th>V</th>
+													<th>S</th>
+													<th>D</th>
+												</tr>
+												<tr>
+													<td>
+														<input type="checkbox" name="conso-jour-semaine" value="1" checked/>
+													</td>
+													<td>
+														<input type="checkbox" name="conso-jour-semaine" value="2" checked/>
+													</td>
+													<td>
+														<input type="checkbox" name="conso-jour-semaine" value="3" checked/>
+													</td>
+													<td>
+														<input type="checkbox" name="conso-jour-semaine" value="4" checked/>
+													</td>
+													<td>
+														<input type="checkbox" name="conso-jour-semaine" value="5" checked/>
+													</td>
+													<td>
+														<input type="checkbox" name="conso-jour-semaine" value="6" checked/>
+													</td>
+													<td>
+														<input type="checkbox" name="conso-jour-semaine" value="7" checked/>
+													</td>
+												</tr>
+											</table>
+											<div class="clear"></div>
+										</div>
+										<input type="submit" name="valider" value="Ajouter l'alerte" style="float: right; margin-right: 0;"/>
+
+										<div class="clear"></div>
+									</form>
+								</div>
+							</li>
+							<li>
+								<a href="#" class="cat-title">Créer une alerte mensuelle</a>
+								<div class="faq-content">
+									<form action="#" method="POST" id="emmenage-step-form" class="alerte-step-form-mens" style="text-align: left; width: 100%; margin: 0; " >
+										<div style=" background-color: #D5D7D9; padding: 40px; padding-top: 20px; padding-bottom: 20px;">
+											<div id="conso-mois-err" class="formValidationSpan formValidation" style="text-align: left;">
+												<ul>
+													<li></li>
+												</ul>
+											</div>
+											Nom de l'alerte <input type="text" name="conso-libelle" id="conso-mens-libelle" value="" style="width: 424px;"/><br />
+											Valeur plafond <input type="text" name="conso-mois" id="conso-mens-seuil" placeholder="M3/MOIS" style="width: 120px;" />
+											pour la période du <input type="text" name="conso-mois-debut" id="conso-mens-debut" value="" style="width: 80px;" class="date-picker-month" readonly="readonly" /> au <input type="text" name="conso-mois-fin" id="conso-mens-fin" value="" style="width: 80px;"  readonly="readonly" class="date-picker-month"/>
+										</div>
+										<input type="submit" name="valider" value="Ajouter l'alerte" style="float: right; margin-right: 0; margin-top: 20px;" />
+										<div class="clear"></div>
+									</form>
+								</div>
+							</li>
+
+							<li>
+								<a href="#" class="cat-title">Liste de mes alertes</a>
+								<div class="faq-content">
+									<b>Légende:</b>
+									<ul class="legend-list">
+										<li>&nbsp;&nbsp;<img src="./images/picto-espace/p_suppr.png" alt="" /> &nbsp;&nbsp;&nbsp;&nbsp;Supprimer l'alerte</li>
+										<li>&nbsp;<div class="alerte_historic_nb"><img src="./images/picto-espace/p_voiralerte-rouge.png" alt="" /><span>1</span></div> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Voir historique de l'alerte</li>
+									</ul>
+								    <table class="responsive" id="list-alert-form">
+											<thead>
+												<tr class="violet">
+													<th>Nom de l'alerte</th>
+													<th>Valeurs</th>
+													<th>Période séléctionnée</th>
+													<th style="width:65px">Active</th>
+													<th>Actions</th>
+												</tr>
+											</thead>
+											<tbody>
+
+											</tbody>
+									</table>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+            <div class="clear"></div>
+            </div>
+		</div>
+		 <footer class="container-w960">&copy; Veolia 2015
+
+  <nav>
+    <ul>
+      <li><a href="./sitemap.aspx">Plan du site</a></li>
+      <li><a href="./mentions-legales.aspx">Mentions légales</a></li>
+      <li><a href="./veolia-contact.aspx">Nous contacter</a></li>
+    </ul>
+  </nav>
+
+</footer>
+
+        <script src="./js/FormValidation.js"></script>
+        <script src="./js/Account.js"></script>
+		<script type="text/javascript" src="./js/canvasjs.min.js"></script>
+		 <script src="./js/responsive-table.js"></script>
+        <script>
+            <!--
+
+				var current_select_li = -1;
+				var FVmens = new FormValidation();
+				var FVjour = new FormValidation();
+				currently_submit = false;
+				FVjour.addRules('conso-jour-libelle', FVjour.TYPE_TEXT, {'min-length': 1}, {'onError': {'msg' : 'Libellé obligatoire'}});
+				FVjour.addRules('conso-jour-debut', FVjour.TYPE_TEXT, {'min-length': 1}, {'onError': {'msg' : 'Date de début de surveillance obligatoire'}});
+				FVjour.addRules('conso-jour-fin', FVjour.TYPE_TEXT, {'min-length': 1}, {'onError': {'msg' : 'Date de fin de surveillance obligatoire'}});
+				FVjour.addRules('conso-jour-seuil', FVjour.TYPE_TEXT, {'min-length': 1, 'is_numeric': true}, {'onError': {'msg' : 'Valeur plafond obligatoire'}});
+				FVjour.addRules('conso-jour-hdebut', FVjour.TYPE_TEXT, {'min-length': 1, 'is_numeric': true}, {'onError': {'msg' : 'Heure de début de surveillance obligatoire'}});
+				FVjour.addRules('conso-jour-hfin', FVjour.TYPE_TEXT, {'min-length': 1, 'is_numeric': true}, {'onError': {'msg' : 'Heure de fin de surveillance obligatoire'}});
+				FVjour.onError = function( obj ) {
+					var div;
+					if( obj['states'].onError.hasOwnProperty('msg') ) {
+						div    = $('<li></li>');
+						div.addClass('formValidationSpan formValidation' + obj.id);
+						div.html( "> " + obj['states'].onError.msg );
+						$('#conso-jour-err > ul').append(div);
+					}
+					$('#' + obj.id).addClass('formValidationInputStyle');
+				};
+
+				$('.alerte-step-form-jour').submit( function() {
+					/* Reset champs */
+					if( currently_submit ) return false;
+					currently_submit = true;
+					//stepLoader(true);                        $('.formValidationSpan').remove();
+					$('.formValidationInputStyle').removeClass('formValidationInputStyle');
+					if(FVjour.validation()) {
+						return true;
+					}
+
+				   $('html, body').animate({
+						scrollTop:$('form.alerte-step-form-jour').offset().top
+					}, 'slow');
+
+					//stepLoader(false);
+					currently_submit = false;
+
+					return false;
+
+				});
+
+				$('.alerte-step-form-jour input').blur(function() {
+				   var id = $(this).attr('id');
+				   $('.formValidation' + id).remove();
+				   $('#' + id).removeClass('formValidationInputStyle');
+				   FVjour.check(id);
+				});
+
+				FVmens.addRules('conso-mens-libelle', FVmens.TYPE_TEXT, {'min-length': 1}, {'onError': {'msg' : 'Libellé obligatoire'}});
+				FVmens.addRules('conso-mens-debut', FVmens.TYPE_TEXT, {'min-length': 1}, {'onError': {'msg' : 'Premier mois de surveillance obligatoire'}});
+				FVmens.addRules('conso-mens-fin', FVmens.TYPE_TEXT, {'min-length': 1}, {'onError': {'msg' : 'Dernier mois de surveillance obligatoire'}});
+				FVmens.addRules('conso-mens-seuil', FVmens.TYPE_TEXT, {'min-length': 1, 'is_numeric': true}, {'onError': {'msg' : 'Valeur plafond obligatoire'}});
+				FVmens.onError = function( obj ) {
+					var div;
+					if( obj['states'].onError.hasOwnProperty('msg') ) {
+						div    = $('<li></li>');
+						div.addClass('formValidationSpan formValidation' + obj.id);
+						div.html( "> " + obj['states'].onError.msg );
+						$('#conso-mois-err > ul').append(div);
+					}
+					$('#' + obj.id).addClass('formValidationInputStyle');
+				};
+
+				$('.alerte-step-form-mens').submit( function() {
+					/* Reset champs */
+					if( currently_submit ) return false;
+					currently_submit = true;
+					//stepLoader(true);                        $('.formValidationSpan').remove();
+					$('.formValidationInputStyle').removeClass('formValidationInputStyle');
+					if(FVmens.validation()) {
+						return true;
+					}
+
+				   $('html, body').animate({
+						scrollTop:$('form.alerte-step-form-mens').offset().top
+					}, 'slow');
+
+					//stepLoader(false);
+					currently_submit = false;
+
+					return false;
+
+				});
+
+				$('.alerte-step-form-mens input').blur(function() {
+				   var id = $(this).attr('id');
+				   $('.formValidation' + id).remove();
+				   $('#' + id).removeClass('formValidationInputStyle');
+				   FVmens.check(id);
+				});
+                function CPCheck( value ) {
+                   var chiffres = new RegExp("[0-9\+]");
+                   var verif;
+
+                   if( value.length !== 5) return false;
+
+                   for(x = 0; x < value.length; x++) {
+                       verif = chiffres.test(value.charAt(x));
+                       if(verif === false) return false;
+                   }
+
+                   return true;
+                }
+
+				function toggle( p,  index ) {
+
+					if( current_select_li != -1 ) {
+						$('.cat-title:eq(' + current_select_li + ')').removeClass('opened');
+						$('.large-list .faq-content:eq(' + current_select_li + ')').slideUp('fast');
+					}
+
+					var selector = $('.large-list .faq-content:eq(' + index + ')');
+					if( selector.css('display') == "block") {
+						selector.slideUp('fast');
+						$(p).removeClass('opened');
+					}
+					else {
+
+						selector.slideDown('fast');
+						$(p).addClass('opened');
+					}
+
+					current_select_li = index;
+				}
+
+                $(document).ready(function() {
+					/*
+					$('.large-list .faq-content:gt(0)').hide();
+					$('.cat-title:eq(0)').addClass('opened');
+					current_select_li = 0;
+					*/
+					$('.large-list .faq-content').hide();
+					$('#juniors-bloc .cat-title').click(function() {
+						var index = $(this).index('.cat-title');
+						toggle(this, index);
+						return false;
+					});
+
+					$('a.delete-alerte').click( function() {
+						return confirm('Êtes-vous sur de vouloir supprimer cette alerte?');
+					});
+
+
+						$("a.alerte-access").fancybox({
+								fitToView	: false,
+								width       : '90%',
+								maxWidth    : '600',
+ 								maxHeight    : '800',
+								autoSize	: true,
+								closeClick	: true,
+								padding: 20,
+								type		: 'iframe'
+
+						});
+
+					$('#type-affichage').change( function() {
+						var val = $(this).val();
+						if( val == "1" ) {
+							$('#tableur').show();
+							$('#chartContainer').hide();
+						}
+						else {
+							$('#tableur').hide();
+							$('#chartContainer').show();
+						}
+
+					});
+
+					$( ".date-picker" ).datepicker({
+                        minDate: 0,
+                        firstDay: 1,
+                        altField: "#date",
+                        closeText: 'Fermer',
+                        prevText: 'Précédent',
+                        nextText: 'Suivant',
+                        currentText: 'Aujourd\'hui',
+                        monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                        monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+                        dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+                        dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
+                        dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+                        weekHeader: 'Sem.',
+                        dateFormat: 'dd/mm/yy',
+                    	onClose: function(date) {
+							$(this).focus();
+							$(this).blur();
+                   		 }
+                    });
+
+					var date = new Date();
+                        $(".date-picker-month").datepicker({
+                            minDate: new Date(date.getFullYear(), date.getMonth() + 1,1),
+	                        changeMonth: true,
+	                        changeYear: true,
+	                        closeText: 'Fermer',
+	                        prevText: 'Précédent',
+	                        nextText: 'Suivant',
+	                        currentText: 'Aujourd\'hui',
+	                        monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+	                        monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+	                        dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+	                        dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
+	                        dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+	                        weekHeader: 'Sem.',
+	                        dateFormat: 'mm/yy',
+	                        onClose: function() {
+		                        var iMonth = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+		                        var iYear = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+		                        $(this).datepicker('setDate', new Date(iYear, iMonth, 1));
+								 $(this).trigger('blur');
+	                        },
+	                        beforeShow: function() {
+	                         if ((selDate = $(this).val()).length > 0)
+	                          {
+		                          var spl = selDate.split('/');
+		                          console.log(selDate);
+
+				                  $(this).datepicker('option', 'monthNames');
+		                         $(this).datepicker('option', 'defaultDate', new Date(spl[1], spl[0]-1, 1));
+		                         $(this).datepicker('setDate', new Date(spl[1], spl[0] - 1, 1));
+
+	                          }
+	                        }
+                        });
+
+
+
+			$('#list-alert-form input:checkbox').on('change', function() {
+				if($('#list-alert-form input:checkbox:checked').length > 5) {
+					$.fancybox.open({
+						maxWidth	: 300,
+						maxHeight	: 280,
+						fitToView	: false,
+						width       : '70%',
+						height      : '70%',
+						autoSize	: true,
+						closeClick	: false,
+						openEffect	: 'none',
+						closeEffect	: 'none',
+						padding: 20,
+						content : '<div style="text-align:center;">Vous ne pouvez avoir que 5 alertes actives simultanément</div>'
+					});
+					$(this).removeAttr('checked');
+					return false;
+				}
+				$(this).closest('form').submit();
+				return true;
+			});
+				CanvasJS.addColorSet("greenShades",
+                [//colorSet Array
+
+                "#2abbcf",
+				"#94dde7"
+
+                ]);
+
+				var chart = new CanvasJS.Chart("chartContainer",
+				{
+				  colorSet: "greenShades",
+				  title:{
+					text: ""
+				  },
+				  axisY: {
+					title: "litre",
+                    valueFormatString: "#####.###"
+				  },
+				  legend: {
+					verticalAlign: "bottom",
+					horizontalAlign: "center"
+				  },
+				  theme: "theme2",
+				  backgroundColor: "#EAEBEC",
+				  data: [
+
+				  {
+                    yValueFormatString: "#####.###",
+
+					click: function(e){
+						var split = e.dataPoint.label.split('/');
+						window.location.href = "mon-espace-suivi-personnalise.aspx?mm=" + split[1] +"/" + split[2]+"&d=" + split[0];
+					},
+
+					type: "column",
+					showInLegend: false,
+					legendMarkerColor: "grey",
+					legendText: "1m3 = 1000 L",
+					addColorSet: "1m3 = 1000 L",
+					dataPoints: [
+
+
+								{y: 169, label: "01/02/2018"}
+								,
+
+								{y: 243, label: "02/02/2018"}
+								,
+
+								{y: 221, label: "03/02/2018"}
+								,
+
+								{y: 682, label: "04/02/2018"}
+								,
+
+								{y: 314, label: "05/02/2018"}
+								,
+
+								{y: 257, label: "06/02/2018"}
+								,
+
+								{y: 317, label: "07/02/2018"}
+								,
+
+								{y: 159, label: "08/02/2018"}
+								,
+
+								{y: 320, label: "09/02/2018"}
+								,
+
+								{y: 217, label: "10/02/2018"}
+								,
+
+								{y: 342, label: "11/02/2018"}
+								,
+
+								{y: 322, label: "12/02/2018"}
+								,
+
+								{y: 306, label: "13/02/2018"}
+								,
+
+								{y: 485, label: "14/02/2018"}
+								,
+
+								{y: 189, label: "15/02/2018"}
+								,
+
+								{y: 219, label: "16/02/2018"}
+								,
+
+								{y: 212, label: "17/02/2018"}
+								,
+
+								{y: 689, label: "18/02/2018"}
+								,
+
+								{y: 204, label: "19/02/2018"}
+								,
+
+								{y: 192, label: "20/02/2018"}
+								,
+
+								{y: 570, label: "21/02/2018"}
+								,
+
+								{y: 277, label: "22/02/2018"}
+								,
+
+								{y: 165, label: "23/02/2018"}
+								,
+
+								{y: 275, label: "24/02/2018"}
+								,
+
+								{y: 170, label: "25/02/2018"}
+								,
+
+								{y: 186, label: "26/02/2018"}
+								,
+
+								{y: 155, label: "27/02/2018"}
+								,
+
+								{y: 0, color:"#c0bebf", label: "Non mesurée"}
+								,
+
+
+					]
+				  }
+				  ]
+				});
+
+				chart.render();
+
+                });
+            //-->
+        </script>
+    </body>
+</html>
