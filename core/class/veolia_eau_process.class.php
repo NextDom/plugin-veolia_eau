@@ -461,11 +461,11 @@ class veolia_eau extends eqLogic {
 		curl_close($ch);
 
         //traitement du xls
-        $this->traiteConso($data_file, $htm_file, $mock_test,$offsetVeoliaDate);
+        $this->traiteConso($data_file, $htm_file, $mock_test, $offsetVeoliaDate);
 	    @unlink($cookie_file);
 	}
 
-	public function traiteConso ($file, $htm_file, $mock_test,$offsetVeoliaDate) {
+	public function traiteConso($file, $htm_file, $mock_test, $offsetVeoliaDate) {
         $consomonth = [];
         $datasFetched = [];
         $conso = 0;
@@ -752,13 +752,13 @@ class veolia_eau extends eqLogic {
              }
         }
 
-        if ($mock_test = 0) {
+        if ($mock_test == 0) {
 		    @unlink($file);
 		    @unlink($htm_file);
         }
 	}
 
-	private static function secure_touch ($fname) {
+	private static function secure_touch($fname) {
 		if (file_exists($fname)) {
 			return;
 		}
@@ -782,7 +782,7 @@ class veolia_eauCmd extends cmd {
     }
     */
 
-    public function execute ($_options = array()) {
+    public function execute($_options = array()) {
     }
 
     /***************************** Getteur/Setteur ***************************/
