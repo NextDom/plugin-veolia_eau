@@ -1,12 +1,27 @@
-## IDE-independent coding style via EditorConfig: http://editorconfig.org/
-## Please be sure to apply these when submitting a pull request.
+# This file is for unifying the coding style for different editors and IDEs
+# editorconfig.org
+
+# PHP PSR-2 Coding Standards
+# http://www.php-fig.org/psr/psr-2/
 
 root = true
 
-[*]
+[*.php]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
 indent_style = space
 indent_size = 4
-end_of_line = lf
+
+[*.js]
 charset = utf-8
 trim_trailing_whitespace = true
-insert_final_newline = true
+indent_style = space
+indent_size = 4
+
+[*.css]
+charset = utf-8
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
