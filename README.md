@@ -1,7 +1,7 @@
 # Plugin Veolia pour Jeedom
 
 [![Coverage Status](https://coveralls.io/repos/github/rjullien/plugin-veolia_eau/badge.svg?branch=master)](https://coveralls.io/github/rjullien/plugin-veolia_eau?branch=master)
-https://travis-ci.org/{{username}}/{{project_name}}.png?branch={{branch}}
+https://travis-ci.org/rjullien/plugin-veolia_eau.svg?branch=master
 
 Ce plugin permet de récupérer le télé-relevé disponible sur les sites Internet de Veolia Eau / Veolia Méditerranée / Tout sur mon eau / Eau en ligne
 
