@@ -491,7 +491,7 @@ class veolia_eau extends eqLogic {
                  $j=0;
                  $keepI=-1;
 
-                 $previousIndex=$htmlDataFetched[0]["index"]; // TODO update index Recuperer l index du mois d avant dans jeedom
+                 $previousIndex=$htmlDataFetched[0]["index"]-$htmlDataFetched[0]["conso"]; // TODO update index Recuperer l index du mois d avant dans jeedom
                  foreach ($csvDataFetched as $dateCSV ) {
 
                    if ($i < count($htmlDataFetched) ){
@@ -522,11 +522,13 @@ class veolia_eau extends eqLogic {
                         }
                         $i--;
                      }
+                     $compteur=$datasFetched[$j]["index"];
                      $i++; $j++;
                  } else{
                      log::add('veolia_eau', 'debug', 'html plus petit que le csv, csv:'.count($csvDataFetched)." html:".count($htmlDataFetched)." i:".$i);
                  }
                 }
+
               } else{
                   $datasFetched=static::processHtml($htm_file,$website,$compteur,$date,$offsetVeoliaDate,$mock_test,$lastdate);
               }
