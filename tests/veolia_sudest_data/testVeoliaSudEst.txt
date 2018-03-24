@@ -1337,27 +1337,27 @@ veolia_eau debug 20 data lines
 
 veolia_eau debug 20 data lines
 
-veolia_eau debug html different du CSV - $dataHtml["date"]$dateCSV["date"]2018-03-09$data<>$data<>397$i7$keepI3
+veolia_eau debug html plus petit que le csv, csv:20 html:7 i:7
 
-veolia_eau debug html different du CSV - $dataHtml["date"]$dateCSV["date"]2018-03-10$data<>$data<>324$i7$keepI3
+veolia_eau debug html plus petit que le csv, csv:20 html:7 i:7
 
-veolia_eau debug html different du CSV - $dataHtml["date"]$dateCSV["date"]2018-03-11$data<>$data<>220$i7$keepI3
+veolia_eau debug html plus petit que le csv, csv:20 html:7 i:7
 
-veolia_eau debug html different du CSV - $dataHtml["date"]$dateCSV["date"]2018-03-12$data<>$data<>199$i7$keepI3
+veolia_eau debug html plus petit que le csv, csv:20 html:7 i:7
 
-veolia_eau debug html different du CSV - $dataHtml["date"]$dateCSV["date"]2018-03-13$data<>$data<>278$i7$keepI3
+veolia_eau debug html plus petit que le csv, csv:20 html:7 i:7
 
-veolia_eau debug html different du CSV - $dataHtml["date"]$dateCSV["date"]2018-03-14$data<>$data<>523$i7$keepI3
+veolia_eau debug html plus petit que le csv, csv:20 html:7 i:7
 
-veolia_eau debug html different du CSV - $dataHtml["date"]$dateCSV["date"]2018-03-15$data<>$data<>244$i7$keepI3
+veolia_eau debug html plus petit que le csv, csv:20 html:7 i:7
 
-veolia_eau debug html different du CSV - $dataHtml["date"]$dateCSV["date"]2018-03-16$data<>$data<>185$i7$keepI3
+veolia_eau debug html plus petit que le csv, csv:20 html:7 i:7
 
-veolia_eau debug html different du CSV - $dataHtml["date"]$dateCSV["date"]2018-03-17$data<>$data<>345$i7$keepI3
+veolia_eau debug html plus petit que le csv, csv:20 html:7 i:7
 
-veolia_eau debug html different du CSV - $dataHtml["date"]$dateCSV["date"]2018-03-18$data<>$data<>250$i7$keepI3
+veolia_eau debug html plus petit que le csv, csv:20 html:7 i:7
 
-veolia_eau debug html different du CSV - $dataHtml["date"]$dateCSV["date"]2018-03-19$data<>$data<>205$i7$keepI3
+veolia_eau debug html plus petit que le csv, csv:20 html:7 i:7
 
 veolia_eau debug Date: 2018-03-01 / Index: 275 / Conso: 275 / Type de relevé: M
 

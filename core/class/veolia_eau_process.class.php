@@ -494,7 +494,7 @@ class veolia_eau extends eqLogic {
                  $previousIndex=$htmlDataFetched[0]["index"]; // TODO update index Recuperer l index du mois d avant dans jeedom
                  foreach ($csvDataFetched as $dateCSV ) {
 
-                   if ($i <= count($htmlDataFetched) ){
+                   if ($i < count($htmlDataFetched) ){
                      $dataHtml = $htmlDataFetched[ $i ];
 
                      if ($dataHtml["date"] === $dateCSV["date"]){
