@@ -15,9 +15,11 @@ veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
 
+veolia_eau debug ### GET DATAFILE CSV ###
+
 veolia_eau debug alert: 680
 
-veolia_eau debug ### TRAITE CONSO CSV 2 ###
+veolia_eau debug ### TRAITE CONSO HTML 2 ###
 
 veolia_eau debug last1: 2018-03-01
 
@@ -75,9 +77,11 @@ veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
 
+veolia_eau debug ### GET DATAFILE CSV ###
+
 veolia_eau debug alert: 680
 
-veolia_eau debug ### TRAITE CONSO CSV 2 ###
+veolia_eau debug ### TRAITE CONSO HTML 2 ###
 
 veolia_eau debug last1: 2018-03-03
 
@@ -133,9 +137,11 @@ veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
 
+veolia_eau debug ### GET DATAFILE CSV ###
+
 veolia_eau debug alert: 680
 
-veolia_eau debug ### TRAITE CONSO CSV 2 ###
+veolia_eau debug ### TRAITE CONSO HTML 2 ###
 
 veolia_eau debug last1: 2018-03-03
 
@@ -191,9 +197,11 @@ veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
 
+veolia_eau debug ### GET DATAFILE CSV ###
+
 veolia_eau debug alert: 680
 
-veolia_eau debug ### TRAITE CONSO CSV 2 ###
+veolia_eau debug ### TRAITE CONSO HTML 2 ###
 
 veolia_eau debug last1: 2018-03-04
 
@@ -247,9 +255,11 @@ veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
 
+veolia_eau debug ### GET DATAFILE CSV ###
+
 veolia_eau debug alert: 680
 
-veolia_eau debug ### TRAITE CONSO CSV 2 ###
+veolia_eau debug ### TRAITE CONSO HTML 2 ###
 
 veolia_eau debug last1: 2018-03-04
 
@@ -275,9 +285,11 @@ veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
 
+veolia_eau debug ### GET DATAFILE CSV ###
+
 veolia_eau debug alert: 680
 
-veolia_eau debug ### TRAITE CONSO CSV 2 ###
+veolia_eau debug ### TRAITE CONSO HTML 2 ###
 
 veolia_eau debug last1: 2018-01-31
 
@@ -469,9 +481,11 @@ veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
 
+veolia_eau debug ### GET DATAFILE CSV ###
+
 veolia_eau debug alert: 680
 
-veolia_eau debug ### TRAITE CONSO CSV 2 ###
+veolia_eau debug ### TRAITE CONSO HTML 2 ###
 
 veolia_eau debug last1: 2018-02-28
 
@@ -531,9 +545,11 @@ veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
 
+veolia_eau debug ### GET DATAFILE CSV ###
+
 veolia_eau debug alert: 680
 
-veolia_eau debug ### TRAITE CONSO CSV 2 ###
+veolia_eau debug ### TRAITE CONSO HTML 2 ###
 
 veolia_eau debug last1: 2018-01-31
 
@@ -729,9 +745,11 @@ veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
 
+veolia_eau debug ### GET DATAFILE CSV ###
+
 veolia_eau debug alert: 680
 
-veolia_eau debug ### TRAITE CONSO CSV 2 ###
+veolia_eau debug ### TRAITE CONSO HTML 2 ###
 
 veolia_eau debug last1: 2018-02-27
 
@@ -927,9 +945,11 @@ veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
 
+veolia_eau debug ### GET DATAFILE CSV ###
+
 veolia_eau debug alert: 680
 
-veolia_eau debug ### TRAITE CONSO CSV 2 ###
+veolia_eau debug ### TRAITE CONSO HTML 2 ###
 
 veolia_eau debug last1: 2018-02-27
 
@@ -1121,9 +1141,11 @@ veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
 
+veolia_eau debug ### GET DATAFILE CSV ###
+
 veolia_eau debug alert: 680
 
-veolia_eau debug ### TRAITE CONSO CSV 2 ###
+veolia_eau debug ### TRAITE CONSO HTML 2 ###
 
 veolia_eau debug last1: 2018-02-28
 
@@ -1183,9 +1205,11 @@ veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
 
+veolia_eau debug ### GET DATAFILE CSV ###
+
 veolia_eau debug alert: 680
 
-veolia_eau debug ### TRAITE CONSO CSV 2 ###
+veolia_eau debug ### TRAITE CONSO HTML 2 ###
 
 veolia_eau debug last1: 2018-03-09
 
@@ -1242,3 +1266,111 @@ veolia_eau debug Date: 2018-03-06 / Index: 0 / Conso: 83 / Type de relevé: M
 veolia_eau debug Date: 2018-03-07 / Index: 0 / Conso: 135 / Type de relevé: M
 
 veolia_eau debug Date: 2018-03-08 / Index: 0 / Conso: 215 / Type de relevé: M
+
+veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:0 last:2018-03-09 alert:#680 mock_date:2018-03-12
+
+veolia_eau debug 03/2018 09
+
+veolia_eau debug ### LOGIN ON https://www.eau-services.com/default.aspx ###
+
+veolia_eau debug cURL response : tbd
+
+veolia_eau debug cURL errno : 0
+
+veolia_eau debug ### GO TO CONSOMMATION PAGE ###
+
+veolia_eau debug cURL response : 1
+
+veolia_eau debug cURL errno : 0
+
+veolia_eau debug ### GET DATAFILE CSV ###
+
+veolia_eau debug alert: 680
+
+veolia_eau debug ### TRAITE CONSO HTML 2 ###
+
+veolia_eau debug last1: 2018-03-09
+
+veolia_eau debug 275,01/03/2018
+
+veolia_eau debug 2018-03-01 275 M 0 0
+
+veolia_eau debug 154,02/03/2018
+
+veolia_eau debug 2018-03-02 154 M 0 0
+
+veolia_eau debug 379,03/03/2018
+
+veolia_eau debug 2018-03-03 379 M 0 0
+
+veolia_eau debug 0,Nonmesurée
+
+veolia_eau debug valeur non mesurée
+
+veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
+
+veolia_eau debug 0,Nonmesurée
+
+veolia_eau debug valeur non mesurée
+
+veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
+
+veolia_eau debug 233,05/03/2018
+
+veolia_eau debug 2018-03-05 233 M 0 0
+
+veolia_eau debug 83,06/03/2018
+
+veolia_eau debug 2018-03-06 83 M 0 0
+
+veolia_eau debug 135,07/03/2018
+
+veolia_eau debug 2018-03-07 135 M 0 0
+
+veolia_eau debug 215,08/03/2018
+
+veolia_eau debug 2018-03-08 215 M 0 0
+
+veolia_eau debug ### TRAITE CONSO XLS 2 ###
+
+veolia_eau debug 20 data lines
+
+veolia_eau debug 20 data lines
+
+veolia_eau debug html different du CSV - $dataHtml["date"]$dateCSV["date"]2018-03-09$data<>$data<>397$i7$keepI3
+
+veolia_eau debug html different du CSV - $dataHtml["date"]$dateCSV["date"]2018-03-10$data<>$data<>324$i7$keepI3
+
+veolia_eau debug html different du CSV - $dataHtml["date"]$dateCSV["date"]2018-03-11$data<>$data<>220$i7$keepI3
+
+veolia_eau debug html different du CSV - $dataHtml["date"]$dateCSV["date"]2018-03-12$data<>$data<>199$i7$keepI3
+
+veolia_eau debug html different du CSV - $dataHtml["date"]$dateCSV["date"]2018-03-13$data<>$data<>278$i7$keepI3
+
+veolia_eau debug html different du CSV - $dataHtml["date"]$dateCSV["date"]2018-03-14$data<>$data<>523$i7$keepI3
+
+veolia_eau debug html different du CSV - $dataHtml["date"]$dateCSV["date"]2018-03-15$data<>$data<>244$i7$keepI3
+
+veolia_eau debug html different du CSV - $dataHtml["date"]$dateCSV["date"]2018-03-16$data<>$data<>185$i7$keepI3
+
+veolia_eau debug html different du CSV - $dataHtml["date"]$dateCSV["date"]2018-03-17$data<>$data<>345$i7$keepI3
+
+veolia_eau debug html different du CSV - $dataHtml["date"]$dateCSV["date"]2018-03-18$data<>$data<>250$i7$keepI3
+
+veolia_eau debug html different du CSV - $dataHtml["date"]$dateCSV["date"]2018-03-19$data<>$data<>205$i7$keepI3
+
+veolia_eau debug Date: 2018-03-01 / Index: 275 / Conso: 275 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-02 / Index: 429 / Conso: 154 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-03 / Index: 808 / Conso: 379 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-04 / Index: 1007 / Conso: 199 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-05 / Index: 1240 / Conso: 233 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-06 / Index: 1323 / Conso: 83 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-07 / Index: 1458 / Conso: 135 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-08 / Index: 1673 / Conso: 215 / Type de relevé: M

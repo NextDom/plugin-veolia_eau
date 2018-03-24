@@ -77,6 +77,14 @@ $instanceVeolia->setConfiguration('mock_file',"veolia_sudest_data/veolia_html_11
 $instanceVeolia->displayConfig();
 $instanceVeolia->getConso(2);
 
+# Test de l auto correction avec le csv + test du cas ou csv <> html
+$instanceVeolia = new veolia_eau;
+$instanceVeolia->setConfiguration('last',"2018-03-09");
+$instanceVeolia->setConfiguration('mock_date',"2018-03-12");
+$instanceVeolia->setConfiguration('mock_file',"veolia_sudest_data/veolia_html_11Mar-NonMesureMilieu.htm");
+$instanceVeolia->setConfiguration('csv_mock_file',"veolia_sudest_data_src/veolia_releve_22March.csv");
+$instanceVeolia->displayConfig();
+$instanceVeolia->getConso(2);
 
 // Test avec l access au site Veolia - Penser a MAJ les ID/password
 //$instanceVeolia->setConfiguration('login',"xx");

@@ -505,7 +505,6 @@ class veolia_eau extends eqLogic {
                       }
 
                   } else {
-                    log::add('veolia_eau', 'debug', '$dataHtml["date"]'.$dataHtml["date"].'$dateCSV["date"]'.$dateCSV["date"].'$data<>'.$dataHtml["conso"].'$data<>'.$dateCSV["conso"].'$i'.$i.'$keepI'.$keepI);
                     if ($dateCSV["conso"]<0){
                         $keepNegativeConso=$dateCSV["conso"];
                         $keepI=$i;
@@ -515,6 +514,8 @@ class veolia_eau extends eqLogic {
                         $dateCSV["typeReleve"]="M";
                         $previousIndex=$dateCSV["index"];
                         $datasFetched[$j]=$dateCSV;
+                    } else{
+                        log::add('veolia_eau', 'debug', 'html different du CSV - $dataHtml["date"]'.$dataHtml["date"].'$dateCSV["date"]'.$dateCSV["date"].'$data<>'.$dataHtml["conso"].'$data<>'.$dateCSV["conso"].'$i'.$i.'$keepI'.$keepI);
                     }
                     $i--;
                   }
