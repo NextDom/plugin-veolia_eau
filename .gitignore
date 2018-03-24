@@ -25,3 +25,7 @@ core/class/veolia_eau_process_mar.class.php
 tests/testVeoliaSudEstReneNoCommit.php
 
 core/class/veolia_eau_process_mar_old.class.php
+
+tests/veolia_sudest_data_src/veolia_html_5ab41f9666029.htm
+
+tests/.atoum.php

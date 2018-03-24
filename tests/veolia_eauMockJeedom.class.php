@@ -39,8 +39,8 @@ class eqLogic{
       return $this->alert;
     }elseif ($config=="mock_file"){
       return $this->mock_file;
-  }elseif ($config=="csv_mock_file"){
-      return $this->mock_file;
+    }elseif ($config=="csv_mock_file"){
+      return $this->csv_mock_file;
     }elseif ($config=="mock_date"){
       return $this->mock_date;
     }elseif ($config=="maxday"){
@@ -71,7 +71,7 @@ class eqLogic{
       }elseif ($config=="mock_file"){
         $this->mock_file=$value;
       }elseif ($config=="csv_mock_file"){
-        $this->mock_file=$value;
+        $this->csv_mock_file=$value;
       }elseif ($config=="mock_date"){
         $this->mock_date=$value;
       }
