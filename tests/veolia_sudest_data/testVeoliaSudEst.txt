@@ -15,6 +15,8 @@ veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
 
+veolia_eau debug ### GET DATAFILE CSV ###
+
 veolia_eau debug alert: 680
 
 veolia_eau debug ### TRAITE CONSO HTML 2 ###
@@ -75,6 +77,8 @@ veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
 
+veolia_eau debug ### GET DATAFILE CSV ###
+
 veolia_eau debug alert: 680
 
 veolia_eau debug ### TRAITE CONSO HTML 2 ###
@@ -132,6 +136,8 @@ veolia_eau debug ### GO TO CONSOMMATION PAGE ###
 veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
+
+veolia_eau debug ### GET DATAFILE CSV ###
 
 veolia_eau debug alert: 680
 
@@ -191,6 +197,8 @@ veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
 
+veolia_eau debug ### GET DATAFILE CSV ###
+
 veolia_eau debug alert: 680
 
 veolia_eau debug ### TRAITE CONSO HTML 2 ###
@@ -247,6 +255,8 @@ veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
 
+veolia_eau debug ### GET DATAFILE CSV ###
+
 veolia_eau debug alert: 680
 
 veolia_eau debug ### TRAITE CONSO HTML 2 ###
@@ -274,6 +284,8 @@ veolia_eau debug ### GO TO CONSOMMATION PAGE ###
 veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
+
+veolia_eau debug ### GET DATAFILE CSV ###
 
 veolia_eau debug alert: 680
 
@@ -469,6 +481,8 @@ veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
 
+veolia_eau debug ### GET DATAFILE CSV ###
+
 veolia_eau debug alert: 680
 
 veolia_eau debug ### TRAITE CONSO HTML 2 ###
@@ -530,6 +544,8 @@ veolia_eau debug ### GO TO CONSOMMATION PAGE ###
 veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
+
+veolia_eau debug ### GET DATAFILE CSV ###
 
 veolia_eau debug alert: 680
 
@@ -729,6 +745,8 @@ veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
 
+veolia_eau debug ### GET DATAFILE CSV ###
+
 veolia_eau debug alert: 680
 
 veolia_eau debug ### TRAITE CONSO HTML 2 ###
@@ -927,6 +945,8 @@ veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
 
+veolia_eau debug ### GET DATAFILE CSV ###
+
 veolia_eau debug alert: 680
 
 veolia_eau debug ### TRAITE CONSO HTML 2 ###
@@ -1121,6 +1141,8 @@ veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
 
+veolia_eau debug ### GET DATAFILE CSV ###
+
 veolia_eau debug alert: 680
 
 veolia_eau debug ### TRAITE CONSO HTML 2 ###
@@ -1182,6 +1204,8 @@ veolia_eau debug ### GO TO CONSOMMATION PAGE ###
 veolia_eau debug cURL response : 1
 
 veolia_eau debug cURL errno : 0
+
+veolia_eau debug ### GET DATAFILE CSV ###
 
 veolia_eau debug alert: 680
 
