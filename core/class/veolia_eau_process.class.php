@@ -478,7 +478,7 @@ class veolia_eau extends eqLogic {
         switch ($website) {
             case 2:
             case 3:
-                if ($file!=""){
+              if ($file!=""){
                 $htmlDataFetched=static::processHtml($htm_file,$website,$compteur,$date,$offsetVeoliaDate,$mock_test,$lastdate);
                 //log::add('veolia_eau', 'debug', 'csvDataFetched:'.serialize($datasFetched));
 
@@ -490,11 +490,14 @@ class veolia_eau extends eqLogic {
                  $i=0;
                  $j=0;
                  $keepI=-1;
-                 $previousIndex=$htmlDataFetched[0][index]; // TODO update index Recuperer l index du mois d avant dans jeedom
-                 foreach ($csvDataFetched as $dateCSV ) {
-                   $dataHtml = $htmlDataFetched[ $i ];
 
-                  if ($dataHtml["date"] === $dateCSV["date"]){
+                 $previousIndex=$htmlDataFetched[0]["index"]; // TODO update index Recuperer l index du mois d avant dans jeedom
+                 foreach ($csvDataFetched as $dateCSV ) {
+
+                   if ($i <= count($htmlDataFetched) ){
+                     $dataHtml = $htmlDataFetched[ $i ];
+
+                     if ($dataHtml["date"] === $dateCSV["date"]){
                       if ($dataHtml["conso"] != $dateCSV["conso"]){
                           log::add('veolia_eau', 'error', '$dataHtml["date"]'.$dataHtml["date"].'$data<>'.$dataHtml["conso"].'$data<>'.$dateCSV["conso"]);
                       } else{
@@ -505,7 +508,7 @@ class veolia_eau extends eqLogic {
                       }
 
                   } else {
-                    if ($dateCSV["conso"]<0){
+                        if ($dateCSV["conso"]<0){
                         $keepNegativeConso=$dateCSV["conso"];
                         $keepI=$i;
                     } elseif ($keepI==$i){ // Negatif a soustraire au suivant
@@ -515,18 +518,21 @@ class veolia_eau extends eqLogic {
                         $previousIndex=$dateCSV["index"];
                         $datasFetched[$j]=$dateCSV;
                     } else{
-                        log::add('veolia_eau', 'debug', 'html different du CSV - $dataHtml["date"]'.$dataHtml["date"].'$dateCSV["date"]'.$dateCSV["date"].'$data<>'.$dataHtml["conso"].'$data<>'.$dateCSV["conso"].'$i'.$i.'$keepI'.$keepI);
-                    }
-                    $i--;
-                  }
-                  $i++; $j++;
+                          log::add('veolia_eau', 'debug', 'html different du CSV - $dataHtml["date"]'.$dataHtml["date"].'$dateCSV["date"]'.$dateCSV["date"].'$data<>'.$dataHtml["conso"].'$data<>'.$dateCSV["conso"].'$i'.$i.'$keepI'.$keepI);
+                        }
+                        $i--;
+                     }
+                     $i++; $j++;
+                 } else{
+                     log::add('veolia_eau', 'debug', 'html plus petit que le csv, csv:'.count($csvDataFetched)." html:".count($htmlDataFetched)." i:".$i);
+                 }
                 }
-                } else{
-                    $datasFetched=static::processHtml($htm_file,$website,$compteur,$date,$offsetVeoliaDate,$mock_test,$lastdate);
-                }
+              } else{
+                  $datasFetched=static::processHtml($htm_file,$website,$compteur,$date,$offsetVeoliaDate,$mock_test,$lastdate);
+              }
                 //log::add('veolia_eau', 'debug', 'csvDataFetched:'.serialize($datasFetched));                $dataFetched=$dataFetched;
 
-                break;
+              break;
 
             case 4:
                 $datasFetched=static::processCSV($file,$website);
