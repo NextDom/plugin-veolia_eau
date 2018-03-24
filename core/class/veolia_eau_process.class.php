@@ -650,15 +650,16 @@ class veolia_eau extends eqLogic {
                   $dateTemp = explode('/', $line['A']);
                   if ($website ==2 || $website == 3) {
                       $date = $dateTemp[2].'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT);
-                      $index = $line['C'];
+                      $index = 0;
                       $conso = $line['B'];
+                      $typeReleve = 0;
                   } else {
                       $date = $dateTemp[2].'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT);
                       $index = $line['B'];
                       $conso = $line['C'];
+                      $typeReleve = $line['D'];
                   }
                   $consomonth[] = $conso;
-                  $typeReleve = $line['D'];
                   $datasFetched[] = array(
                       'date' => $date,
                       'index' => $index,
