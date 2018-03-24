@@ -625,7 +625,7 @@ class veolia_eau extends eqLogic {
 
       log::add('veolia_eau', 'debug', '### TRAITE CONSO XLS '.$website.' ###');
       require_once dirname(__FILE__).'/../../3rparty/PHPExcel/Classes/PHPExcel/IOFactory.php';
-      $objReader = PHPExcel_IOFactory::createReader("csv");
+      $objReader = PHPExcel_IOFactory::createReader("CSV");
       if ($website ==2 || $website == 3) {
           $objReader->setDelimiter(";");
       } else {
