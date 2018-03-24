@@ -1,10 +1,12 @@
 <?php
+
 if (!isConnect('admin')) {
     throw new Exception('{{401 - Accès non autorisé}}');
 }
 $plugin = plugin::byId('veolia_eau');
 sendVarToJS('eqType', $plugin->getId());
 $eqLogics = eqLogic::byType($plugin->getId());
+
 ?>
 
 <div class="row row-overflow">
@@ -150,7 +152,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                     </fieldset>
                 </form>
 
-                 <legend>{{Alertes}}</legend>
+                <legend>{{Alertes}}</legend>
                 <form class="form-horizontal">
                     <fieldset>
                         <div class="form-group">
@@ -200,5 +202,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
     </div>
 </div>
 
-<?php include_file('desktop', 'veolia_eau', 'js', 'veolia_eau'); ?>
-<?php include_file('core', 'plugin.template', 'js'); ?>
+<?php
+    include_file('desktop', 'veolia_eau', 'js', 'veolia_eau');
+    include_file('core', 'plugin.template', 'js');
+
