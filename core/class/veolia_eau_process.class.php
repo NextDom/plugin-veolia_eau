@@ -353,6 +353,12 @@ class veolia_eau extends eqLogic {
           	log::add('veolia_eau', 'debug', 'Extracting token');
             require_once dirname(__FILE__).'/../../3rparty/SimpleHtmlParser/simple_html_dom.php';
             $html = str_get_html($response);
+            //// TODO: next line
+            //< Notice: Trying to get property of non-object in /home/travis/build/[secure]/plugin-veolia_eau/core/class/veolia_eau_process.class.php on line 356
+            // < Call Stack:
+            //<     0.0001     243200   1. {main}() /home/travis/build/[secure]/plugin-veolia_eau/tests/testVeoliaEau.php:0
+            //<     0.0020     565144   2. veolia_eau->getConso() /home/travis/build/[secure]/plugin-veolia_eau/tests/testVeoliaEau.php:16
+
             $token = $html->find('input[name='.$tokenFieldName.']', 0)->value;
             log::add('veolia_eau', 'debug', 'Token: '.$token);
 
@@ -499,8 +505,9 @@ class veolia_eau extends eqLogic {
 
                    if ($i < count($htmlDataFetched) ){
                      $dataHtml = $htmlDataFetched[ $i ];
+                    // log::add('veolia_eau', 'debug', '$i < count($htmlDataFetched) j'.$j." i:".$i." $datasFetched".serialize($datasFetched[$j]["index"]));
 
-                     if ($dataHtml["date"] === $dateCSV["date"]){
+                    if ($dataHtml["date"] === $dateCSV["date"]){
                       if ($dataHtml["conso"] != $dateCSV["conso"]){
                           log::add('veolia_eau', 'error', '$dataHtml["date"]'.$dataHtml["date"].'$data<>'.$dataHtml["conso"].'$data<>'.$dateCSV["conso"]);
                       } else{
@@ -509,24 +516,24 @@ class veolia_eau extends eqLogic {
                           $previousIndex=$dateCSV["index"];
                           $datasFetched[$j]=$dateCSV;
                       }
-
                   } else {
-                        if ($dateCSV["conso"]<0){
+                      if ($dateCSV["conso"]<0){
                         $keepNegativeConso=$dateCSV["conso"];
                         $keepI=$i;
-                    } elseif ($keepI==$i){ // Negatif a soustraire au suivant
+                      } elseif ($keepI==$i){ // Negatif a soustraire au suivant
                         $dateCSV["conso"]=($dateCSV["conso"]+$keepNegativeConso);
                         $dateCSV["index"]=($dateCSV["conso"]+$previousIndex);
                         $dateCSV["typeReleve"]="M";
                         $previousIndex=$dateCSV["index"];
                         $datasFetched[$j]=$dateCSV;
-                    } else{
+                      } else{
                           log::add('veolia_eau', 'debug', 'html different du CSV - $dataHtml["date"]'.$dataHtml["date"].'$dateCSV["date"]'.$dateCSV["date"].'$data<>'.$dataHtml["conso"].'$data<>'.$dateCSV["conso"].'$i'.$i.'$keepI'.$keepI);
-                        }
-                        $i--;
+                      }
+                     $i--;
                      }
-                     log::add('veolia_eau', 'debug', 'j'.$j." i:".$i." $datasFetched".serialize($datasFetched[$j]["index"]));
-                     $compteur=$datasFetched[$j]["index"]; // travis undefined offset
+                     if (sizeof($datasFetched[$j])!=0){ // fix travis undefined offset when CSV is negative
+                       $compteur=$datasFetched[$j]["index"];
+                     }
                      $i++; $j++;
                  } else{
                      log::add('veolia_eau', 'debug', 'html plus petit que le csv, csv:'.count($csvDataFetched)." html:".count($htmlDataFetched)." i:".$i);
