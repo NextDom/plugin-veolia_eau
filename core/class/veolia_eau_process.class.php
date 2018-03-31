@@ -533,10 +533,10 @@ class veolia_eau extends eqLogic {
                      $i--;
                      }
 
-                     if (is_array($datasFetched[$j])) { // fix travis undefined offset when CSV is negative
+                     if (isset($datasFetched[$j])) { // fix travis undefined offset when CSV is negative
                        $compteur=$datasFetched[$j]["index"];
                    } else {
-                       log::add('veolia_eau', 'debug', '$datasFetched[$j] not array - $dataHtml["date"]'.$dataHtml["date"].'$dateCSV["date"]'.$dateCSV["date"].'$data<>'.$dataHtml["conso"].'$data<>'.$dateCSV["conso"].'$i'.$i.'$keepI'.$keepI.'$j:'.$j.'sizeof($datasFetched[$j])'.sizeof($datasFetched[$j]));
+                       //log::add('veolia_eau', 'debug', '$datasFetched[$j] not array - $dataHtml["date"]'.$dataHtml["date"].'$dateCSV["date"]'.$dateCSV["date"].'$data<>'.$dataHtml["conso"].'$data<>'.$dateCSV["conso"].'$i'.$i.'$keepI'.$keepI.'$j:'.$j.'sizeof($datasFetched[$j])'.sizeof($datasFetched[$j]));
 
                    }
                      $i++; $j++;
