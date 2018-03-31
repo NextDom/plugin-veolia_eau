@@ -520,8 +520,7 @@ class veolia_eau extends eqLogic {
                       if ($dateCSV["conso"]<0){
                         $keepNegativeConso=$dateCSV["conso"];
                         $keepI=$i;
-                        $datasFetched[$j]["index"]=0; // fix travis undefined offset when CSV is negative
-                        //log::add('veolia_eau', 'debug', 'conso<0 - $dataHtml["date"]'.$dataHtml["date"].'$dateCSV["date"]'.$dateCSV["date"].'$data<>'.$dataHtml["conso"].'$data<>'.$dateCSV["conso"].'$i'.$i.'$keepI'.$keepI.'$j:'.$j);
+                        // log::add('veolia_eau', 'debug', 'conso<0 - $dataHtml["date"]'.$dataHtml["date"].'$dateCSV["date"]'.$dateCSV["date"].'$data<>'.$dataHtml["conso"].'$data<>'.$dateCSV["conso"].'$i'.$i.'$keepI'.$keepI.'$j:'.$j);
                       } elseif ($keepI==$i){ // Negatif a soustraire au suivant
                         $dateCSV["conso"]=($dateCSV["conso"]+$keepNegativeConso);
                         $dateCSV["index"]=($dateCSV["conso"]+$previousIndex);
@@ -533,9 +532,11 @@ class veolia_eau extends eqLogic {
                       }
                      $i--;
                      }
-                     //log::add('veolia_eau', 'debug', 'html different du CSV - $dataHtml["date"]'.$dataHtml["date"].'$dateCSV["date"]'.$dateCSV["date"].'$data<>'.$dataHtml["conso"].'$data<>'.$dateCSV["conso"].'$i'.$i.'$keepI'.$keepI.'$j:'.$j.'sizeof($datasFetched[$j])'.sizeof($datasFetched[$j]));
+                     // log::add('veolia_eau', 'debug', 'html different du CSV - $dataHtml["date"]'.$dataHtml["date"].'$dateCSV["date"]'.$dateCSV["date"].'$data<>'.$dataHtml["conso"].'$data<>'.$dateCSV["conso"].'$i'.$i.'$keepI'.$keepI.'$j:'.$j.'sizeof($datasFetched[$j])'.sizeof($datasFetched[$j]));
 
-                     $compteur=$datasFetched[$j]["index"];
+                     if (is_array($datasFetched)) { // fix travis undefined offset when CSV is negative
+                       $compteur=$datasFetched[$j]["index"];
+                     }
                      $i++; $j++;
                  } else{
                      log::add('veolia_eau', 'debug', 'html plus petit que le csv, csv:'.count($csvDataFetched)." html:".count($htmlDataFetched)." i:".$i);
