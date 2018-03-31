@@ -525,7 +525,8 @@ class veolia_eau extends eqLogic {
                         }
                         $i--;
                      }
-                     $compteur=$datasFetched[$j]["index"];
+                     log::add('veolia_eau', 'debug', 'j'.$j." i:".$i." $datasFetched".serialize($datasFetched[$j]["index"]));
+                     $compteur=$datasFetched[$j]["index"]; // travis undefined offset
                      $i++; $j++;
                  } else{
                      log::add('veolia_eau', 'debug', 'html plus petit que le csv, csv:'.count($csvDataFetched)." html:".count($htmlDataFetched)." i:".$i);
