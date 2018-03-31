@@ -29,3 +29,19 @@ core/class/veolia_eau_process_mar_old.class.php
 tests/veolia_sudest_data_src/veolia_html_5ab41f9666029.htm
 
 tests/.atoum.php
+
+tests/alex.py
+
+tests/tools/diffPluginFiles.sh
+
+tests/tools/publishLocalProd.sh
+
+tests/rj/new.txt
+
+tests/rj/new2.txt
+
+tests/rj/old.txt
+
+core/class/veolia_eau_process_prod.class.php
+
+tests/veolia_eau_data/testVeoliaEau.txt

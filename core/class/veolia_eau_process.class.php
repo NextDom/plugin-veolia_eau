@@ -270,6 +270,9 @@ class veolia_eau extends eqLogic {
                     } else {
                         log::add('veolia_eau', 'error',  'Mesure du '.date('Y-m-d',$releve).' perdu, pas disponible chez veolia');
                     }
+                } elseif ($EndMonth == 0 && $monthReleve != $monthLast){ // il manque plusieurs mois, on passe au mois apres last (+1 jour)
+                    $releve = mktime(0, 0, 0, date("m",$lastdatenum+3600*24)  , date("d",$lastdatenum+3600*24), date("Y",$lastdatenum+3600*24));
+                    log::add('veolia_eau', 'debug','Il manque 1 ou plusiers mois:'.  $monthReleve.' '.$monthLast.' '.$EndMonth);
                 }
 
                 $month = date('m/Y',$releve);
@@ -633,18 +636,24 @@ class veolia_eau extends eqLogic {
 
       log::add('veolia_eau', 'debug', '### TRAITE CONSO XLS '.$website.' ###');
       require_once dirname(__FILE__).'/../../3rparty/PHPExcel/Classes/PHPExcel/IOFactory.php';
-      $objReader = PHPExcel_IOFactory::createReader("CSV");
       if ($website ==2 || $website == 3) {
+          $objReader = PHPExcel_IOFactory::createReader("CSV");
           $objReader->setDelimiter(";");
+          try {
+            $objPHPExcel = $objReader->load( $csv_file );
+          } catch(Exception $e) {
+              log::add('veolia_eau', 'error',$e->getMessage());
+            return 0;
+          }
       } else {
-          $objReader->setDelimiter(",");
+          try{
+            $objPHPExcel = PHPExcel_IOFactory::load($csv_file);
+        } catch(Exception $e) {
+            log::add('veolia_eau', 'error',$e->getMessage());
+          return 0;
+        }
       }
-      try {
-        $objPHPExcel = $objReader->load( $csv_file );
-      } catch(Exception $e) {
-          log::add('veolia_eau', 'error',$e->getMessage());
-        return 0;
-      }
+
       $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
 
       if (is_array($sheetData) && count($sheetData)) {
