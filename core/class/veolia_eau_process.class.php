@@ -54,10 +54,44 @@ class veolia_eau extends eqLogic {
             if (date('G') == $heure_releve) {
 				if ($veolia_eau->getIsEnable() == 1) {
 					if (!empty($veolia_eau->getConfiguration('login')) && !empty($veolia_eau->getConfiguration('password'))) {
-						$veolia_eau->getConso(0);
-                        log::add('veolia_eau', 'debug', 'done... ');
+                      ## Code suivant utile pour les cas qui ne donnent pas l index dans le CSV
+                      # Recuperation de l index du mois passe
+                      if (!empty($veolia_eau->getConfiguration('depart'))) {
+                          $depart_compteur=$veolia_eau->getConfiguration('depart');
+                      } else {
+                          $depart_compteur=0;
+                      }
+                      # On MAJ avec les données 3 jours dans le passé, elle ne sont pas dispo live
+                      $offsetVeoliaDate=3;
+                      $eqLogicId = $veolia_eau->getId();
+                      # Recuperation de l ID de index
+                      $cmdId = cmd::byEqLogicIdAndLogicalId($eqLogicId,'index')->getId();
+                      log::add('veolia_eau', 'debug', '$cmdId:'.$cmdId);
+                      # calcul de la date de recuperation des données
+                      $currentdatenum=time()-3600*24*$offsetVeoliaDate;
+                      # Calcul du dernier jour du mois d'avant
+                      $LastDayLastMonth=date('Y-m-d',strtotime('last day of last month',$currentdatenum));
+                      # Recuperation de l'historique
+                      $debut = date("Y-m-d H:i:s", strtotime($LastDayLastMonth));
+                      log::add('veolia_eau', 'debug', '$debut:'.$debut);
+                      $fin = date("Y-m-d H:i:s", strtotime($LastDayLastMonth));
+                      log::add('veolia_eau', 'debug', '$fin:'.$fin);
+                      $value= history::all($cmdId,$debut,$fin);
+
+                      if (count($value)>0){
+                        $item = $value[0];
+                        $dateval=$item -> getDatetime();
+                        $compteurEndPrevMonth=$item -> getValue();
+                      } else {
+                        // If prev month empty --> assumption plugin just installed
+                        // compteur = start
+                        $dateval=0;
+                        $compteurEndPrevMonth=$depart_compteur;
+                      }
+                      $veolia_eau->getConso(0,$compteurEndPrevMonth,$offsetVeoliaDate);
+                      log::add('veolia_eau', 'debug', 'done... ');
 					} else {
-						log::add('veolia_eau', 'error', 'Identifiants non saisis');
+					  log::add('veolia_eau', 'error', 'Identifiants non saisis');
 					}
 				}
 			}
@@ -206,7 +240,7 @@ class veolia_eau extends eqLogic {
 
     /*     * **********************Getteur Setteur*************************** */
 
-	public function getConso($mock_test) {
+	public function getConso($mock_test,$compteurEndPrevMonth,$offsetVeoliaDate) {
         // Add ability to mock and tests the process without Jeedom
         // $mock_test=0: Normal process
         // $mock_test=1: Run automated tests with direct call to veolia
@@ -218,7 +252,6 @@ class veolia_eau extends eqLogic {
 
 		$getConsoInHtmlFile = true;
         $website=intval($this->getConfiguration('website'));
-        $offsetVeoliaDate=3;
         $url_token=0; // n etait pas initialisé dans tous les cas
         if ($website == 2){
             $url_site = 'www.eau-services.com';
@@ -230,6 +263,10 @@ class veolia_eau extends eqLogic {
         switch ($website) {
             case 2:
             case 3:
+            // Algo: Process HTML and CSV and compare results
+            // It will allow a progressive migration to csv
+            // index is not provided, it is calculated from the begining
+            // of the month, last value of previous month is provided in input
                 $url_login = 'https://'.$url_site.'/default.aspx';
                 // on ne peux avoir le csv que de deux jours en arrière
                 // le csv mensuel pas de données pour le dernier jour
