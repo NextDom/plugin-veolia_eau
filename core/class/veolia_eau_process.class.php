@@ -504,11 +504,11 @@ class veolia_eau extends eqLogic {
 
         //traitement du xls
 
-        $this->traiteConso($data_file, $htm_file, $mock_test, $offsetVeoliaDate);
+        $this->traiteConso($data_file, $htm_file, $mock_test, $offsetVeoliaDate,$compteurEndPrevMonth);
 		@unlink($cookie_file);
 	}
 
-	public function traiteConso($file, $htm_file, $mock_test, $offsetVeoliaDate) {
+	public function traiteConso($file, $htm_file, $mock_test, $offsetVeoliaDate,$compteurEndPrevMonth) {
         $consomonth = [];
         $datasFetched = [];
         $htmlDatasFetched = [];
@@ -537,7 +537,8 @@ class veolia_eau extends eqLogic {
                  $j=0;
                  $keepI=-1;
 
-                 $previousIndex=$htmlDataFetched[0]["index"]-$htmlDataFetched[0]["conso"]; // TODO update index Recuperer l index du mois d avant dans jeedom
+                 //$previousIndex=$htmlDataFetched[0]["index"]-$htmlDataFetched[0]["conso"];
+                 $previousIndex=$compteurEndPrevMonth;
                  foreach ($csvDataFetched as $dateCSV ) {
 
                    if ($i < count($htmlDataFetched) ){

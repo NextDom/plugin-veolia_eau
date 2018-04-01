@@ -1393,20 +1393,20 @@ veolia_eau debug html plus petit que le csv, csv:20 html:7 i:7
 
 veolia_eau debug html plus petit que le csv, csv:20 html:7 i:7
 
-veolia_eau debug Date: 2018-03-01 / Index: 0 / Conso: 275 / Type de relevé: M
+veolia_eau debug Date: 2018-03-01 / Index: 275 / Conso: 275 / Type de relevé: M
 
-veolia_eau debug Date: 2018-03-02 / Index: 154 / Conso: 154 / Type de relevé: M
+veolia_eau debug Date: 2018-03-02 / Index: 429 / Conso: 154 / Type de relevé: M
 
-veolia_eau debug Date: 2018-03-03 / Index: 533 / Conso: 379 / Type de relevé: M
+veolia_eau debug Date: 2018-03-03 / Index: 808 / Conso: 379 / Type de relevé: M
 
-veolia_eau debug Date: 2018-03-04 / Index: 732 / Conso: 199 / Type de relevé: M
+veolia_eau debug Date: 2018-03-04 / Index: 1007 / Conso: 199 / Type de relevé: M
 
-veolia_eau debug Date: 2018-03-05 / Index: 965 / Conso: 233 / Type de relevé: M
+veolia_eau debug Date: 2018-03-05 / Index: 1240 / Conso: 233 / Type de relevé: M
 
-veolia_eau debug Date: 2018-03-06 / Index: 1048 / Conso: 83 / Type de relevé: M
+veolia_eau debug Date: 2018-03-06 / Index: 1323 / Conso: 83 / Type de relevé: M
 
-veolia_eau debug Date: 2018-03-07 / Index: 1183 / Conso: 135 / Type de relevé: M
+veolia_eau debug Date: 2018-03-07 / Index: 1458 / Conso: 135 / Type de relevé: M
 
-veolia_eau debug Date: 2018-03-08 / Index: 1398 / Conso: 215 / Type de relevé: M
+veolia_eau debug Date: 2018-03-08 / Index: 1673 / Conso: 215 / Type de relevé: M
 
-veolia_eau debug save compteur: 1398
+veolia_eau debug save compteur: 1673
