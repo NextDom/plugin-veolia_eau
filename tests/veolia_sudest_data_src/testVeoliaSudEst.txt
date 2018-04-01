@@ -3,6 +3,8 @@ veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteu
 
 veolia_eau debug 03/2018 04
 
+veolia_eau debug https://www.eau-services.com/mon-espace-suivi-personnalise.aspx?ex=03/2018&mm=03/2018&d=
+
 veolia_eau debug ### LOGIN ON https://www.eau-services.com/default.aspx ###
 
 veolia_eau debug cURL response : tbd
@@ -65,6 +67,8 @@ veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteu
 
 veolia_eau debug 03/2018 04
 
+veolia_eau debug https://www.eau-services.com/mon-espace-suivi-personnalise.aspx?ex=03/2018&mm=03/2018&d=
+
 veolia_eau debug ### LOGIN ON https://www.eau-services.com/default.aspx ###
 
 veolia_eau debug cURL response : tbd
@@ -124,6 +128,8 @@ veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteu
 veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:400 last:2018-03-03 alert:#680 mock_date:2018-03-07
 
 veolia_eau debug 03/2018 04
+
+veolia_eau debug https://www.eau-services.com/mon-espace-suivi-personnalise.aspx?ex=03/2018&mm=03/2018&d=
 
 veolia_eau debug ### LOGIN ON https://www.eau-services.com/default.aspx ###
 
@@ -185,6 +191,8 @@ veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteu
 
 veolia_eau debug 03/2018 04
 
+veolia_eau debug https://www.eau-services.com/mon-espace-suivi-personnalise.aspx?ex=03/2018&mm=03/2018&d=
+
 veolia_eau debug ### LOGIN ON https://www.eau-services.com/default.aspx ###
 
 veolia_eau debug cURL response : tbd
@@ -243,6 +251,8 @@ veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteu
 
 veolia_eau debug 03/2018 04
 
+veolia_eau debug https://www.eau-services.com/mon-espace-suivi-personnalise.aspx?ex=03/2018&mm=03/2018&d=
+
 veolia_eau debug ### LOGIN ON https://www.eau-services.com/default.aspx ###
 
 veolia_eau debug cURL response : tbd
@@ -271,7 +281,11 @@ veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteu
 
 veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:0 last:2018-01-31 alert:#680 mock_date:2018-03-07
 
-veolia_eau debug 03/2018 04
+veolia_eau debug Il manque 1 ou plusieurs mois:March January 0
+
+veolia_eau debug 02/2018 01
+
+veolia_eau debug https://www.eau-services.com/mon-espace-suivi-personnalise.aspx?ex=02/2018&mm=02/2018&d=
 
 veolia_eau debug ### LOGIN ON https://www.eau-services.com/default.aspx ###
 
@@ -467,7 +481,11 @@ veolia_eau debug save last: 2018-02-28
 
 veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:8060 last:2018-02-28 alert:#680 mock_date:2018-03-07
 
-veolia_eau debug 03/2018 04
+veolia_eau debug Il manque 1 ou plusieurs mois:March February 0
+
+veolia_eau debug 03/2018 01
+
+veolia_eau debug https://www.eau-services.com/mon-espace-suivi-personnalise.aspx?ex=03/2018&mm=03/2018&d=
 
 veolia_eau debug ### LOGIN ON https://www.eau-services.com/default.aspx ###
 
@@ -531,7 +549,11 @@ veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteu
 
 veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:0 last:2018-01-31 alert:#680 mock_date:2018-03-03
 
-veolia_eau debug 02/2018 28
+veolia_eau debug Il manque 1 ou plusieurs mois:February January 0
+
+veolia_eau debug 02/2018 01
+
+veolia_eau debug https://www.eau-services.com/mon-espace-suivi-personnalise.aspx?ex=02/2018&mm=02/2018&d=
 
 veolia_eau debug ### LOGIN ON https://www.eau-services.com/default.aspx ###
 
@@ -733,6 +755,8 @@ veolia_eau debug Detection de retard de veolia en fin de mois, on attend la mesu
 
 veolia_eau debug 02/2018 27
 
+veolia_eau debug https://www.eau-services.com/mon-espace-suivi-personnalise.aspx?ex=02/2018&mm=02/2018&d=
+
 veolia_eau debug ### LOGIN ON https://www.eau-services.com/default.aspx ###
 
 veolia_eau debug cURL response : tbd
@@ -933,6 +957,8 @@ veolia_eau debug Detection de retard de veolia en fin de mois, on attend la mesu
 
 veolia_eau debug 02/2018 27
 
+veolia_eau debug https://www.eau-services.com/mon-espace-suivi-personnalise.aspx?ex=02/2018&mm=02/2018&d=
+
 veolia_eau debug ### LOGIN ON https://www.eau-services.com/default.aspx ###
 
 veolia_eau debug cURL response : tbd
@@ -1127,7 +1153,11 @@ veolia_eau debug save last: 2018-02-28
 
 veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:8060 last:2018-02-28 alert:#680 mock_date:2018-03-07
 
-veolia_eau debug 03/2018 04
+veolia_eau debug Il manque 1 ou plusieurs mois:March February 0
+
+veolia_eau debug 03/2018 01
+
+veolia_eau debug https://www.eau-services.com/mon-espace-suivi-personnalise.aspx?ex=03/2018&mm=03/2018&d=
 
 veolia_eau debug ### LOGIN ON https://www.eau-services.com/default.aspx ###
 
@@ -1192,6 +1222,8 @@ veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteu
 veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:0 last:2018-03-09 alert:#680 mock_date:2018-03-12
 
 veolia_eau debug 03/2018 09
+
+veolia_eau debug https://www.eau-services.com/mon-espace-suivi-personnalise.aspx?ex=03/2018&mm=03/2018&d=
 
 veolia_eau debug ### LOGIN ON https://www.eau-services.com/default.aspx ###
 
@@ -1270,6 +1302,8 @@ veolia_eau debug Date: 2018-03-08 / Index: 0 / Conso: 215 / Type de relevé: M
 veolia_eau debug displayConfig: website:2 login:1 password:PSW1 depart:0 compteur:0 last:2018-03-09 alert:#680 mock_date:2018-03-12
 
 veolia_eau debug 03/2018 09
+
+veolia_eau debug https://www.eau-services.com/mon-espace-suivi-personnalise.aspx?ex=03/2018&mm=03/2018&d=
 
 veolia_eau debug ### LOGIN ON https://www.eau-services.com/default.aspx ###
 

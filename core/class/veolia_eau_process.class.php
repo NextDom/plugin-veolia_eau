@@ -272,7 +272,7 @@ class veolia_eau extends eqLogic {
                     }
                 } elseif ($EndMonth == 0 && $monthReleve != $monthLast){ // il manque plusieurs mois, on passe au mois apres last (+1 jour)
                     $releve = mktime(0, 0, 0, date("m",$lastdatenum+3600*24)  , date("d",$lastdatenum+3600*24), date("Y",$lastdatenum+3600*24));
-                    log::add('veolia_eau', 'debug','Il manque 1 ou plusiers mois:'.  $monthReleve.' '.$monthLast.' '.$EndMonth);
+                    log::add('veolia_eau', 'debug','Il manque 1 ou plusieurs mois:'.  $monthReleve.' '.$monthLast.' '.$EndMonth);
                 }
 
                 $month = date('m/Y',$releve);
@@ -280,7 +280,7 @@ class veolia_eau extends eqLogic {
                 log::add('veolia_eau', 'debug',  $month.' '.$day);
                 $url_consommation = 'https://'.$url_site.'/mon-espace-suivi-personnalise.aspx?mm='.$month.'&d=';
                 $url_releve_csv = 'https://'.$url_site.'/mon-espace-suivi-personnalise.aspx?ex='.$month.'&mm='.$month.'&d=';
-                //log::add('veolia_eau', 'debug',  $url_releve_csv);
+                log::add('veolia_eau', 'debug',  $url_releve_csv);
                 $datas = array(
                     'login='.urlencode($this->getConfiguration('login')),
                     'pass='.urlencode($this->getConfiguration('password')),
