@@ -277,8 +277,51 @@ class veolia_eau extends eqLogic {
 
             case 3:
                 $url_login = 'https://agence.eaudugrandlyon.com/default.aspx';
-                $url_consommation = 'https://agence.eaudugrandlyon.com/mon-espace-suivi-personnalise.aspx';
-                $url_releve_csv = 'https://agence.eaudugrandlyon.com/mon-espace-suivi-personnalise.aspx?ex=9/2016&mm=9/2016&d=';
+                // on ne peux avoir le csv que de deux jours en arrière
+                // le csv mensuel pas de données pour le dernier jour
+                // le csv par heure pas de données pour 0-1H
+                // ex=mm/YYYY
+                // mm=mm/YYYY
+                // d=dd moins deux/trois jours
+
+                // Calcul du dernier jour du mois
+                // Si $lastdate n'est pas au dernier jour du mois
+                // et que la date calculé $releve est au mois suivant
+                // il manque la fin du mois passé. il faut passer $releve
+                // au dernier jour du mois passé (last)
+                $lastdate=$this->getConfiguration('last');
+                $lastdatenum=strtotime($lastdate);
+                $monthLast=date("F",$lastdatenum);
+                $LastDayMonth=strtotime("last day of ".$monthLast, $lastdatenum);
+                $EndMonth=$LastDayMonth-$lastdatenum;
+
+                // log::add('veolia_eau', 'debug',  $LastDayMonth.' '.$monthLast.' '.$lastdate);
+
+                if ($mock_test>=1){
+                  $currentdate=$this->getConfiguration('mock_date');
+                  // log::add('veolia_eau', 'debug',' $currentdate:'.$currentdate);
+                  $currentdatenum=strtotime($currentdate);
+                } else {
+                    $currentdatenum=time();
+                }
+                $releve = mktime(0, 0, 0, date("m",$currentdatenum)  , date("d",$currentdatenum)-$offsetVeoliaDate, date("Y",$currentdatenum));
+                $monthReleve = date('F',$releve);
+                // log::add('veolia_eau', 'debug',' $monthReleve:'.$monthReleve);
+
+                if ($EndMonth!=0 && $monthReleve!=$monthLast){
+                    $releve = mktime(0, 0, 0, date("m",$lastdatenum)  , date("d",$lastdatenum), date("Y",$lastdatenum));
+                    if($currentdatenum-$lastdatenum>5*24*3600) { # on attend la musure 5 jours
+                       log::add('veolia_eau', 'debug','Detection de retard de veolia en fin de mois, on attend la mesure: '.  $monthReleve.' '.$monthLast.' '.$EndMonth);
+                    } else {
+                       log::add('veolia_eau', 'error',  'Mesure du '.date('Y-m-d',$releve).' perdu, pas disponible chez veolia');
+                    }
+                }
+                $month = date('m/Y',$releve);
+                $day = date('d',$releve);
+                log::add('veolia_eau', 'debug',  $month.' '.$day);
+                $url_consommation = 'https://agence.eaudugrandlyon.com/mon-espace-suivi-personnalise.aspx?mm='.$month.'&d=';
+                //$url_releve_csv = 'https://agence.eaudugrandlyon.com/mon-espace-suivi-personnalise.aspx?ex='.$month.'&mm='.$month.'&d=';
+                //log::add('veolia_eau', 'debug',  $url_releve_csv);
                 $datas = array(
                     'login='.urlencode($this->getConfiguration('login')),
                     'pass='.urlencode($this->getConfiguration('password')),
@@ -425,8 +468,8 @@ class veolia_eau extends eqLogic {
 			}
 		}
 
-        if ($website != 2){
-        // Inutile de recuperer le xls pour www.eau-services.com
+        if ($website != 2 && $website != 3){
+        // Inutile de recuperer le xls pour www.eau-services.com et agence.eaudugrandlyon.com
     	  log::add('veolia_eau', 'debug', '### GET DATAFILE ###');
 		  $data_file = sys_get_temp_dir().'/veolia_releve_'.uniqid().$extension;
 		  static::secure_touch($data_file);
@@ -474,6 +517,7 @@ class veolia_eau extends eqLogic {
         $website=intval($this->getConfiguration('website'));
         switch ($website) {
             case 2:
+            case 3:
                 log::add('veolia_eau', 'debug', '### TRAITE CONSO CSV '.$website.' ###');
                 $depart = $this->getConfiguration('depart');
                 $compteur = $this->getConfiguration('compteur');
@@ -591,10 +635,6 @@ class veolia_eau extends eqLogic {
                     );
 				}
 
-                break;
-
-            case 3:
-                log::add('veolia_eau', 'debug', '### TRAITE CONSO CSV '.$website.' ###');
                 break;
 
             case 4:
