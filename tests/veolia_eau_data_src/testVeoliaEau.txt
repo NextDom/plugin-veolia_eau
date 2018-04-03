@@ -1,0 +1,212 @@
+
+veolia_eau debug displayConfig: website:1 login:1 password:PSW1 depart:0 compteur:0 last:2018-03-09 alert:#680 mock_date:2018-03-12
+
+veolia_eau debug ### GET CSRF TOKEN ON https://www.service-client.veoliaeau.fr/connexion-espace-client.html ###
+
+veolia_eau debug cURL response : tbd
+
+veolia_eau debug cURL errno : 0
+
+veolia_eau debug Extracting token
+
+veolia_eau debug Token: 
+
+veolia_eau debug ### LOGIN ON https://www.service-client.veoliaeau.fr/home.loginAction.do ###
+
+veolia_eau debug cURL response : tbd
+
+veolia_eau debug cURL errno : 0
+
+veolia_eau debug ### GO TO CONSOMMATION PAGE ###
+
+veolia_eau debug cURL response : 1
+
+veolia_eau debug cURL errno : 0
+
+veolia_eau debug ### GET DATAFILE CSV ###
+
+veolia_eau debug alert: 680
+
+veolia_eau debug ### TRAITE CONSO XLS 1 ###
+
+veolia_eau debug 89 data lines
+
+veolia_eau debug 89 data lines
+
+veolia_eau debug Date: 2017-12-26 / Index: 599005 / Conso: 226.00 / Type de relevé: M
+
+veolia_eau debug Date: 2017-12-27 / Index: 599605 / Conso: 600.00 / Type de relevé: M
+
+veolia_eau debug Date: 2017-12-28 / Index: 600063 / Conso: 458.00 / Type de relevé: M
+
+veolia_eau debug Date: 2017-12-29 / Index: 600606 / Conso: 640.00 / Type de relevé: M
+
+veolia_eau debug Date: 2017-12-30 / Index: 601025 / Conso: 419.00 / Type de relevé: M
+
+veolia_eau debug Date: 2017-12-31 / Index: 601427 / Conso: 402.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-01-01 / Index: 601410 / Conso: 361.00 / Type de relevé: E
+
+veolia_eau debug Date: 2018-01-02 / Index: 601771 / Conso: 361.00 / Type de relevé: E
+
+veolia_eau debug Date: 2018-01-03 / Index: 602132 / Conso: 361.00 / Type de relevé: E
+
+veolia_eau debug Date: 2018-01-04 / Index: 602493 / Conso: 361.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-01-05 / Index: 602834 / Conso: 341.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-01-06 / Index: 603713 / Conso: 879.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-01-07 / Index: 604118 / Conso: 642.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-01-08 / Index: 604356 / Conso: 238.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-01-09 / Index: 604683 / Conso: 327.00 / Type de relevé: E
+
+veolia_eau debug Date: 2018-01-10 / Index: 605010 / Conso: 327.00 / Type de relevé: E
+
+veolia_eau debug Date: 2018-01-11 / Index: 605337 / Conso: 327.00 / Type de relevé: E
+
+veolia_eau debug Date: 2018-01-12 / Index: 605662 / Conso: 327.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-01-13 / Index: 606110 / Conso: 448.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-01-14 / Index: 606426 / Conso: 316.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-01-15 / Index: 606710 / Conso: 284.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-01-16 / Index: 607026 / Conso: 316.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-01-17 / Index: 607405 / Conso: 333.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-01-18 / Index: 607716 / Conso: 323.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-01-19 / Index: 608069 / Conso: 353.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-01-20 / Index: 608474 / Conso: 379.00 / Type de relevé: E
+
+veolia_eau debug Date: 2018-01-21 / Index: 608852 / Conso: 379.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-01-22 / Index: 609083 / Conso: 231.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-01-23 / Index: 609358 / Conso: 275.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-01-24 / Index: 609843 / Conso: 330.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-01-25 / Index: 610171 / Conso: 328.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-01-26 / Index: 610473 / Conso: 302.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-01-27 / Index: 611040 / Conso: 567.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-01-28 / Index: 611188 / Conso: 339.00 / Type de relevé: E
+
+veolia_eau debug Date: 2018-01-29 / Index: 611527 / Conso: 339.00 / Type de relevé: E
+
+veolia_eau debug Date: 2018-01-30 / Index: 611868 / Conso: 339.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-01-31 / Index: 612342 / Conso: 474.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-01 / Index: 612515 / Conso: 173.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-02 / Index: 612793 / Conso: 278.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-03 / Index: 612994 / Conso: 201.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-04 / Index: 612994 / Conso: 0.00 / Type de relevé: E
+
+veolia_eau debug Date: 2018-02-05 / Index: 612994 / Conso: 0.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-06 / Index: 612994 / Conso: 0.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-07 / Index: 612994 / Conso: 0.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-08 / Index: 612994 / Conso: 0.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-09 / Index: 612994 / Conso: 0.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-10 / Index: 612994 / Conso: 0.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-11 / Index: 613709 / Conso: 715.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-12 / Index: 613922 / Conso: 213.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-13 / Index: 614116 / Conso: 194.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-14 / Index: 614634 / Conso: 518.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-15 / Index: 614936 / Conso: 302.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-16 / Index: 615090 / Conso: 228.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-17 / Index: 615502 / Conso: 412.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-18 / Index: 615692 / Conso: 301.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-19 / Index: 616362 / Conso: 670.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-20 / Index: 616637 / Conso: 473.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-21 / Index: 617053 / Conso: 416.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-22 / Index: 617351 / Conso: 298.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-23 / Index: 617519 / Conso: 168.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-24 / Index: 617789 / Conso: 270.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-25 / Index: 618304 / Conso: 515.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-26 / Index: 618606 / Conso: 302.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-27 / Index: 618793 / Conso: 187.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-02-28 / Index: 619076 / Conso: 283.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-01 / Index: 619446 / Conso: 370.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-02 / Index: 619592 / Conso: 146.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-03 / Index: 619592 / Conso: 0.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-04 / Index: 619950 / Conso: 358.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-05 / Index: 620442 / Conso: 492.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-06 / Index: 620625 / Conso: 183.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-07 / Index: 621042 / Conso: 417.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-08 / Index: 621252 / Conso: 210.00 / Type de relevé: E
+
+veolia_eau debug Date: 2018-03-09 / Index: 621461 / Conso: 210.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-10 / Index: 621663 / Conso: 202.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-11 / Index: 621663 / Conso: 0.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-12 / Index: 621663 / Conso: 0.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-13 / Index: 621663 / Conso: 0.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-14 / Index: 621663 / Conso: 0.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-15 / Index: 621670 / Conso: 7.00 / Type de relevé: E
+
+veolia_eau debug Date: 2018-03-16 / Index: 621677 / Conso: 7.00 / Type de relevé: E
+
+veolia_eau debug Date: 2018-03-17 / Index: 621683 / Conso: 7.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-18 / Index: 622382 / Conso: 699.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-19 / Index: 622652 / Conso: 270.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-20 / Index: 622929 / Conso: 277.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-21 / Index: 623443 / Conso: 514.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-22 / Index: 623696 / Conso: 253.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-23 / Index: 623948 / Conso: 252.00 / Type de relevé: M
+
+veolia_eau debug Date: 2018-03-24 / Index: 624605 / Conso: 657.00 / Type de relevé: M

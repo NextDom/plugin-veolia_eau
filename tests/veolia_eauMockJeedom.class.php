@@ -12,6 +12,7 @@ class eqLogic{
   private $last="";
   private $alert="#680";
   private $mock_file="veolia_sudest_data_src/veolia_html_3March.htm";
+  private $csv_mock_file="";
   private $mock_date="";
   private $maxday=1000;
   private $maxmonth=10000;
@@ -38,6 +39,8 @@ class eqLogic{
       return $this->alert;
     }elseif ($config=="mock_file"){
       return $this->mock_file;
+    }elseif ($config=="csv_mock_file"){
+      return $this->csv_mock_file;
     }elseif ($config=="mock_date"){
       return $this->mock_date;
     }elseif ($config=="maxday"){
@@ -67,6 +70,8 @@ class eqLogic{
         $this->alert=$value;
       }elseif ($config=="mock_file"){
         $this->mock_file=$value;
+      }elseif ($config=="csv_mock_file"){
+        $this->csv_mock_file=$value;
       }elseif ($config=="mock_date"){
         $this->mock_date=$value;
       }
