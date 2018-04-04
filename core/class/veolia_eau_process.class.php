@@ -504,11 +504,11 @@ class veolia_eau extends eqLogic {
 
         //traitement du xls
 
-        $this->traiteConso($data_file, $htm_file, $mock_test, $offsetVeoliaDate,$compteurEndPrevMonth);
+        $this->traiteConso($data_file, $htm_file, $mock_test, $offsetVeoliaDate,$compteurEndPrevMonth,$currentdatenum);
 		@unlink($cookie_file);
 	}
 
-	public function traiteConso($file, $htm_file, $mock_test, $offsetVeoliaDate,$compteurEndPrevMonth) {
+	public function traiteConso($file, $htm_file, $mock_test, $offsetVeoliaDate,$compteurEndPrevMonth,$currentdatenum) {
         $consomonth = [];
         $datasFetched = [];
         $htmlDatasFetched = [];
@@ -525,7 +525,7 @@ class veolia_eau extends eqLogic {
             case 2:
             case 3:
               if ($file!=""){
-                $htmlDataFetched=static::processHtml($htm_file,$website,$compteur,$date,$offsetVeoliaDate,$mock_test,$lastdate);
+                $htmlDataFetched=static::processHtml($htm_file,$website,$compteur,$date,$offsetVeoliaDate,$mock_test,$lastdate,$currentdatenum);
                 //log::add('veolia_eau', 'debug', 'csvDataFetched:'.serialize($datasFetched));
 
                 // Traitement du csv
@@ -580,7 +580,7 @@ class veolia_eau extends eqLogic {
                 }
 
               } else{
-                  $datasFetched=static::processHtml($htm_file,$website,$compteur,$date,$offsetVeoliaDate,$mock_test,$lastdate);
+                  $datasFetched=static::processHtml($htm_file,$website,$compteur,$date,$offsetVeoliaDate,$mock_test,$lastdate,$currentdatenum);
               }
 
               break;
@@ -739,7 +739,7 @@ class veolia_eau extends eqLogic {
       return $datasFetched;
     }
 
-    private function processHtml($htm_file, $website, &$compteur, &$date, $offsetVeoliaDate,$mock_test,&$lastdate) {
+    private function processHtml($htm_file, $website, &$compteur, &$date, $offsetVeoliaDate,$mock_test,&$lastdate,$currentdatenum) {
         log::add('veolia_eau', 'debug', '### TRAITE CONSO HTML '.$website.' ###');
         $depart = $this->getConfiguration('depart');
         $compteur = $this->getConfiguration('compteur');
@@ -805,8 +805,8 @@ class veolia_eau extends eqLogic {
                 $nm_nextreleve = mktime(0, 0, 0, date("m",mktime(0, 0, 0, 3, 3, 2018))  , date("d",mktime(0, 0, 0, 3, 3, 2018))-$offsetVeoliaDate+1, date("Y",mktime(0, 0, 0, 3, 3, 2018)));
               }
               else{
-                  $nm_currentreleve = mktime(0, 0, 0, date("m")  , date("d")-$offsetVeoliaDate, date("Y"));
-                  $nm_nextreleve = mktime(0, 0, 0, date("m")  , date("d")-$offsetVeoliaDate+1, date("Y"));
+                  $nm_currentreleve = mktime(0, 0, 0, date("m",$currentdatenum)  , date("d",$currentdatenum)-$offsetVeoliaDate, date("Y",$currentdatenum));
+                  $nm_nextreleve = mktime(0, 0, 0, date("m",$currentdatenum)  , date("d",$currentdatenum)-$offsetVeoliaDate+1, date("Y",$currentdatenum));
               }
               $nm_month = date('m/Y',$nm_currentreleve);
               $nm_nextmonth = date('m/Y',$nm_nextreleve);

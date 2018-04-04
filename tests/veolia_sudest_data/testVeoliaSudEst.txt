@@ -687,7 +687,9 @@ veolia_eau debug 0,Nonmesurée
 
 veolia_eau debug valeur non mesurée
 
-veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:03/2018
+veolia_eau debug  $nm_nextmonth:03/2018 $nm_month:02/2018
+
+veolia_eau error valeur non mesurée en fin de mois
 
 veolia_eau error Valeur non mesurée, une mesure est perdu
 
