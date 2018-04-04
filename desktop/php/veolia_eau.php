@@ -112,7 +112,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 <?php
                                     echo '<option value="1">Veolia</option>';
                                     echo '<option value="2">Veolia Méditerranée</option>';
-                                    //echo '<option value="3">Service Eau du Grand Lyon</option>';
+                                    echo '<option value="3">Service Eau du Grand Lyon</option>';
                                     echo '<option value="4">Tout sur mon eau / Eau en ligne</option>';
                                  ?>
                                 </select>
@@ -205,4 +205,3 @@ $eqLogics = eqLogic::byType($plugin->getId());
 <?php
     include_file('desktop', 'veolia_eau', 'js', 'veolia_eau');
     include_file('core', 'plugin.template', 'js');
-
