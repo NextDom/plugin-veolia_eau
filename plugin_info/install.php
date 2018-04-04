@@ -19,11 +19,28 @@
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 function veolia_eau_install() {
+    log::add('veolia_eau', 'info', 'config - install started');
+    veolia_eau_update() ;
 }
 
 function veolia_eau_update() {
+    // Set default values for each existing equipments
+    log::add('veolia_eau', 'info', 'config - update started');
+    foreach (eqLogic::byType('veolia_eau') as $eqLogic) {
+      $lastdate = $eqLogic->getConfiguration('last');
+      if ($lastdate == ""){
+          $lastdatenum = time();
+          $monthCur = date("F",$lastdatenum);
+          $FirstDayMonth = strtotime("first day of ".$monthCur, $lastdatenum);
+          $lastdate = date("Y-m-d",$FirstDayMonth);
+          // $lastdate = "2017-09-10";
+          $eqLogic->setConfiguration('last',$lastdate); //default value in config::
+      }
+      $eqLogic->save();
+      log::add('veolia_eau', 'info', '$lastdate: '.$lastdate);
+
+    }
 }
 
 function veolia_eau_remove() {
 }
-
