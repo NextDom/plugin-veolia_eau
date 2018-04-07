@@ -36,8 +36,13 @@ function veolia_eau_update() {
           // $lastdate = "2017-09-10";
           $eqLogic->setConfiguration('last',$lastdate); //default value in config::
       }
+      $depart_compteur=$eqLogic->getConfiguration('depart');
+      if ($depart_compteur == ""){
+           $depart_compteur=0;
+           $eqLogic->setConfiguration('depart',$depart_compteur);
+      }
       $eqLogic->save();
-      log::add('veolia_eau', 'info', '$lastdate: '.$lastdate);
+      log::add('veolia_eau', 'info', '$lastdate: '.$lastdate.' depart:'.$depart_compteur);
 
     }
 }
