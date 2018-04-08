@@ -13,7 +13,7 @@ $instanceVeolia->setConfiguration('website',1);
 $instanceVeolia->setConfiguration('mock_date',"2018-03-12");
 $instanceVeolia->setConfiguration('csv_mock_file',"veolia_eau_data/consommation.xls");
 $instanceVeolia->displayConfig();
-$instanceVeolia->getConso(2,0,3);
+$instanceVeolia->getConso(2);
 /**
  *
  */

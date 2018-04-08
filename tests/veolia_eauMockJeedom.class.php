@@ -9,6 +9,7 @@ class eqLogic{
   private $password = "PSW1";
   private $depart = 0;
   private $compteur = 0;
+  private $offsetVeoliaDate = 3;
   private $last="";
   private $alert="#680";
   private $mock_file="veolia_sudest_data_src/veolia_html_3March.htm";
@@ -33,6 +34,8 @@ class eqLogic{
       return $this->depart;
     }elseif ($config=="compteur"){
       return $this->compteur;
+    }elseif ($config=="offsetVeoliaDate"){
+      return $this->offsetVeoliaDate;
     }elseif ($config=="last"){
       return $this->last;
     }elseif ($config=="alert"){
@@ -64,6 +67,8 @@ class eqLogic{
         $this->depart=$value;
       }elseif ($config=="compteur"){
         $this->compteur=$value;
+      }elseif ($config=="offsetVeoliaDate"){
+        $this->offsetVeoliaDate=$value;
       }elseif ($config=="last"){
         $this->last=$value;
       }elseif ($config=="alert"){

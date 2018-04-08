@@ -13,7 +13,7 @@ $instanceVeolia->setConfiguration('mock_date',"2018-03-12");
 $instanceVeolia->setConfiguration('mock_file',"Veolia-Lyon-Apr/veolia_html_Lyon_Apr18.htm");
 $instanceVeolia->setConfiguration('csv_mock_file',"Veolia-Lyon-Apr/veolia_releve_Lyon_Apr18.csv");
 $instanceVeolia->displayConfig();
-$instanceVeolia->getConso(2,3);
+$instanceVeolia->getConso(2);
 
 /**
  *

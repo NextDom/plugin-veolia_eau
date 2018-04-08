@@ -5,7 +5,7 @@ before_script:
 script:
 # Test veolia sud est $website=2
 # ------------------------------
-  - cd ${TRAVIS_BUILD_DIR}/tests;./RunVeoliaTests.sh
+  - cd ${TRAVIS_BUILD_DIR}/tests;./RunVeoliaSudEst.sh
 #   - cd ${TRAVIS_BUILD_DIR}/tests;php ./testVeoliaSudEstSimple.php 
   - diff -B veolia_sudest_data/testVeoliaSudEst.txt veolia_sudest_data_src/testVeoliaSudEst.txt
 # Test veoliaeau.fr $website=1
@@ -13,6 +13,11 @@ script:
   # Erreur a corriger avant de reactiver les tests
   # - cd ${TRAVIS_BUILD_DIR}/tests;./RunVeoliaEau.sh 
   # - diff -B veolia_eau_data/testVeoliaEau.txt veolia_eau_data_src/testVeoliaEau.txt
+# Test eau du grand lyon
+#-----------------------
+  - cd ${TRAVIS_BUILD_DIR}/tests;./RunVeoliaLyon.sh
+  - diff -B veolia_Lyon_data/testVeoliaLyon.txt Veolia-Lyon/testVeoliaLyon.txt
+
 after_success:
     # TBD
     - cd ${TRAVIS_BUILD_DIR}/tests
