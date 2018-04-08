@@ -46,10 +46,6 @@ core/class/veolia_eau_process_prod.class.php
 
 tests/veolia_eau_data/testVeoliaEau.txt
 
-tests/Veolia-Lyon-Apr/*.htm
-
-tests/Veolia-Lyon-Apr/*.csv
-
 tests/Veolia-Lyon/*.htm
 
 tests/Veolia-Lyon/*.csv
