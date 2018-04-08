@@ -170,7 +170,15 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 Il faut penser à mettre dans options avancées pour la commande <b>index</b> un lissage par le max et pas par la moyenne.
                             </div>
                         </div>
-
+                        <div class="form-group" id="group-configuration-last">
+                            <label class="col-sm-3 control-label">{{Nombre de jours de retard}}</label>
+                            <div class="col-sm-3">
+                                <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="offsetVeoliaDate" placeholder="offset Veolia Date"/>
+                            </div>
+                            <div class="col-sm-3">
+                                Nombre de jours de retard du fournisseur d'eau.
+                            </div>
+                        </div>
                     </fieldset>
                 </form>
 

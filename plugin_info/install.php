@@ -82,8 +82,13 @@ function veolia_eau_update() {
            $depart_compteur=0;
            $eqLogic->setConfiguration('depart',$depart_compteur);
       }
+      $offsetVeoliaDate=$eqLogic->getConfiguration('offsetVeoliaDate');
+      if ($offsetVeoliaDate == ""){
+          $offsetVeoliaDate=3;
+           $eqLogic->setConfiguration('offsetVeoliaDate',$offsetVeoliaDate);
+      }
       $eqLogic->save();
-      log::add('veolia_eau', 'info', $eqLogic->getHumanName().': $lastdate: '.$lastdate.' depart:'.$depart_compteur);
+      log::add('veolia_eau', 'info', $eqLogic->getHumanName().': $lastdate: '.$lastdate.' depart:'.$depart_compteur.' offsetVeoliaDate: '.$offsetVeoliaDate);
 
     }
 }
