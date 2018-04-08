@@ -29,3 +29,13 @@ after_failure:
     - grep "displayConfig" veolia_sudest_data_src/testVeoliaSudEst.txt > base.txt
     - diff  base.txt results.txt
     - ls -latr
+deploy:
+     provider: releases
+     api_key:
+         secure: $GH_TOKEN
+     file:
+         - veolia_sudest_data/testVeoliaSudEst.txt
+     skip_cleanup: true
+     on:
+       repo: rjullien/plugin-veolia_eau
+       branche: master
