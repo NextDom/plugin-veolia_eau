@@ -151,9 +151,23 @@ $eqLogics = eqLogic::byType($plugin->getId());
                             </div>
                         </div>
                         <div class="form-group" id="group-configuration-depart">
-                            <label class="col-sm-3 control-label">{{Index de départ}}</label>
+                            <legend>{{...Initialisation - ne pas modifier sauf lors de l'installation ou pour re-initialiser l'historique}}</legend>
+                            <label class="col-sm-3 control-label">{{Index de départ du compteur}}</label>
                             <div class="col-sm-3">
                                 <input type="number" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="depart" placeholder="0123456789"/>
+                            </div>
+                            <div class="col-sm-3">
+                                Cette valeur doit être renssigné une fois au début, c'est la valeur de votre compteur à la date ci dessous.
+                             </div>
+                        </div>
+                        <div class="form-group" id="group-configuration-last">
+                            <label class="col-sm-3 control-label">{{Date de la derniere mesure}}</label>
+                            <div class="col-sm-3">
+                                <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="last" placeholder="Date de la premiere mesure a récupérer"/>
+                            </div>
+                            <div class="col-sm-3">
+                                Modifier cette valeur pour récupérer l'historique à la veille du jour ou vous voulez reprendre.<br>
+                                Il faut penser à mettre dans options avancées pour la commande <b>index</b> un lissage par le max et pas par la moyenne.
                             </div>
                         </div>
 
