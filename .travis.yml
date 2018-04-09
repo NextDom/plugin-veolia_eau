@@ -6,13 +6,14 @@ script:
 # Test veolia sud est $website=2
 # ------------------------------
   - cd ${TRAVIS_BUILD_DIR}/tests;./RunVeoliaSudEst.sh
-#   - cd ${TRAVIS_BUILD_DIR}/tests;php ./testVeoliaSudEstSimple.php 
   - diff -B veolia_sudest_data/testVeoliaSudEst.txt veolia_sudest_data_src/testVeoliaSudEst.txt
+
 # Test veoliaeau.fr $website=1
 # ---------------------------
   # Erreur a corriger avant de reactiver les tests
   # - cd ${TRAVIS_BUILD_DIR}/tests;./RunVeoliaEau.sh 
   # - diff -B veolia_eau_data/testVeoliaEau.txt veolia_eau_data_src/testVeoliaEau.txt
+
 # Test eau du grand lyon
 #-----------------------
   - cd ${TRAVIS_BUILD_DIR}/tests;./RunEauGrandLyon.sh
@@ -29,13 +30,13 @@ after_failure:
     - grep "displayConfig" veolia_sudest_data_src/testVeoliaSudEst.txt > base.txt
     - diff  base.txt results.txt
     - ls -latr
-deploy:
-     provider: releases
-     api_key:
-         secure: $GH_TOKEN
-     file:
-         - veolia_sudest_data/testVeoliaSudEst.txt
-     skip_cleanup: true
-     on:
-       repo: rjullien/plugin-veolia_eau
-       branche: master
+#deploy:
+#     provider: releases
+#     api_key:
+#         secure: $GH_TOKEN
+#     file:
+#         - veolia_sudest_data/testVeoliaSudEst.txt
+#     skip_cleanup: true
+#     on:
+#       repo: rjullien/plugin-veolia_eau
+#       branche: master
