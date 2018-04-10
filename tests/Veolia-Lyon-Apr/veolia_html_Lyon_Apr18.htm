@@ -1,0 +1,737 @@
+
+
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+                <meta charset="ISO-8859-1">
+		<!--[if lt IE 9]>
+            <script src="./js/html5shiv.js"></script>
+            <script src="./js/css3mediaqueries.js"></script>
+ 		<![endif]-->
+        <title>Surveiller ma conso avec Téléo - Eau du Grand Lyon</title>
+		<link rel="shortcut icon" type="image/x-icon" href="./images/favicon.ico" />
+        <link href="./js/fancybox/jquery.fancybox.css" media="all" rel="stylesheet" />
+		<link rel="stylesheet" href="./css/JQueryUI/blitzer.css">
+
+        <script src="./js/jquery.1.8.2.min.js"></script>
+        <script src="./js/mobile-menu.js"></script>
+        <script src="./js/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+        <link href="./css/font.css" rel="stylesheet" media="all" />
+        <link href="./css/base.css" rel="stylesheet" media="all" />
+        <link href="./css/grid-2x2.css" rel="stylesheet" media="all" />
+        <link href="./css/grid-2x2-account.css" rel="stylesheet" media="all" />
+        <link href="./css/style.css" rel="stylesheet" media="all" />
+        <link href="./css/FormValidation.css" rel="stylesheet" media="all" />
+        <link rel="stylesheet" href="./css/responsive-table.css">
+        <link rel="stylesheet" href="./css/no-more-table.css">
+		<script src="./js/jquery-ui.js"></script>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no" />
+        <script type="text/javascript" src="./js/mobile-menu.js"></script>
+		<style>
+		.canvasjs-chart-credit{ display:none;}
+		.prec, .suiv{ color: #df0024; font-weight: bold;}
+		.prec{ float: left;}
+		.suiv{ float: right;}
+
+
+		/* TABS */
+		#tabs.ui-widget-content {
+            border:none;
+            background: transparent;
+            color: inherit;
+        }
+        #tabs .ui-widget-header {
+            border:none;
+            background: transparent;
+            color: inherit;
+            font-weight: inherit;
+
+        }
+        #tabs .ui-state-active, #tabs.ui-widget-content .ui-state-active, #tabs .ui-widget-header .ui-state-active, #tabs .ui-state-default, #tabs.ui-widget-content #tabs  .ui-state-default, #tabs  .ui-widget-header .ui-state-default {
+            border:none;
+            background: transparent;
+            font-weight: inherit;
+            color: inherit;
+
+        }
+         #tabs  .ui-tabs-active{
+            border-bottom:solid 4px #E72636 ;
+
+
+        }
+        #tabs .ui-state-default a, #tabs .ui-state-default a:link, #tabs .ui-state-default a:visited, #tabs .ui-state-default a, #tabs .ui-state-active a:link, #tabs .ui-state-active a:visited{
+                    color:inherit;
+        }
+        #tabs .ui-state-active a:link, #tabs .ui-state-active a:visited{
+            border-bottom:solid 4px #E72636 ;
+
+        }
+        #tabs.ui-tabs .ui-tabs-nav li{
+            width: 32%;
+           font-family: proxima_nova_condensedSBd;
+           font-size: 20px;
+           text-align: center;
+        }
+       #tabs.ui-tabs .ui-tabs-nav .ui-tabs-anchor{
+            float: none;
+            padding: 0;
+            text-decoration: none;
+            text-align: center;
+            text-transform: uppercase;
+                   height: 40px;
+                                    display: block;
+        }
+        #tabs.ui-tabs .ui-tabs-nav {
+            margin: 0;
+            padding: 15px 0 0;
+            border-bottom: solid 1px #cccccc;
+            border-radius: 0;
+        }
+
+        #tabs.ui-tabs .ui-tabs-panel {
+              display: block;
+              border-width: 0;
+              padding: 0;
+              background: 0 0;
+          }
+        form#emmenage-step-form input, form#emmenage-step-form select, form#emmenage-step-form textarea{
+        font-size: 13px;
+        padding: 0 5px;
+
+
+        }
+		</style>
+    </head>
+    <body>
+        
+<header>
+    <div class="container-w960">
+        <a href="./default.aspx" title="Eau du Grand Lyon" id="logo">
+            <img src="./images/logo-eau-grand-lyon.png" alt="Logo Eau du Grand Lyon" />
+        </a>
+        <div class="connect-area">
+        
+            <div class="user-info">
+                <span>NAME FIRST NAME  </span><br />
+                <a href="./default.aspx?logout=1">Déconnexion</a>
+            </div>
+       
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div id="menu-mobile-btn"></div>
+    <nav id="menu">
+        <ul>
+            <li><a href="./default.aspx"><span>Accueil</span></a></li>
+            <li >
+                <a href="./mes-demarches.aspx">
+                    <span>Démarches<br /><span>en ligne</span></span>
+                </a>
+                <ul class="col-x2 c-left">
+                    <li>
+                        <ul>
+                            <li ><a href="./j-emmenage.aspx"><span>J'emménage</span></a></li>
+                            <li ><a href="./payer-facture.aspx"><span>Je paye ma facture</span></a></li>
+                            <li ><a href="./relever-compteur.aspx"><span>Je transmets mon relevé compteur</span></a></li>
+                            <li ><a href="./je-demenage.aspx"><span>Je quitte mon logement</span></a></li>
+							<li ><a href="./raccordement.aspx"><span>Je demande un branchement</span></a></li>
+                        </ul>                       
+                    </li>
+                    <li>
+                        <ul>
+                            <li ><a href="./signaler-probleme.aspx"><span>Je signale un problème</span></a></li>
+                            <li ><a href="./facture-internet.aspx"><span>Je choisis l'e-facture</span></a></li>
+                            <li ><a href="./comment-payer-facture.aspx"><span>Je souhaite être prélevé</span></a></li>
+                            <li ><a href="./webcallback.aspx"><span>Je souhaite être rappelé</span></a></li>
+                            <li ><a href="./warsmann.aspx"><span>Je transmets une demande de dégrèvement pour fuite</span></a></li>
+                        </ul>
+                    </li>	
+                </ul>
+            </li>
+            <li >
+                <a href="./informations-conseils.aspx" ><span>Informations <br /><span>&amp; conseils</span></span></a>
+                <ul class="col-x2 c-center">
+                      <li>
+                          <ul>
+							  <li ><a href="./estimer-consommation.aspx"><span>J'estime ma consommation</span></a></li>
+                              <li ><a href="./mieux-consommer-maison.aspx"><span>Mieux consommer</span></a></li>
+                              <li ><a href="./telereleve.aspx"><span>Télérelevé</span></a></li>
+                              <li ><a href="./eau-sante.aspx"><span>Eau &amp; Santé</span></a></li>
+
+                          </ul>                       
+                      </li>
+                      <li>
+                          <ul>
+							  <li ><a href="./protection-contre-gel.aspx"><span>Protection contre le gel</span></a></li>
+                              <li ><a href="./cycle-eau.aspx"><span>Le cycle de l'eau</span></a></li>
+                              <li ><a href="./espace-pedagogique.aspx"><span>Espace pédagogique</span></a></li>
+							  <li ><a href="./faq.aspx"><span>Questions fréquentes</span></a></li>
+                         </ul>
+                      </li>
+                  </ul>
+            </li>			
+            <li >
+                <a href="./eau-du-grand-lyon.aspx"><span>L'eau du<br /><span>Grand Lyon</span></span></a>
+                <ul class="col-x2 c-center mg-left-bis">
+                  <li>
+                      <ul>
+                          <li ><a href="./actualites.aspx"><span>Actualités</span></a></li>
+                          <li ><a href="./origine-qualite-eau.aspx"><span>Origine &amp; qualité de l'eau</span></a></li>
+                          <li ><a href="./fontaines.aspx"><span>Carte des fontaines d'eau potable</span></a></li>
+                      </ul>
+                  </li>  
+                  <li>
+                      <ul>
+                          <li ><a href="./prix-eau.aspx"><span>Le prix de l'eau</span></a></li>
+                          <li ><a href="./travaux-incidents.aspx"><span>Travaux en cours &amp; incidents</span></a></li>
+                      </ul>                       
+                  </li>
+              </ul>
+            </li>
+            <li >
+                <a href="./services-eau.aspx"><span>Service public<br /><span>de l'eau</span></span></a>
+                <ul class="col-x2 c-right">
+                    <li>
+                        <ul>
+                            <li ><a href="./objectifs-missions.aspx"><span>Objectifs &amp; missions</span></a></li>
+                            <li ><a href="./contact-grand-lyon.aspx"><span>Nous contacter</span></a></li>
+                            <li ><a href="./accueils-permanences.aspx"><span>Accueils &amp; permanences</span></a></li>
+                            <li ><a href="./charte-client.aspx"><span>Charte &amp; règlement de service</span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <ul>
+                            <li ><a href="./mediateur-eau.aspx"><span>Médiateur de l'eau</span></a></li>                            
+							<!--<li ><a href="./teleo-pro.aspx"><span>Téléo Pro</span></a></li>-->
+							<li ><a href="./mobil-eau.aspx"><span>Mobil'eau</span></a></li>
+                            <li ><a href="./espace-individualisation.aspx"><span>Espace individualisation</span></a></li>
+                             <li ><a href="./eau-pour-tous.aspx"><span>Eau pour tous</span></a></li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="./mon-espace-perso.aspx"><span>Mon espace<br /><span>personnel</span></span></a></li>
+        </ul>
+    </nav>
+</header>
+
+	<div id="global-container"  >
+
+
+
+            <div class="container-w960 p-conseil-pratique" id="global-content">
+                <div class="col-w190 col-left">
+					<div id="sub-menu-account">
+    <a href="./mon-espace-perso.aspx" class="li-style main">Mon espace <span>perso</span></a>
+    <ul>
+        <li class="li-style orange">
+            <a href="#" class="main-categorie"><span>Mon compte client</span></a> 
+             <ul>
+                <li  ><a href="./mon-espace-compte-modification.aspx">Modifier mon compte</a></li>
+                <li  ><a href="./mon-espace-compte-dialogue.aspx">Dialoguer avec Eau du Grand Lyon</a></li>
+                <li  ><a href="./mon-espace-compte-rdv.aspx">Gérer mes rendez-vous</a></li>
+                <li  ><a href="./mon-espace-compte-resiliation.aspx">Résilier un contrat</a></li>
+              </ul>
+        </li>
+        <li class="li-style blue">
+            <a href="#" class="main-categorie"><span>Mes factures</span></a>
+            <ul>
+                <li  ><a href="./mon-espace-compte-payer-facture.aspx">Payer mes factures</a></li>
+                <li  ><a href="./mon-espace-compte-consulter-facture.aspx">Consulter mes factures</a></li>
+                <li  ><a href="./mon-espace-compte-mes-operations.aspx">Voir mes opérations</a></li>
+                <li  ><a href="./mon-espace-compte-coordonne-bancaires.aspx">Coordonnées bancaires</a></li>
+                <li  ><a href="./mon-espace-compte-mode-paiement.aspx">Mode de paiement</a></li>
+            </ul>
+        
+        </li>
+        <li class="li-style purple">
+                <a href="#" class="main-categorie"><span>Mes consommations</span></a>
+                <ul>
+                    <li  ><a href="./mon-espace-compte-historique.aspx">Voir mon historique</a></li>
+                    <li  ><a href="./mon-espace-compte-releve.aspx">Transmettre mon relevé de compteur</a></li>
+					
+                    <li  class="select"  ><a href="./mon-espace-suivi-personnalise.aspx">Surveiller ma conso avec Téléo</a></li>
+                   <!-- <li  ><a href="./mon-espace-alarmes-service.aspx">Alarmes du service</a></li>-->
+										
+                 </ul>
+        </li>
+        <li class="li-style green">
+            <a href="#" class="main-categorie"><span>Mon eau au quotidien</span></a>
+            <ul>
+                <li  ><a href="./mon-espace-compte-origine-qualite.aspx">Origine et qualité</a></li>
+                <li  ><a href="./mon-espace-compte-travaux-incident.aspx">Travaux / incidents</a></li>
+                <li  ><a href="./mon-espace-compte-signaler-probleme.aspx">Signaler un problème</a></li>
+            </ul>
+        </li>
+    </ul>
+    <br>
+    <a href="./pdf/plaquette-telereleve.pdf" target="_blank"><img src="./images/pub-teleo.jpg" style="max-width: 100%"></a>
+   						
+</div>
+                </div>
+                <div class="col-w750 col-center" id="mieux-consommer">
+                <div class="entete-cat">
+                    <h2>Surveiller ma conso <span>avec Téléo</span></h2>
+					<hr />
+                </div>
+                                      
+                                      <hr />
+
+                <div>
+                    <h4>Consultation de vos consommations relev&eacute;es sur votre compteur &agrave; distance</h4>
+                    <div style="position: relative; text-align: center; height: 46px;   background:#eaebec; padding: 16px 20px 0;">
+						<a href="?mm=3/2018" class="prec" >« Précédent</a>&nbsp;<strong style="font-family: proxima_nova_condensedSBd; font-size: 20px;">Avril 2018</strong>&nbsp;<a href="?mm=5/2018" class="suiv" >Suivant »</a>
+					 </div>
+					 <div id="tableur" style="display: none;">
+						  <br />
+						  <table class="responsive">
+                                <tr>
+                                    <th>Période (jour)</th>
+                                    <th class="large">Volume consommé (litre) </th>
+                                    <th class="large">Télérelève (litre) </th>
+                                </tr>
+                                 
+                                 <tr>
+                                   <td>01/04/2018</td>
+                                   
+                                       <td>528</td>
+                                       <td>825951</td>
+                                   
+                                 </tr>
+                                
+                                 <tr>
+                                   <td>31/03/2018</td>
+                                   
+                                       <td>707</td>
+                                       <td>825423</td>
+                                   
+                                 </tr>
+                                
+                            </table>
+					 </div>
+
+					 <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+					 <form action="" method="get" id="chart-change-result">
+                                             <input type="hidden" name="mm" value = "4/2018" />
+                     						<div style="padding: 20px 20px; background-color: #D5D7D9; ">
+                     							<div style="display: inline-block; width: 33%; float: left;">
+                     								<select name="type-affichage" id="type-affichage" style="width: 100%;  padding: 0 10px;">
+                     									<option value="0">Affichage graphique</option>
+                     									<option value="1">Affichage tableau</option>
+                     								</select>
+                     							</div>
+                     							<div style="display: inline-block; width: 33%; text-align: center;">
+                     								<label for="chart-change-result-unite"  style="margin: 0; padding-left: 10px;  padding-right: 5px;"><b>Unité :</b></label>
+                     								<input type="radio" name="unite" value="m3"  litre onclick="submit();">m<sup>3</sup> <input type="radio" name="unite" value="litre" checked onclick="submit();">litre
+                     							</div>
+                     							<div style="display: inline-block; width: 33%; float: right;">
+                     								<a href="?ex=4/2018&mm=4/2018" style="background-color:#df0024; border-radius: 5px; padding: 10px 20px; font-size: 17px; cursor: pointer; color: #FFF;">
+                     									Exporter les données
+                     								</a>
+                     							</div>
+                     						</div>
+                     					</form>
+
+					 <br />
+       <div id="tabs">
+                       <ul>
+                         <li><a href="#tabs-1">Alerte journalière</a></li>
+                         <li><a href="#tabs-2">Alerte Mensuelle</a></li>
+                         <li><a href="#tabs-3">Alertes Archivées</a></li>
+                       </ul>
+                       <div id="tabs-1"> <!-- form et liste alertes journalières... -->
+                         
+
+                                              <div class="faq-content">
+                                                <form action="#tabs-1" method="POST" id="emmenage-step-form" style="width:100%" >
+                                                    <div class="greyBG">
+                                                                     <input type="hidden" name="contratsList" value = "" />
+
+                                                            <div id="conso-jour-err" class="formValidationSpan formValidation" style="text-align: left;">
+                                                            <ul>
+                                                                <li></li>
+                                                            </ul>
+                                                        </div>
+                                                           <p style="font-family:proxima_nova_rgregular; font-size: 16px;padding-left:0;"><strong>1. Créer une alerte journalière pour recevoir un e-mail si la consommation dépasse : </strong></p>
+                                                             <input type="text" value="" id="conso-jour"  name="conso-jour" placeholder="" style="width: 60px; padding: 0 5px"  /><span style="font-family:proxima_nova_rgregular; font-size: 16px;">&nbsp;&nbsp;
+                                                             <select name="uniteALT" style="max-width: 80px">
+                                                                <option  >M3/Jour</option>
+                                                                <option  >Litres/Jour</option>
+                                                             </select>
+                                                            pour la période du&nbsp;&nbsp;</span><input type="text" value="" placeholder="JJ/MM/AAAA"  name="conso-jour-debut" id="conso-jour-debut"  style="width: 130px;  " class="date-picker" /><span style="font-family:proxima_nova_rgregular; font-size: 16px;">&nbsp;&nbsp;au&nbsp;&nbsp;</span><input type="text" placeholder="JJ/MM/AAAA" value="" name="conso-jour-fin" id="conso-jour-fin"  style="width: 130px; "class=" date-picker" />
+                                                    <br />
+                                                    <div class="clear"></div>
+                                               </div>
+                                                    <div class="greyBG">
+                                                       <p style="font-family:proxima_nova_rgregular; font-size: 16px;padding-left:0;"><strong>2. Saisir le(s) adresses e-mail du/des destinataire(s) de l'alerte :</strong></p>
+                                                        <span style="font-family:proxima_nova_rgregular; font-size: 16px;">E-mail 1<span style="color: #e20025; font-weight: bold;">*</span>&nbsp;<input type="text" name="email1" id="email1-jour" value="" style="width: 220px;" />&nbsp;&nbsp;
+                                                          E-mail 2&nbsp;<input type="text" name="email2" id="email2-jour" value="" style="width: 220px;" /> <br /> </span>
+                                                    </div>
+                                                    <div class="clear"></div>
+                                                <input type="submit" name="valider" value="Créer l'alerte" style="float: right; margin-bottom: 20px;  background: url(images/arrow-white.png) 130px center no-repeat #df0024; margin-top: 0; margin-right: 0" />
+
+                                                </form>
+
+                                            </div>
+                                            <br />
+                                            
+                        </div>
+                       <div id="tabs-2"><!-- alerte mensuelles -->
+                             
+                                 <div class="faq-content">
+                                    <form action="#tabs-2" method="POST" id="emmenage-step-form" style="text-align: left; width: 100%; " >
+                                          <div class="greyBG">
+
+                                         <input type="hidden" name="contratsList" value = "" />
+                                            <div id="conso-mois-err" class="formValidationSpan formValidation" style="text-align: left;">
+                                                <ul>
+                                                    <li></li>
+                                                </ul>
+                                            </div>
+                                                <p style="font-family:proxima_nova_rgregular; font-size: 16px; padding-left:0;"><strong>Créer une alerte mensuelle pour recevoir un e-mail si la consommation dépasse : </strong></p>
+
+                                                <input type="text" name="conso-mois" value = ""   placeholder="" style="width: 60px; padding: 0 5px; " /><span  style="font-family:proxima_nova_rgregular; font-size: 16px;">&nbsp;&nbsp;m<sup>3</sup>/mois
+                                            pour la période de&nbsp;&nbsp;</span>
+                                            <select name="conso-mois-debut" style="width: 130px;  ">
+                                               
+                                                       <option  value="01/5/2018" >Mai - 2018</option>
+                                               
+                                                       <option  value="01/6/2018" >Juin - 2018</option>
+                                               
+                                                       <option  value="01/7/2018" >Juillet - 2018</option>
+                                               
+                                                       <option  value="01/8/2018" >Août - 2018</option>
+                                               
+                                                       <option  value="01/9/2018" >Septembre - 2018</option>
+                                               
+                                                       <option  value="01/10/2018" >Octobre - 2018</option>
+                                               
+                                                       <option  value="01/11/2018" >Novembre - 2018</option>
+                                               
+                                                       <option  value="01/12/2018" >Décembre - 2018</option>
+                                               
+                                                       <option  value="01/1/2019" >Janvier - 2019</option>
+                                               
+                                                       <option  value="01/2/2019" >Février - 2019</option>
+                                               
+                                                       <option  value="01/3/2019" >Mars - 2019</option>
+                                               
+                                                       <option  value="01/4/2019" >Avril - 2019</option>
+                                               
+                                           </select>&nbsp;&nbsp;à&nbsp;&nbsp;
+                                           <select name="conso-mois-fin" style="width: 130px;">
+                                                   <option value="12/12/2099">Indéfini</option>
+                                                
+                                                        <option  value="01/06/2018" >Mai - 2018</option>
+                                                
+                                                        <option  value="01/07/2018" >Juin - 2018</option>
+                                                
+                                                        <option  value="01/08/2018" >Juillet - 2018</option>
+                                                
+                                                        <option  value="01/09/2018" >Août - 2018</option>
+                                                
+                                                        <option  value="01/10/2018" >Septembre - 2018</option>
+                                                
+                                                        <option  value="01/11/2018" >Octobre - 2018</option>
+                                                
+                                                        <option  value="01/12/2018" >Novembre - 2018</option>
+                                                
+                                                        <option  value="01/01/2019" >Décembre - 2018</option>
+                                                
+                                                        <option  value="01/02/2019" >Janvier - 2019</option>
+                                                
+                                                        <option  value="01/03/2019" >Février - 2019</option>
+                                                
+                                                        <option  value="01/04/2019" >Mars - 2019</option>
+                                                
+                                                        <option  value="01/05/2019" >Avril - 2019</option>
+                                                
+                                            </select>
+                                        <br />
+                                      </div>
+                                     <div class="greyBG">
+                                        <p style="font-family:proxima_nova_rgregular; font-size: 16px;padding-left:0;"><strong>2. Entrez au minimun un e-mail destinataire de l'alerte :</strong></p>
+                                        <span style="font-family:proxima_nova_rgregular; font-size: 16px;">E-mail 1&nbsp;<input type="text" name="email1" id="email1-mois" value="" style="width: 220px;" />&nbsp;&nbsp;
+                                            E-mail 2&nbsp;<input type="text" name="email2" id="email2-mois" value="" style="width: 220px;" /> <br /> </span>
+                                    </div>
+                                    <div class="clear"></div>
+                                         <input type="submit" name="valider" value="Créer l'alerte" style="float: right; margin-right: 0; margin-bottom: 20px; background: url(images/arrow-white.png) 130px center no-repeat #df0024; margin-top: 0;" />
+
+                                              <div class="clear"></div>
+
+                                    </form>
+                                </div>
+                                <br />
+                            
+
+                       </div>
+                       <div id="tabs-3">
+                        
+                        </div>
+                     </div>
+				</div>
+			</div>
+            <div class="clear"></div>
+            </div>
+		</div>
+		<footer class="container-w960">
+	<a href="http://www.grandlyon.com/Eau-et-assainissement.454.0.html" target="_blank"><img src="./images/logo-footer.jpg" alt="Eau Grand Lyon"/></a>
+  <nav>
+		<ul>
+			<li><a href="./sitemap.aspx">Plan du site</a></li>
+			<li><a href="./mentions-legales.aspx">Mentions légales</a></li>
+		</ul>
+	</nav>
+	<nav id="footer-access">
+		<ul>
+			<li><a href="./contact-grand-lyon.aspx">Nous <span>contacter</span></a></li>
+			<li><a href="./espace-grands-comptes.aspx">Espace <span>grands comptes</span></a></li>
+			<li><a href="./espace-collectivites.aspx">Espace <span>collectivités</span></a></li>
+		</ul>
+	</nav>  
+
+	<div class="clear"></div>
+</footer>
+<script type="text/javascript">
+	$(document).ready( function() {
+		 $("a.pass-oubli").fancybox({
+			fitToView	: false,
+			width       : '90%',
+			maxWidth	: 400,
+			height	: '90%',
+			maxHeight	: 450, 
+			autoSize	: false,
+			closeClick	: true,
+			type:'iframe'
+		});
+	});
+</script>
+<script type="text/javascript" src="./js/cookiechoices.js"></script>
+<script>
+  $(function() {
+    cookieChoices.showCookieConsentBar('En poursuivant votre navigation sur ce site, vous acceptez l\’utilisation de cookies pour réaliser des statistiques de visites.',
+      'Fermer', 'En savoir plus', 'http://www.cnil.fr/vos-droits/vos-traces/les-cookies/');
+  });
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56709590-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+ 
+        <script src="./js/FormValidation.js"></script>
+        <script src="./js/Account.js"></script>
+		<script type="text/javascript" src="./js/canvasjs.min.js"></script>
+		 <script src="./js/responsive-table.js"></script>
+        <script>
+            <!--
+
+				var current_select_li = -1;
+				
+                function CPCheck( value ) {
+                   var chiffres = new RegExp("[0-9\+]");
+                   var verif;
+
+                   if( value.length !== 5) return false;
+
+                   for(x = 0; x < value.length; x++) {
+                       verif = chiffres.test(value.charAt(x));
+                       if(verif === false) return false;
+                   }
+
+                   return true;
+                }     
+				
+				function toggle( p,  index ) {
+			
+					if( current_select_li != -1 ) {
+						$('.cat-title:eq(' + current_select_li + ')').removeClass('opened');
+						$('.large-list .faq-content:eq(' + current_select_li + ')').slideUp('fast');
+					}
+					
+					var selector = $('.large-list .faq-content:eq(' + index + ')');
+					if( selector.css('display') == "block") {
+						selector.slideUp('fast');
+						$(p).removeClass('opened');
+					}
+					else {
+						
+						selector.slideDown('fast');
+						$(p).addClass('opened');
+					}
+					
+					current_select_li = index;
+				}
+                
+                $(document).ready(function() {
+					/*
+					$('.large-list .faq-content:gt(0)').hide();
+					$('.cat-title:eq(0)').addClass('opened');
+					current_select_li = 0;
+					*/
+					$('.large-list .faq-content').hide();
+					$('#juniors-bloc .cat-title').click(function() {
+						var index = $(this).index('.cat-title');
+						toggle(this, index);
+						return false;
+					});
+
+
+					
+					$('a.delete-alerte').click( function() {
+						return confirm('Êtes-vous sur de vouloir supprimer/archiver cette alerte?');
+					});
+					
+						$("a.alerte-access").fancybox({
+								fitToView	: false,
+								width       : '90%',
+								maxWidth    : '400',
+ 								maxHeight    : '800',
+								autoSize	: true,
+								closeClick	: true,
+								type		: 'iframe' 
+						});
+					
+					$('#type-affichage').change( function() {
+						var val = $(this).val();
+						if( val == "1" ) {
+							$('#tableur').show();
+							$('#chartContainer').hide();
+						}
+						else {
+							$('#tableur').hide();
+							$('#chartContainer').show();
+						}
+						
+					});
+					
+					$( ".date-picker" ).datepicker({
+                        minDate: 0,
+                        maxDate: 8*7,
+                        firstDay: 1,
+                        altField: "#date",
+                        closeText: 'Fermer',
+                        prevText: 'Précédent',
+                        nextText: 'Suivant',
+                        currentText: 'Aujourd\'hui',
+                        monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                        monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+                        dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+                        dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
+                        dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+                        weekHeader: 'Sem.',
+                        dateFormat: 'dd/mm/yy',        
+                    	onClose: function(date) {
+							$(this).focus();
+							$(this).blur();
+                   		 }
+                    });
+					
+					$('.date-picker-month').datepicker({
+					 changeMonth: true,
+					 changeYear: true,
+					 closeText: 'Fermer',
+					 prevText: 'Précédent',
+						nextText: 'Suivant',
+						currentText: 'Aujourd\'hui',
+						monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+						monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+						dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+						dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
+						dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+						weekHeader: 'Sem.',
+						dateFormat: 'mm/yy', 
+					 onClose: function() {
+						var iMonth = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+						var iYear = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+						$(this).datepicker('setDate', new Date(iYear, iMonth, 1));
+					 },
+
+					 beforeShow: function() {
+					   if ((selDate = $(this).val()).length > 0) 
+					   {
+						  iYear = selDate.substring(selDate.length - 4, selDate.length);
+						  iMonth = jQuery.inArray(selDate.substring(0, selDate.length - 5), 
+								   $(this).datepicker('option', 'monthNames'));
+						  $(this).datepicker('option', 'defaultDate', new Date(iYear, iMonth, 1));
+						  $(this).datepicker('setDate', new Date(iYear, iMonth, 1));
+					   }
+					}
+				  });
+					
+
+
+				CanvasJS.addColorSet("greenShades",
+                [//colorSet Array
+
+                "#80639F",
+				"#9E85B0"
+                       
+                ]);
+				
+				var chart = new CanvasJS.Chart("chartContainer",
+				{
+				  colorSet: "greenShades",
+				  title:{
+					text: ""    
+				  },
+				  axisY: {
+					title: "litre"
+				  },
+				  legend: {
+					verticalAlign: "bottom",
+					horizontalAlign: "center"
+				  },
+				  theme: "theme2",
+				  backgroundColor: "#EAEBEC",
+				  data: [
+
+				  {        
+					type: "column",  
+					showInLegend: false, 
+					legendMarkerColor: "grey",
+					legendText: "1m3 = 1000 L",
+					addColorSet: "1m3 = 1000 L",
+					dataPoints: [
+                   
+                        {y: 707.000, label: "31/03/2018"
+                        ,color : "#9e85b0"
+                        ,color : "#80639f"
+                        }
+
+                          ,
+                        {y: 528.000, label: "01/04/2018"
+                        ,color : "#9e85b0"
+                        ,color : "#80639f"
+                        }
+
+                          ,
+                        {y: 337.000, label: "02/04/2018"
+                        ,color : "#9e85b0"
+                        
+                        }
+
+                          ,
+						  
+					]
+				  }   
+				  ]
+				});
+
+				chart.render();
+
+                $( function() {
+                    $( "#tabs" ).tabs();
+                } );
+                 });
+            //-->
+        </script>
+  </body>
+</html>

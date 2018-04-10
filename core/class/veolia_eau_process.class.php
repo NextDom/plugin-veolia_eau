@@ -37,11 +37,11 @@ class veolia_eau extends eqLogic {
     /* Ajouter ici toutes vos variables propre à votre classe */
     /***************************** Methode static ****************************/
     // Si mode debug, lancer le plugin toutes les minutes
-    //public static function cron() {
-    //    if (log::getLogLevel('veolia_eau') == 100) {
-    //         self::cronHourly();
-    //    }
-    //}
+    public static function cron() {
+        if (log::getLogLevel('veolia_eau') == 100) {
+             self::cronHourly();
+        }
+    }
 
 
     // Fonction exécutée automatiquement toutes les heures par Jeedom
@@ -54,44 +54,10 @@ class veolia_eau extends eqLogic {
             if (date('G') == $heure_releve) {
 				if ($veolia_eau->getIsEnable() == 1) {
 					if (!empty($veolia_eau->getConfiguration('login')) && !empty($veolia_eau->getConfiguration('password'))) {
-                      ## Code suivant utile pour les cas qui ne donnent pas l index dans le CSV
-                      # Recuperation de l index du mois passe
-                      if (!empty($veolia_eau->getConfiguration('depart'))) {
-                          $depart_compteur=$veolia_eau->getConfiguration('depart');
-                      } else {
-                          $depart_compteur=0;
-                      }
-                      # On MAJ avec les données 3 jours dans le passé, elle ne sont pas dispo live
-                      $offsetVeoliaDate=3;
-                      $eqLogicId = $veolia_eau->getId();
-                      # Recuperation de l ID de index
-                      $cmdId = cmd::byEqLogicIdAndLogicalId($eqLogicId,'index')->getId();
-                      log::add('veolia_eau', 'debug', '$cmdId:'.$cmdId);
-                      # calcul de la date de recuperation des données
-                      $currentdatenum=time()-3600*24*$offsetVeoliaDate;
-                      # Calcul du dernier jour du mois d'avant
-                      $LastDayLastMonth=date('Y-m-d',strtotime('last day of last month',$currentdatenum));
-                      # Recuperation de l'historique
-                      $debut = date("Y-m-d H:i:s", strtotime($LastDayLastMonth));
-                      log::add('veolia_eau', 'debug', '$debut:'.$debut);
-                      $fin = date("Y-m-d H:i:s", strtotime($LastDayLastMonth));
-                      log::add('veolia_eau', 'debug', '$fin:'.$fin);
-                      $value= history::all($cmdId,$debut,$fin);
-
-                      if (count($value)>0){
-                        $item = $value[0];
-                        $dateval=$item -> getDatetime();
-                        $compteurEndPrevMonth=$item -> getValue();
-                      } else {
-                        // If prev month empty --> assumption plugin just installed
-                        // compteur = start
-                        $dateval=0;
-                        $compteurEndPrevMonth=$depart_compteur;
-                      }
-                      $veolia_eau->getConso(0,$compteurEndPrevMonth,$offsetVeoliaDate);
-                      log::add('veolia_eau', 'debug', 'done... ');
+                        $veolia_eau->getConso(0);
+                        log::add('veolia_eau', 'debug', 'done... ');
 					} else {
-					  log::add('veolia_eau', 'error', 'Identifiants non saisis');
+					    log::add('veolia_eau', 'error', 'Identifiants non saisis');
 					}
 				}
 			}
@@ -99,7 +65,61 @@ class veolia_eau extends eqLogic {
     }
 
     // Fonction exécutée automatiquement tous les jours par Jeedom
-    public static function cronDayly() {
+    //public static function cronDayly() {
+    //}
+
+    /**
+      * @param $offsetVeoliaDate
+     * @param $refDate --> time() or date in the past
+     * @return $compteurEndPrevMonth
+     */
+    public function calculCompteurEndLastMonth($refDate)
+    {
+        $depart_compteur = $this->getConfiguration('depart');
+        $eqLogicId = $this->getId();
+        # Recuperation de l ID de index
+        $cmdId = cmd::byEqLogicIdAndLogicalId($eqLogicId, 'index')->getId();
+        log::add('veolia_eau', 'debug', '$cmdId:' . $cmdId);
+        # calcul de la date de recuperation des données
+        $currentdatenum = $refDate;
+        # Calcul du dernier jour du mois d'avant
+        $LastDayLastMonth = date('Y-m-d', strtotime('last day of last month', $currentdatenum));
+        # Recuperation de l'historique
+        $debut = date("Y-m-d H:i:s", strtotime($LastDayLastMonth));
+        log::add('veolia_eau', 'debug', '$debut:' . $debut);
+        $fin = date("Y-m-d H:i:s", strtotime($LastDayLastMonth));
+        log::add('veolia_eau', 'debug', '$fin:' . $fin);
+        $value = history::all($cmdId, $debut, $fin);
+
+        // TODO faire une fonction qui efface l histo du mois en cours ou forcer historique pas moyenné
+        // TODO Ou mettre Index en history max et pas moyenne
+        // TODO Sinon des qu'il y a 2 valeurs <> l'index devient la moyenne des 2
+        // $value_date_time = history::byCmdIdDatetime(  $cmdId, $debut);
+        //log::add('veolia_eau', 'debug', 'value_date_time:' . $value_date_time->getValue());
+        //log::add('veolia_eau', 'debug', 'value[0]:' . $value[0]->getValue().'count:'.count(value));
+
+
+        if (count($value) == 1) {
+            $item = $value[0];
+            $dateval = $item->getDatetime();
+            $compteurEndPrevMonth = $item->getValue();
+            log::add('veolia_eau', 'debug', '$compteurEndPrevMonth=1:' . $compteurEndPrevMonth);
+
+        } elseif (count($value) > 0) {
+            $item = $value[0];
+            $dateval = $item->getDatetime();
+            $compteurEndPrevMonth = $item->getValue();
+            foreach ($value as $item) {
+                log::add('veolia_eau', 'debug', '$compteurEndPrevMonth>0:' . $compteurEndPrevMonth . "count" . count($value) . "itemval" . $item->getValue());
+            }
+        } else {
+            // If prev month empty --> assumption plugin just installed
+            // compteur = start
+            $dateval = 0;
+            $compteurEndPrevMonth = $depart_compteur;
+            log::add('veolia_eau', 'debug', '$compteurEndPrevMonth=0: ' . $compteurEndPrevMonth);
+        }
+        return $compteurEndPrevMonth;
     }
 
     /*************************** Methode d'instance **************************/
@@ -213,6 +233,24 @@ class veolia_eau extends eqLogic {
     /* fonction appelé pendant la séquence de sauvegarde avant l'insertion
      * dans la base de données pour une nouvelle entrée */
     public function preInsert() {
+        $this->setIsEnable(1);
+        $this->setIsVisible(1);
+        if ($this->getConfiguration('depart') == "" ) {
+            $this->setConfiguration('depart', '0');
+        }
+
+        if ($this->getConfiguration('last') == "" ) {
+            $lastdatenum = time();
+            $monthCur = date("F",$lastdatenum);
+            $FirstDayMonth = strtotime("first day of ".$monthCur, $lastdatenum);
+            $lastdate = date("Y-m-d",$FirstDayMonth);
+            // $lastdate = "2017-09-10";
+            $this->setConfiguration('last',$lastdate);
+        }
+        if ($this->getConfiguration('offsetVeoliaDate') == ""){
+            $this->setConfiguration('offsetVeoliaDate',3);
+        }
+
     }
 
     /* fonction appelé pendant la séquence de sauvegarde après l'insertion
@@ -240,19 +278,21 @@ class veolia_eau extends eqLogic {
 
     /*     * **********************Getteur Setteur*************************** */
 
-	public function getConso($mock_test,$compteurEndPrevMonth,$offsetVeoliaDate) {
+	public function getConso($mock_test) {
         // Add ability to mock and tests the process without Jeedom
         // $mock_test=0: Normal process
         // $mock_test=1: Run automated tests with direct call to veolia
         // $mock_test=2: Run automated tests with mocked files
         // $mock_test=3: Run automated tests with mocked files and change of month
-		$cookie_file = sys_get_temp_dir().'/veolia_php_cookies_'.uniqid();
+        $cookie_file = sys_get_temp_dir().'/veolia_php_cookies_'.uniqid();
         // log::add('veolia_eau', 'debug',  $cookie_file );
 		static::secure_touch($cookie_file);
 
+        $offsetVeoliaDate=$this->getConfiguration('offsetVeoliaDate');
 		$getConsoInHtmlFile = true;
         $website=intval($this->getConfiguration('website'));
         $url_token=0; // n etait pas initialisé dans tous les cas
+        $releve=0; // Utilise par Veolia sudest et Lyon pour la date du releve, permet de recuperer l historique
         if ($website == 2){
             $url_site = 'www.eau-services.com';
         } elseif ($website == 3) {
@@ -281,6 +321,7 @@ class veolia_eau extends eqLogic {
                 // il manque la fin du mois passé. il faut passer $releve
                 // au dernier jour du mois passé (last)
                 $lastdate = $this->getConfiguration('last');
+                //log::add('veolia_eau', 'debug','$lastdate: '.$lastdate);
                 $lastdatenum = strtotime($lastdate);
                 $monthLast = date("F",$lastdatenum);
                 $LastDayMonth = strtotime("last day of ".$monthLast, $lastdatenum);
@@ -302,7 +343,7 @@ class veolia_eau extends eqLogic {
 
                 if ($EndMonth != 0 && $monthReleve != $monthLast) {
                     $releve = mktime(0, 0, 0, date("m",$lastdatenum)  , date("d",$lastdatenum), date("Y",$lastdatenum));
-                    if ($currentdatenum - $lastdatenum > 5*24*3600) { # on attend la musure 5 jours
+                    if ($currentdatenum - $lastdatenum > 5*24*3600) { # on attend la mesure 5 jours
                         log::add('veolia_eau', 'debug','Detection de retard de veolia en fin de mois, on attend la mesure: '.  $monthReleve.' '.$monthLast.' '.$EndMonth);
                     } else {
                         log::add('veolia_eau', 'error',  'Mesure du '.date('Y-m-d',$releve).' perdu, pas disponible chez veolia');
@@ -504,11 +545,11 @@ class veolia_eau extends eqLogic {
 
         //traitement du xls
 
-        $this->traiteConso($data_file, $htm_file, $mock_test, $offsetVeoliaDate,$compteurEndPrevMonth);
+        $this->traiteConso($data_file, $htm_file, $mock_test, $offsetVeoliaDate,$currentdatenum,$releve);
 		@unlink($cookie_file);
 	}
 
-	public function traiteConso($file, $htm_file, $mock_test, $offsetVeoliaDate,$compteurEndPrevMonth) {
+	public function traiteConso($file, $htm_file, $mock_test, $offsetVeoliaDate,$currentdatenum,$releve) {
         $consomonth = [];
         $datasFetched = [];
         $htmlDatasFetched = [];
@@ -525,7 +566,7 @@ class veolia_eau extends eqLogic {
             case 2:
             case 3:
               if ($file!=""){
-                $htmlDataFetched=static::processHtml($htm_file,$website,$compteur,$date,$offsetVeoliaDate,$mock_test,$lastdate);
+                $htmlDataFetched=static::processHtml($htm_file,$website,$compteur,$date,$offsetVeoliaDate,$mock_test,$lastdate,$currentdatenum);
                 //log::add('veolia_eau', 'debug', 'csvDataFetched:'.serialize($datasFetched));
 
                 // Traitement du csv
@@ -537,7 +578,12 @@ class veolia_eau extends eqLogic {
                  $j=0;
                  $keepI=-1;
 
-                 //$previousIndex=$htmlDataFetched[0]["index"]-$htmlDataFetched[0]["conso"];
+                 if ($mock_test == 0) {
+                     $compteurEndPrevMonth = self::calculCompteurEndLastMonth($releve); // recupere la valeur du dernier jour du mois passé
+                     log::add('veolia_eau', 'debug', 'getConso-$compteurEndPrevMonth: ' . $compteurEndPrevMonth . " offsetVeoliaDate: " . $offsetVeoliaDate);
+                 } else{
+                     $compteurEndPrevMonth=$htmlDataFetched[0]["index"]-$htmlDataFetched[0]["conso"];
+                 }
                  $previousIndex=$compteurEndPrevMonth;
                  foreach ($csvDataFetched as $dateCSV ) {
 
@@ -549,10 +595,13 @@ class veolia_eau extends eqLogic {
                       if ($dataHtml["conso"] != $dateCSV["conso"]){
                           log::add('veolia_eau', 'error', '$dataHtml["date"]'.$dataHtml["date"].'$data<>'.$dataHtml["conso"].'$data<>'.$dateCSV["conso"]);
                       } else{
+                          if ($website==3 && $i==0 ){ // Remove last day of month at the begining for Lyon
+                          } else {
                           $dateCSV["index"]=($dateCSV["conso"]+$previousIndex);
                           $dateCSV["typeReleve"]="M";
                           $previousIndex=$dateCSV["index"];
                           $datasFetched[$j]=$dateCSV;
+                         }
                       }
                   } else {
                       if ($dateCSV["conso"]<0){
@@ -572,6 +621,8 @@ class veolia_eau extends eqLogic {
 
                      if (isset($datasFetched[$j])) { // fix travis undefined offset when CSV is negative
                        $compteur=$datasFetched[$j]["index"];
+                       // log::add('veolia_eau', 'debug', '$compteur: '.$compteur );
+
                      }
                      $i++; $j++;
                  } else{
@@ -580,7 +631,7 @@ class veolia_eau extends eqLogic {
                 }
 
               } else{
-                  $datasFetched=static::processHtml($htm_file,$website,$compteur,$date,$offsetVeoliaDate,$mock_test,$lastdate);
+                  $datasFetched=static::processHtml($htm_file,$website,$compteur,$date,$offsetVeoliaDate,$mock_test,$lastdate,$currentdatenum);
               }
 
               break;
@@ -739,7 +790,7 @@ class veolia_eau extends eqLogic {
       return $datasFetched;
     }
 
-    private function processHtml($htm_file, $website, &$compteur, &$date, $offsetVeoliaDate,$mock_test,&$lastdate) {
+    private function processHtml($htm_file, $website, &$compteur, &$date, $offsetVeoliaDate,$mock_test,&$lastdate,$currentdatenum) {
         log::add('veolia_eau', 'debug', '### TRAITE CONSO HTML '.$website.' ###');
         $depart = $this->getConfiguration('depart');
         $compteur = $this->getConfiguration('compteur');
@@ -805,8 +856,8 @@ class veolia_eau extends eqLogic {
                 $nm_nextreleve = mktime(0, 0, 0, date("m",mktime(0, 0, 0, 3, 3, 2018))  , date("d",mktime(0, 0, 0, 3, 3, 2018))-$offsetVeoliaDate+1, date("Y",mktime(0, 0, 0, 3, 3, 2018)));
               }
               else{
-                  $nm_currentreleve = mktime(0, 0, 0, date("m")  , date("d")-$offsetVeoliaDate, date("Y"));
-                  $nm_nextreleve = mktime(0, 0, 0, date("m")  , date("d")-$offsetVeoliaDate+1, date("Y"));
+                  $nm_currentreleve = mktime(0, 0, 0, date("m",$currentdatenum)  , date("d",$currentdatenum)-$offsetVeoliaDate, date("Y",$currentdatenum));
+                  $nm_nextreleve = mktime(0, 0, 0, date("m",$currentdatenum)  , date("d",$currentdatenum)-$offsetVeoliaDate+1, date("Y",$currentdatenum));
               }
               $nm_month = date('m/Y',$nm_currentreleve);
               $nm_nextmonth = date('m/Y',$nm_nextreleve);

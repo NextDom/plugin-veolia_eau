@@ -5,8 +5,10 @@
 	"author" : "Damien Virlouvet",
     "icon" : "icon nature-drops1",
     "description" : "Plugin pour retrouver le télé-relevé Veolia eau / Tout sur mon eau / Eau en ligne",
-	"require" : "2.2",
+	"require" : "2.3",
 	"category" : "monitoring",
+	"changelog" : "https://jeedom-plugins-extra.github.io/plugin-veolia_eau/fr_FR/#tocAnchor-1-7",
+	"documentation" : "https://jeedom-plugins-extra.github.io/plugin-veolia_eau/fr_FR",
 	"hasDependency" : false,
 	"hasOwnDeamon" : false,
 	"maxDependancyInstallTime" : 0
