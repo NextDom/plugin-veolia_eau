@@ -30,13 +30,21 @@ $eqLogics = eqLogic::byType($plugin->getId());
     </div>
 
     <div class="col-lg-10 col-md-9 col-sm-8 eqLogicThumbnailDisplay" style="border-left: solid 1px #EEE; padding-left: 25px;">
+        <div class="eqLogicThumbnailContainer">
+        <div class="cursor eqLogicAction" data-action="add" style="text-align: center; background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
+            <i class="fa fa-plus-circle" style="font-size : 7em;color:#94ca02;"></i>
+            <br>
+            <span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#94ca02">{{Ajouter}}</span>
+        </div>
+        <div class="cursor eqLogicAction" data-action="gotoPluginConf" style="background-color : #ffffff; height : 120px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;">
+            <center>
+                <i class="fa fa-wrench" style="font-size : 6em;color:#767676;"></i>
+            </center>
+            <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#767676"><center>{{Configuration}}</center></span>
+        </div>
+        </div>
         <legend>{{Mes comptes Veolia}}</legend> <!-- changer pour votre type d'équipement -->
         <div class="eqLogicThumbnailContainer">
-            <div class="cursor eqLogicAction" data-action="add" style="text-align: center; background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
-                <i class="fa fa-plus-circle" style="font-size : 7em;color:#94ca02;"></i>
-                <br>
-                <span style="font-size : 1.1em;position:relative; top : 23px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#94ca02">{{Ajouter}}</span>
-            </div>
             <?php
                 foreach ($eqLogics as $eqLogic) {
                     $opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
@@ -112,7 +120,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 <?php
                                     echo '<option value="1">Veolia</option>';
                                     echo '<option value="2">Veolia Méditerranée</option>';
-                                    //echo '<option value="3">Service Eau du Grand Lyon</option>';
+                                    echo '<option value="3">Service Eau du Grand Lyon</option>';
                                     echo '<option value="4">Tout sur mon eau / Eau en ligne</option>';
                                  ?>
                                 </select>
@@ -143,12 +151,34 @@ $eqLogics = eqLogic::byType($plugin->getId());
                             </div>
                         </div>
                         <div class="form-group" id="group-configuration-depart">
-                            <label class="col-sm-3 control-label">{{Index de départ}}</label>
+                            <legend>{{...Initialisation - ne pas modifier sauf lors de l'installation ou pour re-initialiser l'historique}}</legend>
+                            <label class="col-sm-3 control-label">{{Index de départ du compteur}}</label>
                             <div class="col-sm-3">
                                 <input type="number" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="depart" placeholder="0123456789"/>
                             </div>
+                            <div class="col-sm-3">
+                                Cette valeur doit être renssigné une fois au début, c'est la valeur de votre compteur à la date ci dessous.
+                             </div>
                         </div>
-
+                        <div class="form-group" id="group-configuration-last">
+                            <label class="col-sm-3 control-label">{{Date de la derniere mesure}}</label>
+                            <div class="col-sm-3">
+                                <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="last" placeholder="Date de la premiere mesure a récupérer"/>
+                            </div>
+                            <div class="col-sm-3">
+                                Modifier cette valeur pour récupérer l'historique à la veille du jour ou vous voulez reprendre.<br>
+                                Il faut penser à mettre dans options avancées pour la commande <b>index</b> un lissage par le max et pas par la moyenne.
+                            </div>
+                        </div>
+                        <div class="form-group" id="group-configuration-last">
+                            <label class="col-sm-3 control-label">{{Nombre de jours de retard}}</label>
+                            <div class="col-sm-3">
+                                <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="offsetVeoliaDate" placeholder="offset Veolia Date"/>
+                            </div>
+                            <div class="col-sm-3">
+                                Nombre de jours de retard du fournisseur d'eau.
+                            </div>
+                        </div>
                     </fieldset>
                 </form>
 
@@ -205,4 +235,3 @@ $eqLogics = eqLogic::byType($plugin->getId());
 <?php
     include_file('desktop', 'veolia_eau', 'js', 'veolia_eau');
     include_file('core', 'plugin.template', 'js');
-
