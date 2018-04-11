@@ -1,4 +1,15 @@
 [panel,primary]
+.2018-04-08 - v 2.3
+--
+Gestion de Eau du grand Lyon
+Pour Veolia Sud Est et Lyon:
+- Option de recuperation de l'historique
+- Possibilité de modifier le retard de recuperation (3 jours par defaut)
+
+Ajout du pannel configuration general avec les équipements pour faciliter la navigation
+
+Dev: Ajout de tests automatiques sur travis-ci
+
 .2017-12-19
 --
 Correction de la récupération des données pour toutsurmoneau (Ajout du token pour le login)
