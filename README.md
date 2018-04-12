@@ -9,7 +9,7 @@
 Ce plugin permet de récupérer le télé-relevé disponible sur les sites Internet de Veolia Eau / Veolia Méditerranée / Tout sur mon eau / Eau en ligne / Eau du grand Lyon
 
 
-[![Read the Docs](docs/images/veolia_eau-Screenshot1.png)](docs/images/veolia_eau-Screenshot1.png)
+[![Read the Docs](docs/images/veolia_eau_screen_shoot.png)](docs/images/veolia_eau_screen_shoot.png)
 
 # Documentation du plugin:
 [![Read the Docs](https://img.shields.io/readthedocs/pip.svg)](docs/fr_FR/presentation.md) 
