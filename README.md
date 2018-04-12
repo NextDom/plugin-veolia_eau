@@ -2,7 +2,7 @@
 
 ### Master: [![Build Status](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-veolia_eau.svg?branch=master)](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-veolia_eau)  [![Coverage Status](https://coveralls.io/repos/github/Jeedom-Plugins-Extra/plugin-veolia_eau/badge.svg?branch=master)](https://coveralls.io/github/Jeedom-Plugins-Extra/plugin-veolia_eau?branch=master)
 
-### Develop: [![Build Status](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-veolia_eau.svg?branch=Develop)](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-veolia_eau)  [![Coverage Status](https://coveralls.io/repos/github/Jeedom-Plugins-Extra/plugin-veolia_eau/badge.svg?branch=Develop)](https://coveralls.io/github/Jeedom-Plugins-Extra/plugin-veolia_eau?branch=Develop)
+### Develop: [![Build Status](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-veolia_eau.svg?branch=develop)](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-veolia_eau)  [![Coverage Status](https://coveralls.io/repos/github/Jeedom-Plugins-Extra/plugin-veolia_eau/badge.svg?branch=develop)](https://coveralls.io/github/Jeedom-Plugins-Extra/plugin-veolia_eau?branch=develop)
 
 # Présentation:
 
