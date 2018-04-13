@@ -1,5 +1,0 @@
-[panel,primary]
-.Que deviennent mes identifiants saisis ?
---
-Ils sont simplement stockés sur votre Jeedom pour pouvoir télécharger le relevé tous les jours.
---
