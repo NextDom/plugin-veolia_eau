@@ -1,17 +1,17 @@
 # FAQ
 
-### Que deviennent mes identifiants saisis ?
+### What happens to my entered identifiers?
 
-> Ils sont simplement stockés sur votre Jeedom pour pouvoir télécharger le relevé tous les jours.
+> They are simply stored on your Jeedom so you can download the statement every day.
 
-### Je ne retrouve pas la consommation d'hier
+### I can not find the consumption of yesterday
 
-> Le fichier fourni par Veolia n'est pas en temps réel et ne retourne en général pas les relevé des 3 derniers jours
+> The file provided by Veolia is not in real time and usually does not return the statements for the last 3 days
 
-### Je viens de créer un objet et le relevé est vide
+### I just created an object and the statement is empty
 
-> Le calcul se fera à l'heure de relevé définie dans la configuration
+> The calculation will be done at the survey time defined in the configuration
 
-### Même après plusieurs jours, je n'ai aucun relevé
+### Even after several days, I have no records
 
-> Vérifiez que vos identifiants de connexion sont corrects et que vous avez accès au télé-relevé
+> Check that your login credentials are correct and that you have access to remote reading

@@ -1,16 +1,16 @@
 # Configuration
 
-Vous devez renseigner les identifiants utilisés pour vous connecter votre site
-- Veolia Eau: https://www.service-client.veoliaeau.fr
+You must fill in the identifiers used to connect your site
+- Veolia Water: https://www.service-client.veoliaeau.fr
 - Veolia Méditerranée: https://www.eau-services.com
-- Tout sur mon eau / Eau en ligne: https://www.eau-en-ligne.com
+- All about my water / Water online: https://www.eau-en-ligne.com
 
-Le "Service Télé relevé" doit être activé chez Veolia (Vous pouvez le faire depuis le site Internet dans la rubrique "Vos contrats" si votre compteur d'eau le permet).
+The "Service Télé relevé" must be activated at Veolia (You can do it from the website under the heading "Your contracts" if your water meter allows it).
 
-Votre consommation d'eau sera récupérée chaque jour.
+Your water consumption will be recovered every day.
 
-### Mode debug
+### Debug mode
 
-Le mode debug permet de lancer toutes les minutes pendant une heure, la récupération des données. Il convient de limiter son utilisation au debug.
+The debug mode allows you to run every minute for one hour, recovering the data. It should be limited to debugging.
 
-Laisser le mode debug en permanence va affecter la durée de vie du support de stockage, spécialement les cartes SD et vider plus rapidement la pile de l'appareil.
+Leaving the debug mode permanently will affect the life of the storage medium, especially SD cards, and drain the battery of the device more quickly.

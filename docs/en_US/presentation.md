@@ -1,18 +1,19 @@
 # Description
 
-Ce plugin permet de récupérer le télé-relevé disponible sur les sites Internet de Veolia Eau / Veolia Méditerranée / Tout sur mon eau / Eau en ligne
+This plugin allows to retrieve the tele-survey available on the websites of Veolia Water / Veolia Mediterranean / All about my water / Water online
 
 # Market
 
-Retrouvez le sur le Market Jeedom [ici](https://www.jeedom.com/market/index.php?v=d&p=market&type=plugin&&name=veolia_eau)
+Find it on the Jeedom Market [here] (https://www.jeedom.com/market/index.php?v=d&p=market&type=plugin&&name=veolia_eau)
 
-# Prévisualisation
+# preview
 
+5
 ![scrennshot1](../images/veolia_eau_screen_shoot.png)
 
 # Forum
 
-Lien vers le forum [ici](https://www.jeedom.com/forum/viewtopic.php?f=140&t=21200&start=500)
-# Supporter le plugin
+Link to the forum [here] (https://www.jeedom.com/forum/viewtopic.php?f=140&t=21200&start=500)
+# Support the plugin
 
 [![ PayPal](https://cdn.rawgit.com/twolfson/paypal-github-button/1.0.0/dist/button.svg)](https://www.paypal.me/damien916/)
