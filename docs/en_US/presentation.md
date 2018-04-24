@@ -14,6 +14,3 @@ Find it on the Jeedom Market [here] (https://www.jeedom.com/market/index.php?v=d
 # Forum
 
 Link to the forum [here] (https://www.jeedom.com/forum/viewtopic.php?f=140&t=21200&start=500)
-# Support the plugin
-
-[![ PayPal](https://cdn.rawgit.com/twolfson/paypal-github-button/1.0.0/dist/button.svg)](https://www.paypal.me/damien916/)
