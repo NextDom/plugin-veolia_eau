@@ -374,8 +374,8 @@ class veolia_eau extends eqLogic {
                 $url_consommation = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/historique-de-consommation';
                 $getConsoInHtmlFile = false;
                 $datas = array(
-                    '_username='.urlencode($this->getConfiguration('login')),
-                    '_password='.urlencode($this->getConfiguration('password'))
+                    'tsme_user_login[_username]='.urlencode($this->getConfiguration('login')),
+                    'tsme_user_login[_password]='.urlencode($this->getConfiguration('password'))
                 );
                 $extension='.xls';
                 break;
@@ -766,6 +766,12 @@ class veolia_eau extends eqLogic {
                       $date = $dateTemp[2].'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT);
                       $index = 0;
                       $conso = $line['B'];
+                      $typeReleve = 0;
+                  elseif($website==4) {
+                      $dateTemp = explode('-', $line['A']);
+                      $date = $dateTemp[2].'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT);
+                      $index = $line['C'];
+                      $conso = $line['B'] * 1000;
                       $typeReleve = 0;
                   } else {
                       $date = $dateTemp[2].'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT);
