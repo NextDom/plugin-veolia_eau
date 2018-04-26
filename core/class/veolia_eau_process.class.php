@@ -767,6 +767,7 @@ class veolia_eau extends eqLogic {
                       $index = 0;
                       $conso = $line['B'];
                       $typeReleve = 0;
+                  }
                   elseif($website==4) {
                       $dateTemp = explode('-', $line['A']);
                       $date = $dateTemp[2].'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT);
