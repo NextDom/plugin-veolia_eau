@@ -380,13 +380,24 @@ class veolia_eau extends eqLogic {
                 $extension='.xls';
                 break;
 
+           case 5:
+                $url_login = 'https://espaceclients.eaudemarseille-metropole.fr/webapi/Utilisateur/authentification';
+                $url_consommation = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/historique-de-consommation';
+                $getConsoInHtmlFile = false;
+                $datas = array(
+                    'identifiant='.urlencode($this->getConfiguration('login')),
+                    'motDePasseMD5='.urlencode(md5($this->getConfiguration('password')))
+                );
+                $extension='.xls';
+                break;
+
             case 1:
             default:
-                $url_token = 'https://www.service-client.veoliaeau.fr/connexion-espace-client.html';
+                $url_token = 'https://www.service.eau.veolia.fr/connexion-espace-client.html';
                 $tokenFieldName = 'token';
-                $url_login = 'https://www.service-client.veoliaeau.fr/home.loginAction.do';
-                $url_consommation = 'https://www.service-client.veoliaeau.fr/home/espace-client/votre-consommation.html?vueConso=releves';
-                $url_releve_csv = 'https://www.service-client.veoliaeau.fr/home/espace-client/votre-consommation.exportConsommationData.do?vueConso=releves';
+                $url_login = 'https://www.service.eau.veolia.fr/home.loginAction.do';
+                $url_consommation = 'https://www.service.eau.veolia.fr/home/espace-client/votre-consommation.html?vueConso=releves';
+                $url_releve_csv = 'https://www.service.eau.veolia.fr/home/espace-client/votre-consommation.exportConsommationData.do?vueConso=releves';
                 $datas = array(
                     'veolia_username='.urlencode($this->getConfiguration('login')),
                     'veolia_password='.urlencode($this->getConfiguration('password')),

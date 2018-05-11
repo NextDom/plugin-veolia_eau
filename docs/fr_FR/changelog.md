@@ -1,5 +1,8 @@
 # Changelog
 
+### Version 2018-05-11 - v 2.4
+* Changement de l'URL de Veolia
+
 ### Version 2018-04-08 - v 2.3
 * Gestion de Eau du grand Lyon
 * Pour Veolia Sud Est et Lyon:
