@@ -1,45 +1,48 @@
 # Changelog
 
+### Version 2018-05-11 - v 2.4
+* Changement de l'URL de Veolia
+
 ### Version 2018-04-08 - v 2.3
-* Water Management of Greater Lyon
-* For Veolia South East and Lyon:
-- History retrieval option
-- Ability to change the delay of recovery (3 days by default)
+* Gestion de Eau du grand Lyon
+* Pour Veolia Sud Est et Lyon:
+- Option de recuperation de l'historique
+- Possibilité de modifier le retard de recuperation (3 jours par defaut)
 
-* Added general configuration panel with equipment for easy navigation
+* Ajout du pannel configuration general avec les équipements pour faciliter la navigation
 
-* Dev: Adding automatic tests on travis
+* Dev: Ajout de tests automatiques sur travis-ci
 
 ### Version 2017-12-19
 
-* Correction of the data recovery for allmonitors (Add the token for the login)
-* Adding a polyfill for the function
-* refactoring
+* Correction de la récupération des données pour toutsurmoneau (Ajout du token pour le login)
+* Ajout d'un polyfill pour la fonction
+* Refactoring
 
 ### Version 2017-12-13
 
-* Add debug log
-* Correction of the data recovery for Veolia (Add the token for the login)
+* Ajout de log de debug
+* Correction de la récupération des données pour Veolia (Ajout du token pour le login)
 
 ### Version 2017-12-10
 
-* Fixed URLs for allurmoneau
+* Correction des URL pour toutsurmoneau
 
 ### Version 2017-12-06
 
-* Add debug log
-* Updating the info.json file
+* Ajout de log de debug
+* Mise à jour du fichier info.json
 
 ### Version 2017-10-25
 
-* Correction of the statement date
-* Saving all dates, even if already registered (updating values)
-* Fixed the page that lists the counters to dim the inactive counters
-* Ability to sort orders by drag and drop
-* Refactoring and simplification of the code
+* Correction de la date de relevé
+* Enregistrement de toutes les dates, même déjà enregistrées (mise à jour des valeurs)
+* Correction de la page qui liste les compteurs pour griser les compteurs inactifs
+* Possibilité de trier les commandes par glisser-déposer
+* Refactoring et simplification du code
 
 ### Version 2017-10-18
 
-* Creation of the changelog
-* Update of the documentation
+* Création du changelog
+* Mise à jour de la documentation
 s
