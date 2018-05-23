@@ -33,15 +33,25 @@ veolia_eau debug 528.000,01/04/2018,color:#9e85b0,color:#80639f
 
 veolia_eau debug 2018-04-01 528.000 M 1235 1235
 
-veolia_eau debug 337.000,02/04/2018,color:#9e85b0,
+veolia_eau debug 337.000,02/04/2018,color:#9e85b0
 
 veolia_eau debug 2018-04-02 337.000 M 1572 1572
 
+veolia_eau debug 0,03/04/2018,color:#9e85b0
+
+veolia_eau debug 2018-04-03 0 M 1572 1572
+
+veolia_eau debug 350.000,04/04/2018,color:#9e85b0,
+
+veolia_eau debug 2018-04-04 350.000 M 1922 1922
+
 veolia_eau debug ### TRAITE CONSO XLS 3 ###
 
-veolia_eau debug 3 data lines
+veolia_eau debug 4 data lines
 
-veolia_eau debug 3 data lines
+veolia_eau debug 4 data lines
+
+veolia_eau debug html different du CSV - $dataHtml["date"]2018-04-03$dateCSV["date"]2018-04-04$data<>0$data<>350$i3$keepI-1$j:3
 
 veolia_eau debug Date: 2018-04-01 / Index: 528 / Conso: 528 / Type de relevé: M
 
@@ -49,4 +59,4 @@ veolia_eau debug Date: 2018-04-02 / Index: 865 / Conso: 337 / Type de relevé: M
 
 veolia_eau debug save compteur: 865
 
-veolia_eau debug save last: 2018-04-02
+veolia_eau debug save last: 2018-04-04
