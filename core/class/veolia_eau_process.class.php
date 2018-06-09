@@ -42,7 +42,21 @@ class veolia_eau extends eqLogic {
              self::cronHourly();
         }
     }
-
+	  // Fonction d'info des dependances
+	public static function dependancy_info() {
+		$return = array();
+		$return['progress_file'] = '/tmp/dependancy_veolia_in_progress';
+		$return['state'] = 'ok';
+		if (exec('apt list --installed php7.0-mbstring | grep -E "mbstring"| wc -l') < 1) {
+			$return['state'] = 'nok';
+		}
+		return $return;
+	}
+		  // Fonction d'install des dependances
+	public static function dependancy_install() {
+		log::remove(__CLASS__ . '_update');
+		return array('script' => dirname(__FILE__) . '/../../resources/install_#stype#.sh ' . jeedom::getTmpFolder('veolia') . '/dependance', 'log' => log::getPathToLog(__CLASS__ . '_update'));
+	}
 
     // Fonction exécutée automatiquement toutes les heures par Jeedom
     public static function cronHourly() {
