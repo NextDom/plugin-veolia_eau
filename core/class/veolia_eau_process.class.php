@@ -47,7 +47,8 @@ class veolia_eau extends eqLogic {
 		$return = array();
 		$return['progress_file'] = '/tmp/dependancy_veolia_in_progress';
 		$return['state'] = 'ok';
-		if (exec('apt list --installed php7.0-mbstring | grep -E "mbstring"| wc -l') < 1) {
+		if (exec('php -v | grep "PHP 7." | wc -l') === 1
+            && exec('apt list --installed php7.0-mbstring | grep -E "mbstring"| wc -l') < 1) {
 			$return['state'] = 'nok';
 		}
 		return $return;
