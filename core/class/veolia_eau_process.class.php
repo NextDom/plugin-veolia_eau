@@ -630,18 +630,39 @@ class veolia_eau extends eqLogic {
                          }
                       }
                   } else {
-                      if ($dateCSV["conso"]<0){
-                        $keepNegativeConso=$dateCSV["conso"];
-                        $keepI=$i;
-                      } elseif ($keepI==$i){ // Negatif a soustraire au suivant
-                        $dateCSV["conso"]=($dateCSV["conso"]+$keepNegativeConso);
-                        $dateCSV["index"]=($dateCSV["conso"]+$previousIndex);
-                        $dateCSV["typeReleve"]="M";
-                        $previousIndex=$dateCSV["index"];
-                        $datasFetched[$j]=$dateCSV;
-                      } else{
-                          log::add('veolia_eau', 'debug', 'html different du CSV - $dataHtml["date"]'.$dataHtml["date"].'$dateCSV["date"]'.$dateCSV["date"].'$data<>'.$dataHtml["conso"].'$data<>'.$dateCSV["conso"].'$i'.$i.'$keepI'.$keepI.'$j:'.$j);
-                      }
+                        $newDateCSV = date("Y-m-d", strtotime(" +1 day",strtotime($oldDateCSV)));
+                        //log::add('veolia_eau', 'error', '$newDateCSV'.$newDateCSV);
+
+                        if($newDateCSV == $dataHtml["date"]) {
+                            // add day with 0 conso
+                            $datasFetched[$j]["date"]=$newDateCSV;
+                            $datasFetched[$j]["index"]=$previousIndex;
+                            $datasFetched[$j]["typeReleve"]="M";
+                            $datasFetched[$j]["conso"]=0;
+                            $j++;
+                            // add next one skip into the previous if
+                            $dateCSV["index"]=($dateCSV["conso"]+$previousIndex);
+                            $dateCSV["typeReleve"]="M";
+                            $previousIndex=$dateCSV["index"];
+                            $datasFetched[$j]=$dateCSV;
+                          log::add('veolia_eau','debug','Missing item detected in CSV for:'.$newDateCSV);
+                          $i=$i+2;
+                        } else {
+                        // log::add('veolia_eau', 'error', 'date <> --- $dataHtml["date"]'.$dataHtml["date"].'$data<>'.$dataHtml["conso"].'$data<>'.$dateCSV["conso"]);
+
+                              if ($dateCSV["conso"]<0){
+                                $keepNegativeConso=$dateCSV["conso"];
+                                $keepI=$i;
+                              } elseif ($keepI==$i){ // Negatif a soustraire au suivant
+                                $dateCSV["conso"]=($dateCSV["conso"]+$keepNegativeConso);
+                                $dateCSV["index"]=($dateCSV["conso"]+$previousIndex);
+                                $dateCSV["typeReleve"]="M";
+                                $previousIndex=$dateCSV["index"];
+                                $datasFetched[$j]=$dateCSV;
+                              } else{
+                                  log::add('veolia_eau', 'debug', 'html different du CSV - $dataHtml["date"]'.$dataHtml["date"].'$dateCSV["date"]'.$dateCSV["date"].'$data<>'.$dataHtml["conso"].'$data<>'.$dateCSV["conso"].'$i'.$i.'$keepI'.$keepI.'$j:'.$j);
+                              }
+                        }
                      $i--;
                      }
 
@@ -650,6 +671,7 @@ class veolia_eau extends eqLogic {
                        // log::add('veolia_eau', 'debug', '$compteur: '.$compteur );
 
                      }
+                     $oldDateCSV=$dateCSV["date"];  // manage empty items into CSV
                      $i++; $j++;
                  } else{
                      log::add('veolia_eau', 'debug', 'html plus petit que le csv, csv:'.count($csvDataFetched)." html:".count($htmlDataFetched)." i:".$i);
