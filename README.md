@@ -1,8 +1,8 @@
-[![license](https://img.shields.io/github/license/Jeedom-Plugins-Extra/plugin-veolia_eau.svg)](./LICENSE) [![GitHub contributors](https://img.shields.io/github/contributors/Jeedom-Plugins-Extra/plugin-veolia_eau.svg)](../../graphs/contributors) [![GitHub release](https://img.shields.io/github/release/Jeedom-Plugins-Extra/plugin-veolia_eau.svg)](../../releases) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/damien916) [![Waffle.io - Columns and their card count](https://badge.waffle.io/Jeedom-Plugins-Extra/plugin-veolia_eau.svg?columns=all)](https://waffle.io/Jeedom-Plugins-Extra/plugin-veolia_eau)
+[![license](https://img.shields.io/github/license/NextDom/plugin-veolia_eau.svg)](./LICENSE) [![GitHub contributors](https://img.shields.io/github/contributors/NextDom/plugin-veolia_eau.svg)](../../graphs/contributors) [![GitHub release](https://img.shields.io/github/release/NextDom/plugin-veolia_eau.svg)](../../releases) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/damien916) [![Waffle.io - Columns and their card count](https://badge.waffle.io/NextDom/plugin-veolia_eau.svg?columns=all)](https://waffle.io/NextDom/plugin-veolia_eau)
 
-### Master: [![Build Status](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-veolia_eau.svg?branch=master)](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-veolia_eau)  [![Coverage Status](https://coveralls.io/repos/github/Jeedom-Plugins-Extra/plugin-veolia_eau/badge.svg?branch=master)](https://coveralls.io/github/Jeedom-Plugins-Extra/plugin-veolia_eau?branch=master)
+### Master: [![Build Status](https://travis-ci.org/NextDom/plugin-veolia_eau.svg?branch=master)](https://travis-ci.org/NextDom/plugin-veolia_eau)  [![Coverage Status](https://coveralls.io/repos/github/NextDom/plugin-veolia_eau/badge.svg?branch=master)](https://coveralls.io/github/NextDom/plugin-veolia_eau?branch=master)
 
-### develop: [![Build Status](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-veolia_eau.svg?branch=develop)](https://travis-ci.org/Jeedom-Plugins-Extra/plugin-veolia_eau)  [![Coverage Status](https://coveralls.io/repos/github/Jeedom-Plugins-Extra/plugin-veolia_eau/badge.svg?branch=develop)](https://coveralls.io/github/Jeedom-Plugins-Extra/plugin-veolia_eau?branch=develop)
+### develop: [![Build Status](https://travis-ci.org/NextDom/plugin-veolia_eau.svg?branch=develop)](https://travis-ci.org/NextDom/plugin-veolia_eau)  [![Coverage Status](https://coveralls.io/repos/github/NextDom/plugin-veolia_eau/badge.svg?branch=develop)](https://coveralls.io/github/NextDom/plugin-veolia_eau?branch=develop)
 
 # Présentation:
 
@@ -19,7 +19,7 @@ Ce plugin permet de récupérer le télé-relevé disponible sur les sites Inter
 
 # Documentation complète:
 
-[![Read the Docs](plugin_info/veolia_eau_icon.png)](https://jeedom-plugins-extra.github.io/plugin-veolia_eau)
+[![Read the Docs](plugin_info/veolia_eau_icon.png)](https://NextDom.github.io/plugin-veolia_eau)
 
 
 

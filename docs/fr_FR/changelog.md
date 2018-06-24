@@ -1,5 +1,8 @@
 # Changelog
 
+### Version 2018-06-24 - v 2.4.2
+* Correction du Changelog et documentation
+
 ### Version 2018-06-19 - v 2.4.1
 * Correction des dépendances
 * Correction du Changelog et documentation
