@@ -594,7 +594,10 @@ class veolia_eau extends eqLogic {
               if ($file!=""){
                 $htmlDataFetched=static::processHtml($htm_file,$website,$compteur,$date,$offsetVeoliaDate,$mock_test,$lastdate,$currentdatenum);
                 //log::add('veolia_eau', 'debug', 'csvDataFetched:'.serialize($datasFetched));
-
+                  if($htmlDataFetched==0){
+                      log::add('veolia_eau', 'error',"Pas de données sur le site");
+                      return -1;
+                  }
                 // Traitement du csv
                 $csvDataFetched=static::processCSV($file,$website,$offsetVeoliaDate);
                 //log::add('veolia_eau', 'debug', 'csvDataFetched:'.serialize($csvDataFetched));
@@ -875,6 +878,10 @@ class veolia_eau extends eqLogic {
           $pos = strrpos($info[0], "Nous nous excusons pour la");
           if ($pos != false) { // note: three equal signs
               log::add('veolia_eau', 'error', 'Site Veolia HS: Une erreur est survenue, Veuillez réessayer ultérieurement, Nous nous excusons pour la gêne occasionnée.');
+          }
+          $pos = strrpos($info[0], "Site en cours de maintenance");
+          if ($pos != false){
+              log::add('veolia_eau', 'error', 'Site Veolia HS: Site en cours de maintenance.');
           }
           return 0;
         }
