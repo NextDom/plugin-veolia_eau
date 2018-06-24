@@ -1,5 +1,10 @@
 # Changelog
 
+### Version 2018-06-24 - v 2.4.2
+* Correction des jours avec 0 conso pour Lyon + test auto travis ok pour ce cas
+* Gestion de l'erreur site en maintenance pour Lyon + tests auto pour ce cas dans travis
+* Modification du lien pour la doc avec le nouveau site NextDom
+ 
 ### Version 2018-06-19 - v 2.4.1
 * Correction des dépendances
 * Correction du Changelog et documentation
