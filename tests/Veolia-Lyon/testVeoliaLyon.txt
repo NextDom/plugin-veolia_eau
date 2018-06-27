@@ -41,15 +41,25 @@ veolia_eau debug 0,03/04/2018,color:#9e85b0
 
 veolia_eau debug 2018-04-03 0 M 1572 1572
 
-veolia_eau debug 350.000,04/04/2018,color:#9e85b0,
+veolia_eau debug 350.000,04/04/2018,color:#9e85b0
 
 veolia_eau debug 2018-04-04 350.000 M 1922 1922
 
+veolia_eau debug 360.000,05/04/2018,color:#9e85b0
+
+veolia_eau debug 2018-04-05 360.000 M 2282 2282
+
+veolia_eau debug 370.000,06/04/2018,color:#9e85b0,
+
+veolia_eau debug 2018-04-06 370.000 M 2652 2652
+
 veolia_eau debug ### TRAITE CONSO XLS 3 ###
 
-veolia_eau debug 4 data lines
+veolia_eau debug 6 data lines
 
-veolia_eau debug 4 data lines
+veolia_eau debug 6 data lines
+
+veolia_eau debug Missing item detected in CSV for:2018-04-03
 
 veolia_eau debug Date: 2018-04-01 / Index: 528 / Conso: 528 / Type de relevé: M
 
@@ -59,6 +69,42 @@ veolia_eau debug Date: 2018-04-03 / Index: 865 / Conso: 0 / Type de relevé: M
 
 veolia_eau debug Date: 2018-04-04 / Index: 1215 / Conso: 350 / Type de relevé: M
 
-veolia_eau debug save compteur: 1215
+veolia_eau debug Date: 2018-04-05 / Index: 1575 / Conso: 360 / Type de relevé: M
 
-veolia_eau debug save last: 2018-04-04
+veolia_eau debug Date: 2018-04-06 / Index: 1945 / Conso: 370 / Type de relevé: M
+
+veolia_eau debug save compteur: 1945
+
+veolia_eau debug save last: 2018-04-06
+
+veolia_eau debug displayConfig: website:3 login:1 password:PSW1 depart:0 compteur:0 last:2018-03-09 alert:#680 mock_date:2018-03-12
+
+veolia_eau debug 03/2018 09
+
+veolia_eau debug https://agence.eaudugrandlyon.com/mon-espace-suivi-personnalise.aspx?ex=03/2018&mm=03/2018&d=
+
+veolia_eau debug ### LOGIN ON https://agence.eaudugrandlyon.com/default.aspx ###
+
+veolia_eau debug cURL response : tbd
+
+veolia_eau debug cURL errno : 0
+
+veolia_eau debug ### GO TO CONSOMMATION PAGE ###
+
+veolia_eau debug cURL response : 1
+
+veolia_eau debug cURL errno : 0
+
+veolia_eau debug ### GET DATAFILE CSV ###
+
+veolia_eau debug alert: 680
+
+veolia_eau debug ### TRAITE CONSO HTML 3 ###
+
+veolia_eau debug last1: 2018-03-09
+
+veolia_eau error dataPoints: pas trouvé dans la reponse de Veolia
+
+veolia_eau error Site Veolia HS: Site en cours de maintenance.
+
+veolia_eau error Pas de données sur le site
