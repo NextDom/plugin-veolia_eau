@@ -405,6 +405,20 @@ class veolia_eau extends eqLogic {
                 );
                 $extension='.xls';
                 break;
+           
+           case 6:
+            	log::add('SEE', 'debug', 'downloadToken : '.$downloadToken);
+            	$url_token = 'https://www.eauxdelessonne.com/mon-compte-en-ligne/je-me-connecte';
+                $tokenFieldName = '_csrf_token';
+                $url_login = 'https://www.eauxdelessonne.com/mon-compte-en-ligne/je-me-connecte';
+                $url_consommation = 'https://www.eauxdelessonne.com/mon-compte-en-ligne/historique-de-consommation';
+                $getConsoInHtmlFile = false;
+                $datas = array(
+                    'tsme_user_login[_username]='.urlencode($this->getConfiguration('login')),
+                    'tsme_user_login[_password]='.urlencode($this->getConfiguration('password'))
+                );
+                $extension='.xls';
+                break;
 
             case 1:
             default:
@@ -533,6 +547,17 @@ class veolia_eau extends eqLogic {
                 $year = date('Y');
                 $url_releve_csv = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/exporter-consommation/day/'.$downloadToken.'/'.$year.'/'.$month;
                 log::add('veolia_eau', 'debug', 'url csv : '.$url_releve_csv);
+			}
+          	if ($website == 6) {
+                require_once dirname(__FILE__).'/../../3rparty/SimpleHtmlParser/simple_html_dom.php';
+                $html = str_get_html($response);
+                $monthlyReportUrl = $html->find('div[id=export] a', 0)->href;
+                $downloadToken = substr($monthlyReportUrl, strrpos($monthlyReportUrl, '/') + 1);
+                log::add('SEE', 'debug', 'downloadToken : '.$downloadToken);
+                $month = date('m');
+                $year = date('Y');
+				$url_releve_csv = 'https://www.eauxdelessonne.com/mon-compte-en-ligne/exporter-consommation/day/'.$downloadToken.'/'.$year.'/'.$month;
+                log::add('SEE', 'debug', 'url csv : '.$url_releve_csv);
 			}
 		}
 
@@ -819,7 +844,7 @@ class veolia_eau extends eqLogic {
                       $conso = $line['B'];
                       $typeReleve = 0;
                   }
-                  elseif($website==4) {
+                  elseif($website==4 || $website == 6) {
                       $dateTemp = explode('-', $line['A']);
                       $date = $dateTemp[2].'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT);
                       $index = $line['C'];
