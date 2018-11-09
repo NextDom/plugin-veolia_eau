@@ -122,7 +122,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     echo '<option value="2">Veolia Méditerranée</option>';
                                     echo '<option value="3">Service Eau du Grand Lyon</option>';
                                     echo '<option value="4">Tout sur mon eau / Eau en ligne</option>';
-									echo '<option value="6">Socièté des eaux de l\'essonne</option>';
+									echo '<option value="6">Société des eaux de l\'Essonne</option>';
                                  ?>
                                 </select>
                             </div>
