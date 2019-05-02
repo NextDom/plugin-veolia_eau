@@ -1,5 +1,8 @@
 # Changelog
 
+### Version 2019-05-02 - v 2.5.0 - Damien
+* Compatibilité avec Jeedom v4
+
 ### Version 2018-06-24 - v 2.4.3 - René
 * Correction des jours avec 0 conso pour Lyon + test auto travis ok pour ce cas
 * Gestion de l'erreur site en maintenance pour Lyon + tests auto pour ce cas dans travis

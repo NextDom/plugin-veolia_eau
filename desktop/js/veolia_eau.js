@@ -47,18 +47,18 @@ function addCmdToTable(_cmd) {
     tr += '</td>';
 
 	tr += '<td>';
-    tr += 	'<input class="cmdAttr form-control input-sm" data-l1key="name" style="width : 140px;" placeholder="{{Nom}}">';
+    tr += 	'<input class="cmdAttr form-control input-sm" data-l1key="name" placeholder="{{Nom}}">';
     tr += '</td>';
 
     tr += '<td>';
-    tr += 	'<input class="cmdAttr form-control type input-sm" data-l1key="type" value="info" disabled style="margin-bottom : 5px;" />';
+    tr += 	'<input class="cmdAttr form-control type input-sm" data-l1key="type" value="info" disabled />';
     tr += 	'<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
     tr += '</td>';
 
 	tr += '<td>';
     tr += 	'<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isVisible" checked/>{{Afficher}}</label></span> ';
     tr += 	'<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span> ';
-    tr += 	'<input class="cmdAttr form-control tooltips input-sm" data-l1key="unite" style="width:100px;" placeholder="Unité"/>';
+    tr += 	'<input class="cmdAttr form-control tooltips input-sm" data-l1key="unite" placeholder="Unité"/>';
 	tr += '</td>';
 
 	tr += '<td>';
