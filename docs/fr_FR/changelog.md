@@ -1,5 +1,8 @@
 # Changelog
 
+### Version 2019-05-04 - v 2.5.1 - Damien
+* Compatibilité avec Jeedom v4
+
 ### Version 2019-05-02 - v 2.5.0 - Damien
 * Compatibilité avec Jeedom v4
 
