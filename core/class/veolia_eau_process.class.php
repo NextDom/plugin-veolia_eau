@@ -405,7 +405,7 @@ class veolia_eau extends eqLogic {
                 );
                 $extension='.xls';
                 break;
-           
+
            case 6:
             	log::add('SEE', 'debug', 'downloadToken : '.$downloadToken);
             	$url_token = 'https://www.eauxdelessonne.com/mon-compte-en-ligne/je-me-connecte';
@@ -509,6 +509,8 @@ class veolia_eau extends eqLogic {
 				curl_setopt($ch, CURLOPT_URL, $url_consommation);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 				curl_setopt($ch, CURLOPT_FILE, $fp);
+        $idAbt = ($this->getConfiguration('idAbt',0)=='') ? 0 : $this->getConfiguration('idAbt',0);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, 'idAbt=' . $idAbt);
 
                 if ($mock_test >= 2) {
                     $response = 1;

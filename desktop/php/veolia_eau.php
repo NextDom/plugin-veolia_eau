@@ -136,6 +136,13 @@ $eqLogics = eqLogic::byType($plugin->getId());
                         </div>
 
                         <div class="form-group">
+                            <label class="col-sm-3 control-label">{{Identifiant compteur}}</label>
+                            <div class="col-sm-3">
+                                <input type="number" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="idAbt" placeholder="0, 1, 2... si plusieurs compteurs rattaché au contrat"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <label class="col-sm-3 control-label">{{Heure de relève}}</label>
                             <div class="col-sm-3">
                                 <select class="form-control configuration eqLogicAttr" data-l1key="configuration" data-l2key="heure">
