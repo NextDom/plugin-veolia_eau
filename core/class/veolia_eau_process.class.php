@@ -407,7 +407,6 @@ class veolia_eau extends eqLogic {
                 break;
 
            case 6:
-            	log::add('SEE', 'debug', 'downloadToken : '.$downloadToken);
             	$url_token = 'https://www.eauxdelessonne.com/mon-compte-en-ligne/je-me-connecte';
                 $tokenFieldName = '_csrf_token';
                 $url_login = 'https://www.eauxdelessonne.com/mon-compte-en-ligne/je-me-connecte';
@@ -418,6 +417,23 @@ class veolia_eau extends eqLogic {
                     'tsme_user_login[_password]='.urlencode($this->getConfiguration('password'))
                 );
                 $extension='.xls';
+                break;
+
+           case 7:
+                $begin = mktime(0, 0, 0, date("m")-3, date("d"), date("Y"));
+                $endDate = date("d/m/Y");
+                $beginDate = date("d/m/Y", $begin);
+            	$url_token = 'https://ael.sieva.fr/Portail/fr-FR/Connexion/Login';
+                $tokenFieldName = '__RequestVerificationToken';
+                $url_login = 'https://ael.sieva.fr/Portail/fr-FR/Connexion/Login';
+                // $url_consommation = 'https://ael.sieva.fr/Portail/fr-FR/Usager/Abonnement/ExportGraphReleveDataCSV?pointDInstallationId='.urlencode($this->getConfiguration('idContrat')).'&dateDebut='.urlencode($beginDate).'&dateFin='.urlencode($endDate).'&granularite=Jour';
+                $url_consommation = 'https://ael.sieva.fr/Portail/fr-FR/Usager/Abonnement/ExportGraphReleveDataCSV?pointDInstallationId='.$this->getConfiguration('idContrat');
+                log::add('veolia_eau', 'debug',  $url_consommation);
+                $datas = array(
+                    'Login'.urlencode($this->getConfiguration('login')),
+                    'MotDePasse'.urlencode($this->getConfiguration('password'))
+                );
+                $extension='.csv';
                 break;
 
             case 1:
@@ -488,7 +504,7 @@ class veolia_eau extends eqLogic {
 		log::add('veolia_eau', 'debug', '### LOGIN ON '.$url_login.' ###');
 		curl_setopt($ch, CURLOPT_URL, $url_login);
 		curl_setopt($ch, CURLOPT_POST, TRUE);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, implode('&', $datas));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, implode('&', $datas));
 
 		if ($mock_test >= 2) {
             $response = "tbd";
@@ -500,6 +516,7 @@ class veolia_eau extends eqLogic {
 		log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 		log::add('veolia_eau', 'debug', '### GO TO CONSOMMATION PAGE ###');
 
+
 		if ($getConsoInHtmlFile) {
 			$htm_file = sys_get_temp_dir().'/veolia_html_'.uniqid().'.htm';
 			static::secure_touch($htm_file);
@@ -509,8 +526,8 @@ class veolia_eau extends eqLogic {
 				curl_setopt($ch, CURLOPT_URL, $url_consommation);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 				curl_setopt($ch, CURLOPT_FILE, $fp);
-        $idAbt = ($this->getConfiguration('idAbt',0)=='') ? 0 : $this->getConfiguration('idAbt',0);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, 'idAbt=' . $idAbt);
+                $idAbt = ($this->getConfiguration('idAbt',0)=='') ? 0 : $this->getConfiguration('idAbt',0);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, 'idAbt=' . $idAbt);
 
                 if ($mock_test >= 2) {
                     $response = 1;

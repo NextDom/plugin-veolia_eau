@@ -117,6 +117,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <option value="3">Service Eau du Grand Lyon</option>
                                     <option value="4">Tout sur mon eau / Eau en ligne</option>
                                     <option value="6">Société des eaux de l'Essonne</option>
+                                    <option value="7">SIEVA</option>
                                 </select>
                             </div>
                         </div>
@@ -139,6 +140,16 @@ $eqLogics = eqLogic::byType($plugin->getId());
                             <label class="col-sm-3 control-label">{{Identifiant compteur}}</label>
                             <div class="col-sm-3">
                                 <input type="number" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="idAbt" placeholder="0, 1, 2... si plusieurs compteurs rattaché au contrat"/>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">{{Identifiant contrat (pour SIEVA)}}</label>
+                            <div class="col-sm-3">
+                                <input type="number" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="idContrat" placeholder="1234"/>
+                            </div>
+                            <div class="col-sm-3">
+                                se trouve dans l'url, par exemple: https://ael.sieva.fr/Portail/fr-FR/Usager/Abonnement/Detail/<strong>6987</strong>
                             </div>
                         </div>
 

@@ -1,5 +1,9 @@
 # Changelog
 
+### Version 2019-12-13 - v 2.6.0 - Damien
+
+- Gestion de SIEVA
+
 ### Version 2019-12-06 - v 2.5.2 - Damien
 
 - Ajout de l'identifiant compteur (prise en charge du multi compteur pour eau du grand Lyon)
