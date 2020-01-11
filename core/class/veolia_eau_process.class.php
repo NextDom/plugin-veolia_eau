@@ -509,8 +509,11 @@ class veolia_eau extends eqLogic {
 				curl_setopt($ch, CURLOPT_URL, $url_consommation);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 				curl_setopt($ch, CURLOPT_FILE, $fp);
-        $idAbt = ($this->getConfiguration('idAbt',0)=='') ? 0 : $this->getConfiguration('idAbt',0);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, 'idAbt=' . $idAbt);
+                
+                $idAbt = $this->getConfiguration('idAbt', 0);
+                if ($idAbt) {
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, 'idAbt='.$idAbt);
+                }        
 
                 if ($mock_test >= 2) {
                     $response = 1;
@@ -570,20 +573,26 @@ class veolia_eau extends eqLogic {
               $data_file=$this->getConfiguration('csv_mock_file');
           } else {
               $data_file = sys_get_temp_dir().'/veolia_releve_'.uniqid().$extension;
+              log::add('veolia_eau', 'debug', '### Create File '.$data_file);
     	      static::secure_touch($data_file);
 
               $fp = fopen($data_file, 'w');
 		      if ($fp) {
+                log::add('veolia_eau', 'debug', '### Curl call '.$url_releve_csv);
 			    curl_setopt($ch, CURLOPT_URL, $url_releve_csv);
 			    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			    curl_setopt($ch, CURLOPT_FILE, $fp);
-			    curl_setopt($ch, CURLOPT_POST, TRUE);
+                curl_setopt($ch, CURLOPT_POST, TRUE);
+
                 if($mock_test>=2){
                   $response = "tbd";
                 }else{
                   $response = curl_exec($ch);
                 }
+                $error = curl_error($ch);
 
+			    log::add('veolia_eau', 'debug', 'response : '.$response);
+			    log::add('veolia_eau', 'debug', 'error : '.$error);
 			    log::add('veolia_eau', 'debug', 'response length : '.strlen($response));
 			    log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 
