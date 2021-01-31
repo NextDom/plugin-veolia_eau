@@ -26,7 +26,15 @@ $eqLogics = eqLogic::byType($plugin->getId());
         </div>
 
         <legend><i class="fas fa-table"></i> {{Mes comptes Veolia}}</legend>
-        <input class="form-control" placeholder="{{Rechercher}}" id="in_searchEqlogic" />
+
+        <!-- Champ de recherche -->
+		<div class="input-group">
+			<input class="form-control roundedLeft" placeholder="{{Rechercher}}" id="in_searchEqlogic"/>
+			<div class="input-group-btn">
+				<a id="bt_resetSearch" class="btn roundedRight" style="width:30px"><i class="fas fa-times"></i></a>
+			</div>
+        </div>
+        
         <div class="eqLogicThumbnailContainer">
             <?php
                 foreach ($eqLogics as $eqLogic) {
@@ -55,11 +63,11 @@ $eqLogics = eqLogic::byType($plugin->getId());
 
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation"><a href="#" class="eqLogicAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fa fa-arrow-circle-left"></i></a></li>
-            <li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-tachometer"></i> {{Equipement}}</a></li>
-            <li role="presentation"><a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{Commandes}}</a></li>
+            <li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt"></i> {{Equipement}}</a></li>
+            <li role="presentation"><a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-list-alt"></i> {{Commandes}}</a></li>
         </ul>
 
-        <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
+        <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="eqlogictab">
                 <br/>
                 <form class="form-horizontal">

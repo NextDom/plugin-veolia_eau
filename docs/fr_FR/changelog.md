@@ -1,5 +1,10 @@
 # Changelog
 
+### Version 2021-01-31 - v 3.0.0 - Damien
+
+- Compatible Jeedom V4
+- Mise à jour de la dependance simplehtlmdom
+
 ### Version 2019-12-06 - v 2.5.2 - Damien
 
 - Ajout de l'identifiant compteur (prise en charge du multi compteur pour eau du grand Lyon)
