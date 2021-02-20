@@ -316,7 +316,8 @@ class veolia_eau extends eqLogic {
             $url_site = 'www.toutsurmoneau.fr';
         } elseif ($website == 6) {
 			// SEE
-            $url_site = 'www.eauxdelessonne.com';
+            // $url_site = 'www.eauxdelessonne.com'; // Fermeture du site depuis le 1er juillet 2019.
+            $url_site = 'www.toutsurmoneau.fr';
         } elseif ($website == 7) {
             $url_site = 'vendo.toutsurmoneau.fr';
         } elseif ($website == 8) {
