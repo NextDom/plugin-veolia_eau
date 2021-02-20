@@ -312,6 +312,23 @@ class veolia_eau extends eqLogic {
             $url_site = 'www.eau-services.com';
         } elseif ($website == 3) {
             $url_site = 'agence.eaudugrandlyon.com';
+        } elseif ($website == 4) {
+            $url_site = 'www.toutsurmoneau.fr';
+        } elseif ($website == 6) {
+			// SEE
+            $url_site = 'www.eauxdelessonne.com';
+        } elseif ($website == 7) {
+            $url_site = 'vendo.toutsurmoneau.fr';
+        } elseif ($website == 8) {
+            $url_site = 'www.eauxdesenart.com';
+        } elseif ($website == 9) {
+            $url_site = 'www.stephanoise-eaux.fr';
+        } elseif ($website == 10) {
+            $url_site = 'www.seynoisedeseaux.fr';
+        } elseif ($website == 11) {
+            $url_site = 'www.orleanaise-des-eaux.fr';
+        }  elseif ($website == 12) {
+            $url_site = 'www.seop.fr';
         } else {
             $url_site = 'not defined';
         }
@@ -382,11 +399,19 @@ class veolia_eau extends eqLogic {
                 $extension='.csv';
                 break;
 
-           case 4:
-				$url_token = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/je-me-connecte';
+			// Sites basés sur "Tout sur mon eau" du groupe SUEZ.
+			case 4:
+			case 6:
+			case 7:
+			case 8:
+			case 9:
+			case 10:
+			case 11:
+			case 12:
+				$url_token = 'https://'.$url_site.'/mon-compte-en-ligne/je-me-connecte';
                 $tokenFieldName = '_csrf_token';
-                $url_login = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/je-me-connecte';
-                $url_consommation = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/historique-de-consommation';
+                $url_login = 'https://'.$url_site.'/mon-compte-en-ligne/je-me-connecte';
+                $url_consommation = 'https://'.$url_site.'/mon-compte-en-ligne/historique-de-consommation';
                 $getConsoInHtmlFile = false;
                 $datas = array(
                     'tsme_user_login[_username]='.urlencode($this->getConfiguration('login')),
@@ -395,30 +420,16 @@ class veolia_eau extends eqLogic {
                 $extension='.xls';
                 break;
 
-           case 5:
-                $url_login = 'https://espaceclients.eaudemarseille-metropole.fr/webapi/Utilisateur/authentification';
-                $url_consommation = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/historique-de-consommation';
-                $getConsoInHtmlFile = false;
-                $datas = array(
-                    'identifiant='.urlencode($this->getConfiguration('login')),
-                    'motDePasseMD5='.urlencode(md5($this->getConfiguration('password')))
-                );
-                $extension='.xls';
-                break;
-
-           case 6:
-            	log::add('SEE', 'debug', 'downloadToken : '.$downloadToken);
-            	$url_token = 'https://www.eauxdelessonne.com/mon-compte-en-ligne/je-me-connecte';
-                $tokenFieldName = '_csrf_token';
-                $url_login = 'https://www.eauxdelessonne.com/mon-compte-en-ligne/je-me-connecte';
-                $url_consommation = 'https://www.eauxdelessonne.com/mon-compte-en-ligne/historique-de-consommation';
-                $getConsoInHtmlFile = false;
-                $datas = array(
-                    'tsme_user_login[_username]='.urlencode($this->getConfiguration('login')),
-                    'tsme_user_login[_password]='.urlencode($this->getConfiguration('password'))
-                );
-                $extension='.xls';
-                break;
+			case 5:
+				$url_login = 'https://espaceclients.eaudemarseille-metropole.fr/webapi/Utilisateur/authentification';
+				$url_consommation = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/historique-de-consommation';
+				$getConsoInHtmlFile = false;
+				$datas = array(
+					'identifiant='.urlencode($this->getConfiguration('login')),
+					'motDePasseMD5='.urlencode(md5($this->getConfiguration('password')))
+				);
+				$extension='.xls';
+				break;
 
             case 1:
             default:
@@ -541,8 +552,8 @@ class veolia_eau extends eqLogic {
 			log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
 			log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 
-			// extraction du token de téléchargement pour ToutSurMonEau
-			if ($website == 4) {
+			// extraction du token de téléchargement pour ToutSurMonEau et autres sites basés sur celui de SUEZ (Vend'Ô, Eau de Sénart, etc.)
+			if ($website == 4 || $website == 6 || $website == 7 || $website == 8 || $website == 9 || $website == 10 || $website == 11 || $website == 12) {
                 require_once dirname(__FILE__).'/../../3rparty/SimpleHtmlParser/simple_html_dom.php';
                 $html = str_get_html($response);
                 $monthlyReportUrl = $html->find('div[id=export] a', 0)->href;
@@ -550,19 +561,8 @@ class veolia_eau extends eqLogic {
                 log::add('veolia_eau', 'debug', 'downloadToken : '.$downloadToken);
                 $month = date('m');
                 $year = date('Y');
-                $url_releve_csv = 'https://www.toutsurmoneau.fr/mon-compte-en-ligne/exporter-consommation/day/'.$downloadToken.'/'.$year.'/'.$month;
+                $url_releve_csv = 'https://'.$url_site.'/mon-compte-en-ligne/exporter-consommation/day/'.$downloadToken.'/'.$year.'/'.$month;
                 log::add('veolia_eau', 'debug', 'url csv : '.$url_releve_csv);
-			}
-          	if ($website == 6) {
-                require_once dirname(__FILE__).'/../../3rparty/SimpleHtmlParser/simple_html_dom.php';
-                $html = str_get_html($response);
-                $monthlyReportUrl = $html->find('div[id=export] a', 0)->href;
-                $downloadToken = substr($monthlyReportUrl, strrpos($monthlyReportUrl, '/') + 1);
-                log::add('SEE', 'debug', 'downloadToken : '.$downloadToken);
-                $month = date('m');
-                $year = date('Y');
-				$url_releve_csv = 'https://www.eauxdelessonne.com/mon-compte-en-ligne/exporter-consommation/day/'.$downloadToken.'/'.$year.'/'.$month;
-                log::add('SEE', 'debug', 'url csv : '.$url_releve_csv);
 			}
 		}
 
@@ -724,6 +724,13 @@ class veolia_eau extends eqLogic {
               break;
 
             case 4:
+			case 6:
+			case 7:
+			case 8:
+			case 9:
+			case 10:
+			case 11:
+			case 12:
                 $datasFetched=static::processCSV($file,$website);
                 break;
 
@@ -855,7 +862,7 @@ class veolia_eau extends eqLogic {
                       $conso = $line['B'];
                       $typeReleve = 0;
                   }
-                  elseif($website==4 || $website == 6) {
+                  elseif($website == 4 || $website == 6 || $website == 7 || $website == 8 || $website == 9 || $website == 10 || $website == 11 || $website == 12) {
                       $dateTemp = explode('-', $line['A']);
                       $date = $dateTemp[2].'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT);
                       $index = $line['C'];
