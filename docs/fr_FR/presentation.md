@@ -12,4 +12,4 @@ Retrouvez le sur le Market Jeedom [ici](https://www.jeedom.com/market/index.php?
 
 # Forum
 
-Lien vers le forum [ici](https://www.jeedom.com/forum/viewtopic.php?f=140&t=21200&start=500)
+Lien vers le forum [ici](https://community.jeedom.com/tag/plugin-veolia_eau)
