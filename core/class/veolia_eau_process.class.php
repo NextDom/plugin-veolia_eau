@@ -308,27 +308,40 @@ class veolia_eau extends eqLogic {
         $website=intval($this->getConfiguration('website'));
         $url_token=0; // n etait pas initialisé dans tous les cas
         $releve=0; // Utilise par Veolia sudest et Lyon pour la date du releve, permet de recuperer l historique
-        if ($website == 2){
+        if ($website == 1){
+            $nom_fournisseur = 'Veolia';
+            $url_site = 'www.service.eau.veolia.fr';
+        } elseif ($website == 2){
+            $nom_fournisseur = 'Veolia Méditerranée';
             $url_site = 'www.eau-services.com';
         } elseif ($website == 3) {
+            $nom_fournisseur = 'Service Eau du Grand Lyon';
             $url_site = 'agence.eaudugrandlyon.com';
         } elseif ($website == 4) {
+            $nom_fournisseur = 'Tout sur mon eau / Eau en ligne';
             $url_site = 'www.toutsurmoneau.fr';
         } elseif ($website == 6) {
 			// SEE
+            $nom_fournisseur = 'Société des eaux de l\'Essonne';
             // $url_site = 'www.eauxdelessonne.com'; // Fermeture du site depuis le 1er juillet 2019.
             $url_site = 'www.toutsurmoneau.fr';
         } elseif ($website == 7) {
+            $nom_fournisseur = 'VEND\'Ô - Tout sur mon eau';
             $url_site = 'vendo.toutsurmoneau.fr';
         } elseif ($website == 8) {
+            $nom_fournisseur = 'Eau de Sénart';
             $url_site = 'www.eauxdesenart.com';
         } elseif ($website == 9) {
+            $nom_fournisseur = 'Stéphanoise des Eaux';
             $url_site = 'www.stephanoise-eaux.fr';
         } elseif ($website == 10) {
+            $nom_fournisseur = 'Seynoise des Eaux';
             $url_site = 'www.seynoisedeseaux.fr';
         } elseif ($website == 11) {
+            $nom_fournisseur = 'Orléanaise des Eaux';
             $url_site = 'www.orleanaise-des-eaux.fr';
         }  elseif ($website == 12) {
+            $nom_fournisseur = 'Société des Eaux de l\'Ouest Parisien (SEOP)';
             $url_site = 'www.seop.fr';
         } else {
             $url_site = 'not defined';
@@ -884,7 +897,7 @@ class veolia_eau extends eqLogic {
                   );
               }
           } else {
-              log::add('veolia_eau', 'error', 'Aucune donnée, merci de vérifier que vos identifiants sont corrects et que vous avez accès au télérelevé Veolia');
+              log::add('veolia_eau', 'error', 'Aucune donnée, merci de vérifier que vos identifiants sont corrects et que vous avez accès au télérelevé de : '.$nom_fournisseur.' ('.$url_site.').');
           }
       } else {
           log::add('veolia_eau', 'debug', 'empty data');
