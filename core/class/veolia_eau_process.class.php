@@ -621,11 +621,11 @@ class veolia_eau extends eqLogic {
 
         //traitement du xls
 
-        $this->traiteConso($data_file, $htm_file, $mock_test, $offsetVeoliaDate,$currentdatenum,$releve);
+        $this->traiteConso($data_file, $htm_file, $mock_test, $offsetVeoliaDate, $currentdatenum, $releve, $nom_fournisseur, $url_site);
 		@unlink($cookie_file);
 	}
 
-	public function traiteConso($file, $htm_file, $mock_test, $offsetVeoliaDate,$currentdatenum,$releve) {
+	public function traiteConso($file, $htm_file, $mock_test, $offsetVeoliaDate, $currentdatenum, $releve, $nom_fournisseur, $url_site) {
         $consomonth = [];
         $datasFetched = [];
         $htmlDatasFetched = [];
@@ -642,14 +642,14 @@ class veolia_eau extends eqLogic {
             case 2:
             case 3:
               if ($file!=""){
-                $htmlDataFetched=static::processHtml($htm_file,$website,$compteur,$date,$offsetVeoliaDate,$mock_test,$lastdate,$currentdatenum);
+                $htmlDataFetched=static::processHtml($htm_file, $website, $compteur, $date, $offsetVeoliaDate, $mock_test, $lastdate, $currentdatenum, $nom_fournisseur, $url_site);
                 //log::add('veolia_eau', 'debug', 'csvDataFetched:'.serialize($datasFetched));
                   if($htmlDataFetched==0){
                       log::add('veolia_eau', 'error',"Pas de données sur le site");
                       return -1;
                   }
                 // Traitement du csv
-                $csvDataFetched=static::processCSV($file,$website,$offsetVeoliaDate);
+                $csvDataFetched=static::processCSV($file,$website, $offsetVeoliaDate, $nom_fournisseur, $url_site);
                 //log::add('veolia_eau', 'debug', 'csvDataFetched:'.serialize($csvDataFetched));
 
                 // Comparaison csv html pour corriger les non mesuree du html
@@ -732,11 +732,12 @@ class veolia_eau extends eqLogic {
                 }
 
               } else{
-                  $datasFetched=static::processHtml($htm_file,$website,$compteur,$date,$offsetVeoliaDate,$mock_test,$lastdate,$currentdatenum);
+                  $datasFetched=static::processHtml($htm_file, $website, $compteur, $date, $offsetVeoliaDate, $mock_test, $lastdate, $currentdatenum);
               }
 
               break;
 
+			// Cas concernant les site de Suez, gardé séparé de Veolia (case 1) en cas de besoin de modification de code
             case 4:
 			case 6:
 			case 7:
@@ -745,12 +746,12 @@ class veolia_eau extends eqLogic {
 			case 10:
 			case 11:
 			case 12:
-                $datasFetched=static::processCSV($file,$website);
+                $datasFetched=static::processCSV($file, $website, $nom_fournisseur, $url_site);
                 break;
 
 			case 1:
 			default:
-                $datasFetched=static::processCSV($file,$website);
+                $datasFetched=static::processCSV($file, $website, $nom_fournisseur, $url_site);
 
         }
         if (is_array($datasFetched)){
@@ -834,7 +835,7 @@ class veolia_eau extends eqLogic {
 		rename($temp, $fname);
 	}
 
-    private static function processCSV($csv_file, $website) {
+    private static function processCSV($csv_file, $website, $nom_fournisseur, $url_site) {
       $consomonth = [];
       $datasFetched = [];
       $conso = 0;
@@ -897,7 +898,7 @@ class veolia_eau extends eqLogic {
                   );
               }
           } else {
-              log::add('veolia_eau', 'error', 'Aucune donnée, merci de vérifier que vos identifiants sont corrects et que vous avez accès au télérelevé de : '.$nom_fournisseur.' ('.$url_site.').');
+              log::add('veolia_eau', 'error', 'Aucune donnée, merci de vérifier que vos identifiants sont corrects et que vous avez accès au télérelevé de : '.$nom_fournisseur.' (https://'.$url_site.').');
           }
       } else {
           log::add('veolia_eau', 'debug', 'empty data');
@@ -905,7 +906,7 @@ class veolia_eau extends eqLogic {
       return $datasFetched;
     }
 
-    private function processHtml($htm_file, $website, &$compteur, &$date, $offsetVeoliaDate,$mock_test,&$lastdate,$currentdatenum) {
+    private function processHtml($htm_file, $website, &$compteur, &$date, $offsetVeoliaDate, $mock_test, &$lastdate, $currentdatenum, $nom_fournisseur, $url_site) {
         log::add('veolia_eau', 'debug', '### TRAITE CONSO HTML '.$website.' ###');
         $depart = $this->getConfiguration('depart');
         $compteur = $this->getConfiguration('compteur');
@@ -931,14 +932,14 @@ class veolia_eau extends eqLogic {
         $html = file_get_contents($htm_file);
         $info = explode("dataPoints: [", $html,2);
         if (count($info) == 1) { //dataPoints pas dans le HTML
-          log::add('veolia_eau', 'error', 'dataPoints: pas trouvé dans la reponse de Veolia');
+          log::add('veolia_eau', 'error', 'dataPoints: pas trouvé dans la reponse de : '.$nom_fournisseur.' (https://'.$url_site'.).');
           $pos = strrpos($info[0], "Nous nous excusons pour la");
           if ($pos != false) { // note: three equal signs
-              log::add('veolia_eau', 'error', 'Site Veolia HS: Une erreur est survenue, Veuillez réessayer ultérieurement, Nous nous excusons pour la gêne occasionnée.');
+              log::add('veolia_eau', 'error', 'Site de : '.$nom_fournisseur.' (https://.'$url_site'.) H.-S. : une erreur est survenue, veuillez réessayer ultérieurement, nous nous excusons pour la gêne occasionnée.');
           }
           $pos = strrpos($info[0], "Site en cours de maintenance");
           if ($pos != false){
-              log::add('veolia_eau', 'error', 'Site Veolia HS: Site en cours de maintenance.');
+              log::add('veolia_eau', 'error', 'Site de : '.$nom_fournisseur.' (https://'.$url_site'.) H.-S. : site en cours de maintenance.');
           }
           return 0;
         }
