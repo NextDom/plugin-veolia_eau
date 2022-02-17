@@ -308,10 +308,10 @@ class veolia_eau extends eqLogic {
         $website=intval($this->getConfiguration('website'));
         $url_token=0; // n etait pas initialisé dans tous les cas
         $releve=0; // Utilise par Veolia sudest et Lyon pour la date du releve, permet de recuperer l historique
-        if ($website == 1){
+        if ($website == 1) {
             $nom_fournisseur = 'Veolia';
             $url_site = 'www.service.eau.veolia.fr';
-        } elseif ($website == 2){
+        } elseif ($website == 2) {
             $nom_fournisseur = 'Veolia Méditerranée';
             $url_site = 'www.eau-services.com';
         } elseif ($website == 3) {
@@ -344,6 +344,7 @@ class veolia_eau extends eqLogic {
             $nom_fournisseur = 'Société des Eaux de l\'Ouest Parisien (SEOP)';
             $url_site = 'www.seop.fr';
         } else {
+			$nom_fournisseur = '';
             $url_site = 'not defined';
         }
         switch ($website) {
@@ -932,14 +933,14 @@ class veolia_eau extends eqLogic {
         $html = file_get_contents($htm_file);
         $info = explode("dataPoints: [", $html,2);
         if (count($info) == 1) { //dataPoints pas dans le HTML
-          log::add('veolia_eau', 'error', 'dataPoints: pas trouvé dans la reponse de : '.$nom_fournisseur.' (https://'.$url_site'.).');
+          log::add('veolia_eau', 'error', 'dataPoints: pas trouvé dans la reponse de : '.$nom_fournisseur.' (https://'.$url_site.').');
           $pos = strrpos($info[0], "Nous nous excusons pour la");
           if ($pos != false) { // note: three equal signs
-              log::add('veolia_eau', 'error', 'Site de : '.$nom_fournisseur.' (https://.'$url_site'.) H.-S. : une erreur est survenue, veuillez réessayer ultérieurement, nous nous excusons pour la gêne occasionnée.');
+              log::add('veolia_eau', 'error', 'Site de '.$nom_fournisseur.' (https://.'$url_site.'.) H.-S. : une erreur est survenue, veuillez réessayer ultérieurement, nous nous excusons pour la gêne occasionnée.');
           }
           $pos = strrpos($info[0], "Site en cours de maintenance");
           if ($pos != false){
-              log::add('veolia_eau', 'error', 'Site de : '.$nom_fournisseur.' (https://'.$url_site'.) H.-S. : site en cours de maintenance.');
+              log::add('veolia_eau', 'error', 'Site de '.$nom_fournisseur.' (https://'.$url_site.'.) H.-S. : site en cours de maintenance.');
           }
           return 0;
         }
