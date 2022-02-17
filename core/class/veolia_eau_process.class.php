@@ -936,7 +936,7 @@ class veolia_eau extends eqLogic {
           log::add('veolia_eau', 'error', 'dataPoints: pas trouvé dans la reponse de : '.$nom_fournisseur.' (https://'.$url_site.').');
           $pos = strrpos($info[0], "Nous nous excusons pour la");
           if ($pos != false) { // note: three equal signs
-              log::add('veolia_eau', 'error', 'Site de '.$nom_fournisseur.' (https://.'$url_site.'.) H.-S. : une erreur est survenue, veuillez réessayer ultérieurement, nous nous excusons pour la gêne occasionnée.');
+              log::add('veolia_eau', 'error', 'Site de '.$nom_fournisseur.' (https://'.$url_site.'.) H.-S. : une erreur est survenue, veuillez réessayer ultérieurement, nous nous excusons pour la gêne occasionnée.');
           }
           $pos = strrpos($info[0], "Site en cours de maintenance");
           if ($pos != false){
