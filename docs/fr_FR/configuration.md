@@ -12,7 +12,7 @@ Vous devez renseigner les identifiants utilisés pour vous connecter votre site
 - Orléanaise des Eaux : https://www.orleanaise-des-eaux.fr/
 - Société des Eaux de l'Ouest Parisien (SEOP) : https://www.seop.fr/
 
-Le "Service Télé relevé" doit être activé chez Veolia (Vous pouvez le faire depuis le site Internet dans la rubrique "Vos contrats" si votre compteur d'eau le permet).
+Le "Service Télé relevé" doit être activé chez votre fournisseur (Veolia ou SUEZ) (Vous pouvez le faire depuis le site Internet dans la rubrique "Vos contrats" si votre compteur d'eau le permet).
 
 Votre consommation d'eau sera récupérée chaque jour.
 
