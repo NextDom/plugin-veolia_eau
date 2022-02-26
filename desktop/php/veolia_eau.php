@@ -125,12 +125,6 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <option value="3">Service Eau du Grand Lyon</option>
                                     <option value="4">Tout sur mon eau / Eau en ligne</option>
                                     <option value="6">Société des eaux de l'Essonne</option>
-									<option value="7">VEND'Ô - Tout sur mon eau</option>
-									<option value="8">Eau de Sénart</option>
-									<option value="9">Stéphanoise des Eaux</option>
-									<option value="10">Seynoise des Eaux</option>
-									<option value="11">Orléanaise des Eaux</option>
-									<option value="12">Société des Eaux de l'Ouest Parisien (SEOP)</option>
                                 </select>
                             </div>
                         </div>
