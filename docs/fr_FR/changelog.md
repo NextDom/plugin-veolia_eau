@@ -1,5 +1,11 @@
 # Changelog
 
+### Version 2022-02-27 - v 3.1.0 - @Gis70
+
+- Ajout de nouveaux fournisseurs (Société des Eaux de l'Essonne (SEE), VEND'Ô - Tout sur mon eau, Eau de Sénart, Stéphanoise des Eaux, Seynoise des Eaux, Orléanaise des Eaux, Société des Eaux de l'Ouest Parisien (SEOP)) @Xandr3
+- Correction du code pour Veolia Méditerranée @hugoKs3
+- Mise à jour du message d'erreur demandant de vérifier les informations d'authentification @Xandr3
+
 ### Version 2021-01-31 - v 3.0.0 - Damien
 
 - Compatible Jeedom V4
