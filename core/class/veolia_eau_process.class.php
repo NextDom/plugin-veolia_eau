@@ -535,11 +535,11 @@ class veolia_eau extends eqLogic {
 				curl_setopt($ch, CURLOPT_URL, $url_consommation);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 				curl_setopt($ch, CURLOPT_FILE, $fp);
-                
+
                 $idAbt = $this->getConfiguration('idAbt', 0);
                 if ($idAbt) {
                     curl_setopt($ch, CURLOPT_POSTFIELDS, 'idAbt='.$idAbt);
-                }        
+                }
 
                 if ($mock_test >= 2) {
                     $response = 1;
@@ -574,7 +574,15 @@ class veolia_eau extends eqLogic {
                 $monthlyReportUrl = $html->find('div[id=export] a', 0)->href;
                 $downloadToken = substr($monthlyReportUrl, strrpos($monthlyReportUrl, '/') + 1);
                 log::add('veolia_eau', 'debug', 'downloadToken : '.$downloadToken);
-                $month = date('m');
+                
+
+      // ajout d'une evolution pour veolia_eau
+                if (($website == 4) and date('d') == 1) {
+                      $month = date('m')-1;
+                          }
+                            else {
+                                $month = date('m');
+                                  }
                 $year = date('Y');
                 $url_releve_csv = 'https://'.$url_site.'/mon-compte-en-ligne/exporter-consommation/day/'.$downloadToken.'/'.$year.'/'.$month;
                 log::add('veolia_eau', 'debug', 'url csv : '.$url_releve_csv);
