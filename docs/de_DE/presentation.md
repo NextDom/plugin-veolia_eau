@@ -1,6 +1,6 @@
 # Description
 
-Ce plugin permet de récupérer le télé-relevé disponible sur les sites Internet de Veolia Eau / Veolia Méditerranée / Tout sur mon eau / Eau en ligne
+Ce plugin permet de récupérer le télé-relevé disponible sur les sites Internet de Veolia Eau / Veolia Méditerranée / Tout sur mon eau / Eau en ligne / L'eau du Dunkerquois
 
 # Market
 
