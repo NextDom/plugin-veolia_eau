@@ -343,6 +343,9 @@ class veolia_eau extends eqLogic {
         }  elseif ($website == 12) {
             $nom_fournisseur = 'Société des Eaux de l\'Ouest Parisien (SEOP)';
             $url_site = 'www.seop.fr';
+        }  elseif ($website == 13) {
+            $nom_fournisseur = 'L\'eau du Dunkerquois';
+            $url_site = 'www.eaux-dunkerque.fr';
         } else {
 			$nom_fournisseur = '';
             $url_site = 'not defined';
@@ -423,6 +426,7 @@ class veolia_eau extends eqLogic {
 			case 10:
 			case 11:
 			case 12:
+            case 13:
 				$url_token = 'https://'.$url_site.'/mon-compte-en-ligne/je-me-connecte';
                 $tokenFieldName = '_csrf_token';
                 $url_login = 'https://'.$url_site.'/mon-compte-en-ligne/je-me-connecte';
@@ -568,7 +572,7 @@ class veolia_eau extends eqLogic {
 			log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 
 			// extraction du token de téléchargement pour ToutSurMonEau et autres sites basés sur celui de SUEZ (Vend'Ô, Eau de Sénart, etc.)
-			if ($website == 4 || $website == 6 || $website == 7 || $website == 8 || $website == 9 || $website == 10 || $website == 11 || $website == 12) {
+			if ($website == 4 || $website == 6 || $website == 7 || $website == 8 || $website == 9 || $website == 10 || $website == 11 || $website == 12 || $website == 13) {
                 require_once dirname(__FILE__).'/../../3rparty/SimpleHtmlParser/simple_html_dom.php';
                 $html = str_get_html($response);
                 $monthlyReportUrl = $html->find('div[id=export] a', 0)->href;
@@ -747,6 +751,7 @@ class veolia_eau extends eqLogic {
 			case 10:
 			case 11:
 			case 12:
+            case 13:
                 $datasFetched=static::processCSV($file, $website, $nom_fournisseur, $url_site);
                 break;
 
@@ -878,7 +883,7 @@ class veolia_eau extends eqLogic {
                       $conso = $line['B'];
                       $typeReleve = 0;
                   }
-                  elseif($website == 4 || $website == 6 || $website == 7 || $website == 8 || $website == 9 || $website == 10 || $website == 11 || $website == 12) {
+                  elseif($website == 4 || $website == 6 || $website == 7 || $website == 8 || $website == 9 || $website == 10 || $website == 11 || $website == 12 || $website == 13) {
                       $dateTemp = explode('-', $line['A']);
                       $date = $dateTemp[2].'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT);
                       $index = $line['C'];
