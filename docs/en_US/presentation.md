@@ -1,6 +1,6 @@
 # Description
 
-This plugin allows to retrieve the tele-survey available on the websites of Veolia Water / Veolia Mediterranean / All about my water / Water online
+This plugin allows to retrieve the tele-survey available on the websites of Veolia Water / Veolia Mediterranean / All about my water / Water online  / L'eau du Dunkerquois
 
 # Market
 

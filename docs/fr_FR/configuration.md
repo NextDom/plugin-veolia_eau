@@ -11,6 +11,7 @@ Vous devez renseigner les identifiants utilisés pour vous connecter votre site
 - Seynoise des Eaux : https://www.seynoisedeseaux.fr/
 - Orléanaise des Eaux : https://www.orleanaise-des-eaux.fr/
 - Société des Eaux de l'Ouest Parisien (SEOP) : https://www.seop.fr/
+- L'eau du Dunkerquois : https://www.eaux-dunkerque.fr
 
 Le "Service Télé relevé" doit être activé chez votre fournisseur (Veolia ou SUEZ) (Vous pouvez le faire depuis le site Internet dans la rubrique "Vos contrats" si votre compteur d'eau le permet).
 
