@@ -243,6 +243,17 @@ class veolia_eau extends eqLogic {
 			$veolia_eauCmd->setIsHistorized(0);
 			$veolia_eauCmd->save();
 		}
+
+        $cmdlogic = veolia_eauCmd::byEqLogicIdAndLogicalId($this->getId(), 'refresh');
+		if (!is_object($cmdlogic)) {
+            $veolia_eauCmd = new veolia_eauCmd();
+            $veolia_eauCmd->setName(__('Rafraichir', __FILE__));
+            $veolia_eauCmd->setEqLogic_id($this->id);
+            $veolia_eauCmd->setLogicalId('refresh');
+            $veolia_eauCmd->setType('action');
+            $veolia_eauCmd->setSubType('other');
+            $veolia_eauCmd->save();
+        }
     }
 
     /* fonction appelé pendant la séquence de sauvegarde avant l'insertion
@@ -1055,6 +1066,21 @@ class veolia_eauCmd extends cmd {
     */
 
     public function execute($_options = array()) {
+        $veolia_eau = $this->getEqLogic(); //récupère l'éqlogic de la commande $this
+
+        switch ($this->getLogicalId()) { //vérifie le logicalid de la commande
+            case 'refresh': // LogicalId de la commande rafraîchir.
+                log::add('veolia_eau', 'info', 'Relevé manuel');
+                if ($veolia_eau->getIsEnable() == 1) {
+                    if (!empty($veolia_eau->getConfiguration('login')) && !empty($veolia_eau->getConfiguration('password'))) {
+                        $veolia_eau->getConso(0);
+                        log::add('veolia_eau', 'debug', 'done... ');
+                    } else {
+                        log::add('veolia_eau', 'error', 'Identifiants non saisis');
+                    }
+                }
+                break;
+        }
     }
 
     /***************************** Getteur/Setteur ***************************/
