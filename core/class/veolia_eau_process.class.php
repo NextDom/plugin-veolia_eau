@@ -519,8 +519,21 @@ class veolia_eau extends eqLogic {
             //<     0.0020     565144   2. veolia_eau->getConso() /home/travis/build/[secure]/plugin-veolia_eau/tests/testVeoliaEau.php:16
 
             $token = $html->find('input[name='.$tokenFieldName.']', 0)->value;
-            log::add('veolia_eau', 'debug', 'Token: '.$token);
-
+            // Ajout : Extraction token pour le nouveau site toutsurmoneau
+			if ($website == 4 || $website == 7 || $website == 8 || $website == 10 || $website == 11 || $website == 12 || $website == 13) {
+              preg_match("/csrfToken.*,/", $response, $matches);
+              $token = implode($matches);
+              $token = str_ireplace("\u002D","-",$token);
+              $token = str_ireplace("csrfToken\u0022\u003A\u0022","",$token);
+              $token = str_ireplace("\u0022,","",$token);
+              log::add('veolia_eau', 'debug', 'Token: '.$token);
+            }
+            // Fin Ajout toutsurmoneau
+            //log::add('veolia_eau', 'debug', 'Token: '.$token);
+            
+            
+            
+            
             if ($token !== '') {
                 array_push($datas, $tokenFieldName.'='.$token);
             }
