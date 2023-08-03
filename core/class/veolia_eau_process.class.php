@@ -520,7 +520,7 @@ class veolia_eau extends eqLogic {
 
             $token = $html->find('input[name='.$tokenFieldName.']', 0)->value;
             // Ajout : Extraction token pour le nouveau site toutsurmoneau
-			if ($website == 4 || $website == 7 || $website == 8 || $website == 10 || $website == 11 || $website == 12 || $website == 13) {
+			if ($website == 4 || $website == 6 || $website == 7 || $website == 8 || $website == 9 || $website == 10 || $website == 11 || $website == 12 || $website == 13) {
               preg_match("/csrfToken.*targetUrl/", $response, $matches);
               $token = implode($matches);
               $token = str_ireplace("\u002D","-",$token);
