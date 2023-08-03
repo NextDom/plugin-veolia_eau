@@ -521,11 +521,11 @@ class veolia_eau extends eqLogic {
             $token = $html->find('input[name='.$tokenFieldName.']', 0)->value;
             // Ajout : Extraction token pour le nouveau site toutsurmoneau
 			if ($website == 4 || $website == 7 || $website == 8 || $website == 10 || $website == 11 || $website == 12 || $website == 13) {
-              preg_match("/csrfToken.*,/", $response, $matches);
+              preg_match("/csrfToken.*targetUrl/", $response, $matches);
               $token = implode($matches);
               $token = str_ireplace("\u002D","-",$token);
               $token = str_ireplace("csrfToken\u0022\u003A\u0022","",$token);
-              $token = str_ireplace("\u0022,","",$token);
+              $token = str_ireplace("\u0022,\u0022targetUrl","",$token);
               log::add('veolia_eau', 'debug', 'Token: '.$token);
             }
             // Fin Ajout toutsurmoneau
@@ -603,14 +603,12 @@ class veolia_eau extends eqLogic {
                 $downloadToken = substr($monthlyReportUrl, strrpos($monthlyReportUrl, '/') + 1);
                 log::add('veolia_eau', 'debug', 'downloadToken : '.$downloadToken);
                 
-
-      // ajout d'une evolution pour veolia_eau
-                if (($website == 4) and date('d') == 1) {
-                      $month = date('m')-1;
-                          }
-                            else {
-                                $month = date('m');
-                                  }
+                // ajout d'une evolution pour veolia_eau
+                if (($website == 4 || $website == 6 || $website == 7 || $website == 8 || $website == 9 || $website == 10 || $website == 11 || $website == 12 || $website == 13) and date('d') == 1) {
+                    $month = date('m')-1;
+                } else {
+                    $month = date('m');
+                }
                 $year = date('Y');
                 $url_releve_csv = 'https://'.$url_site.'/mon-compte-en-ligne/exporter-consommation/day/'.$downloadToken.'/'.$year.'/'.$month;
                 log::add('veolia_eau', 'debug', 'url csv : '.$url_releve_csv);
