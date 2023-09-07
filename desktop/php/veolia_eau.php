@@ -132,6 +132,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 									<option value="11">Orléanaise des Eaux</option>
 									<option value="12">Société des Eaux de l'Ouest Parisien (SEOP)</option>
                                     <option value="13">L'eau du Dunkerquois</option>
+                                    <option value="14">SIDESOL - Tout sur mon eau</option>
                                 </select>
                             </div>
                         </div>
