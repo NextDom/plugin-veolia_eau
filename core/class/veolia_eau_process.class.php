@@ -331,7 +331,7 @@ class veolia_eau extends eqLogic {
         } elseif ($website == 4) {
             $nom_fournisseur = 'Tout sur mon eau / Eau en ligne';
             $url_site = 'www.toutsurmoneau.fr';
-        } elseif ($website == 6) {
+       } elseif ($website == 6) {
 			// SEE
             $nom_fournisseur = 'Société des eaux de l\'Essonne';
             // $url_site = 'www.eauxdelessonne.com'; // Fermeture du site depuis le 1er juillet 2019.
@@ -357,7 +357,10 @@ class veolia_eau extends eqLogic {
         }  elseif ($website == 13) {
             $nom_fournisseur = 'L\'eau du Dunkerquois';
             $url_site = 'www.eaux-dunkerque.fr';
-        } else {
+        } elseif ($website == 14) {
+            $nom_fournisseur = 'Syndicat de Distribution d’Eau du Sud-Ouest Lyonnais (SIDESOL)';
+            $url_site = 'sidesol.toutsurmoneau.fr';
+         } else {
 			$nom_fournisseur = '';
             $url_site = 'not defined';
         }
@@ -430,7 +433,7 @@ class veolia_eau extends eqLogic {
 
 			// Sites basés sur "Tout sur mon eau" du groupe SUEZ.
 			case 4:
-			case 6:
+          	case 6:
 			case 7:
 			case 8:
 			case 9:
@@ -438,6 +441,7 @@ class veolia_eau extends eqLogic {
 			case 11:
 			case 12:
             case 13:
+            case 14:
 				$url_token = 'https://'.$url_site.'/mon-compte-en-ligne/je-me-connecte';
                 $tokenFieldName = '_csrf_token';
                 $url_login = 'https://'.$url_site.'/mon-compte-en-ligne/je-me-connecte';
@@ -520,7 +524,7 @@ class veolia_eau extends eqLogic {
 
             $token = $html->find('input[name='.$tokenFieldName.']', 0)->value;
             // Ajout : Extraction token pour le nouveau site toutsurmoneau
-			if ($website == 4 || $website == 6 || $website == 7 || $website == 8 || $website == 9 || $website == 10 || $website == 11 || $website == 12 || $website == 13) {
+			if ($website == 4 || $website == 6 || $website == 7 || $website == 8 || $website == 9 || $website == 10 || $website == 11 || $website == 12 || $website == 13 || $website == 14) {
               preg_match("/csrfToken.*targetUrl/", $response, $matches);
               $token = implode($matches);
               $token = str_ireplace("\u002D","-",$token);
@@ -596,20 +600,26 @@ class veolia_eau extends eqLogic {
 			log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 
 			// extraction du token de téléchargement pour ToutSurMonEau et autres sites basés sur celui de SUEZ (Vend'Ô, Eau de Sénart, etc.)
-			if ($website == 4 || $website == 6 || $website == 7 || $website == 8 || $website == 9 || $website == 10 || $website == 11 || $website == 12 || $website == 13) {
+			if ($website == 4 || $website == 6 || $website == 7 || $website == 8 || $website == 9 || $website == 10 || $website == 11 || $website == 12 || $website == 13 || $website == 14) {
                 require_once dirname(__FILE__).'/../../3rparty/SimpleHtmlParser/simple_html_dom.php';
                 $html = str_get_html($response);
                 $monthlyReportUrl = $html->find('div[id=export] a', 0)->href;
                 $downloadToken = substr($monthlyReportUrl, strrpos($monthlyReportUrl, '/') + 1);
                 log::add('veolia_eau', 'debug', 'downloadToken : '.$downloadToken);
                 
-                // ajout d'une evolution pour veolia_eau
-                if (($website == 4 || $website == 6 || $website == 7 || $website == 8 || $website == 9 || $website == 10 || $website == 11 || $website == 12 || $website == 13) and date('d') == 1) {
-                    $month = date('m')-1;
-                } else {
-                    $month = date('m');
-                }
-                $year = date('Y');
+                // teste debut de mois et début d'année
+                if (date('d') == '1') {
+    				if (date('m') == '01') {
+        				$month = '12';
+                    	$year = date('Y') - 1;
+    				} else {
+        				$month = date('m')-1;
+                        $year = date('Y');
+    				}
+				} else {
+               		$month = date('m');
+                	$year = date('Y');
+				}
                 $url_releve_csv = 'https://'.$url_site.'/mon-compte-en-ligne/exporter-consommation/day/'.$downloadToken.'/'.$year.'/'.$month;
                 log::add('veolia_eau', 'debug', 'url csv : '.$url_releve_csv);
 			}
@@ -782,6 +792,7 @@ class veolia_eau extends eqLogic {
 			case 11:
 			case 12:
             case 13:
+          	case 14:
                 $datasFetched=static::processCSV($file, $website, $nom_fournisseur, $url_site);
                 break;
 
@@ -913,7 +924,7 @@ class veolia_eau extends eqLogic {
                       $conso = $line['B'];
                       $typeReleve = 0;
                   }
-                  elseif($website == 4 || $website == 6 || $website == 7 || $website == 8 || $website == 9 || $website == 10 || $website == 11 || $website == 12 || $website == 13) {
+                  elseif($website == 4 || $website == 6 || $website == 7 || $website == 8 || $website == 9 || $website == 10 || $website == 11 || $website == 12 || $website == 13 || $website == 14) {
                       $dateTemp = explode('-', $line['A']);
                       $date = $dateTemp[2].'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT);
                       $index = $line['C'];
