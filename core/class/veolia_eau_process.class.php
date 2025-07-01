@@ -296,6 +296,13 @@ class veolia_eau extends eqLogic {
     public function postRemove() {
     }
 
+
+    private static function isWebsiteToutSurMonEau($website){
+	    if ($website == 4 || $website == 6 || $website == 7 || $website == 8 || $website == 9 || $website == 10 || $website == 11 ||$website == 12 || $website == 13 ||$website == 14){
+		    return true;}
+	    return false;
+    }
+
     /*
      * Non obligatoire mais permet de modifier l'affichage du widget si vous en avez besoin
       public function toHtml($_version = 'dashboard') {
@@ -445,7 +452,6 @@ class veolia_eau extends eqLogic {
 				$url_token = 'https://'.$url_site.'/mon-compte-en-ligne/je-me-connecte';
                 $tokenFieldName = '_csrf_token';
                 $url_login = 'https://'.$url_site.'/mon-compte-en-ligne/je-me-connecte';
-                $url_consommation = 'https://'.$url_site.'/mon-compte-en-ligne/historique-de-consommation';
                 $getConsoInHtmlFile = false;
                 $datas = array(
                     'tsme_user_login[_username]='.urlencode($this->getConfiguration('login')),
@@ -593,35 +599,34 @@ class veolia_eau extends eqLogic {
             if ($mock_test >= 2) {
                 $response = "tbd";
             } else {
-                $response = curl_exec($ch);
+		        if (static::isWebsiteToutSurMonEau($website)){
+			        $response == "";}
+		        else{
+                    $response = curl_exec($ch);}
             }
 
 			log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
 			log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 
-			// extraction du token de téléchargement pour ToutSurMonEau et autres sites basés sur celui de SUEZ (Vend'Ô, Eau de Sénart, etc.)
-			if ($website == 4 || $website == 6 || $website == 7 || $website == 8 || $website == 9 || $website == 10 || $website == 11 || $website == 12 || $website == 13 || $website == 14) {
-                require_once dirname(__FILE__).'/../../3rparty/SimpleHtmlParser/simple_html_dom.php';
-                $html = str_get_html($response);
-                $monthlyReportUrl = $html->find('div[id=export] a', 0)->href;
-                $downloadToken = substr($monthlyReportUrl, strrpos($monthlyReportUrl, '/') + 1);
-                log::add('veolia_eau', 'debug', 'downloadToken : '.$downloadToken);
-                
-                // teste debut de mois et début d'année
-                if (date('d') == '1') {
-    				if (date('m') == '01') {
-        				$month = '12';
-                    	$year = date('Y') - 1;
-    				} else {
-        				$month = date('m')-1;
-                        $year = date('Y');
-    				}
-				} else {
-               		$month = date('m');
-                	$year = date('Y');
-				}
-                $url_releve_csv = 'https://'.$url_site.'/mon-compte-en-ligne/exporter-consommation/day/'.$downloadToken.'/'.$year.'/'.$month;
-                log::add('veolia_eau', 'debug', 'url csv : '.$url_releve_csv);
+			if (static::isWebsiteToutSurMonEau($website)){
+				$url_pds = 'https://'.$url_site.'/public-api/cel-consumption/meters-list';
+				log::add('veolia_eau', 'debug', 'url PDS : '.$url_pds);
+				curl_setopt($ch, CURLOPT_URL, $url_pds);
+				$response = curl_exec($ch);
+				$json_obj = json_decode($response);
+				$idPDS = $json_obj->{'content'}->{'clientCompteursPro'}[0]->{'compteursPro'}[0]->{'idPDS'};
+
+                $dt = date_create();
+                $end_year = date_format($dt,"Y");
+                $end_month = date_format($dt,"m");
+                $end_day = date_format($dt,"d");
+
+                date_modify($dt, "-1 month");
+                $start_year = date_format($dt,"Y");
+                $start_month = date_format($dt,"m");
+                $start_day = date_format($dt,"d");
+
+                $url_releve_csv = 'https://'.$url_site.'/public-api/cel-consumption/telemetry?id_PDS='.$idPDS.'&mode=daily&start_date='.$start_year.'-'.$start_month.'-'.$start_day.'&end_date='.$end_year.'-'.$end_month.'-'.$end_day;
 			}
 		}
 
@@ -639,9 +644,11 @@ class veolia_eau extends eqLogic {
 		      if ($fp) {
                 log::add('veolia_eau', 'debug', '### Curl call '.$url_releve_csv);
 			    curl_setopt($ch, CURLOPT_URL, $url_releve_csv);
-			    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			    curl_setopt($ch, CURLOPT_FILE, $fp);
-                curl_setopt($ch, CURLOPT_POST, TRUE);
+                if (!static::isWebsiteToutSurMonEau($website)){
+			        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($ch, CURLOPT_FILE, $fp);
+                    curl_setopt($ch, CURLOPT_POST, TRUE);
+                }
 
                 if($mock_test>=2){
                   $response = "tbd";
@@ -655,8 +662,15 @@ class veolia_eau extends eqLogic {
 			    log::add('veolia_eau', 'debug', 'response length : '.strlen($response));
 			    log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
 
-			    fclose($fp);
-
+                if (static::isWebsiteToutSurMonEau($website)){
+                    $json_obj = json_decode($response);
+                    fwrite($fp, "date;index;volume\n");
+                    foreach ($json_obj->{'content'}->{'measures'} as $measure){
+                        if ($measure->{'index'}){
+                            fwrite($fp, $measure->{'date'}.';'.$measure->{'index'}.';'.$measure->{'volume'}."\n");}
+                    }
+                }
+                fclose($fp);
 		     } else {
 			   log::add('veolia_eau', 'error', 'error on creating file "'.$data_file.'"');
 		     }
@@ -889,7 +903,7 @@ class veolia_eau extends eqLogic {
 
       log::add('veolia_eau', 'debug', '### TRAITE CONSO XLS '.$website.' ###');
       require_once dirname(__FILE__).'/../../3rparty/PHPExcel/Classes/PHPExcel/IOFactory.php';
-      if ($website ==2 || $website == 3) {
+      if ($website ==2 || $website == 3 || static::isWebsiteToutSurMonEau($website)) {
           $objReader = PHPExcel_IOFactory::createReader("CSV");
           $objReader->setDelimiter(";");
           try {
@@ -924,11 +938,11 @@ class veolia_eau extends eqLogic {
                       $conso = $line['B'];
                       $typeReleve = 0;
                   }
-                  elseif($website == 4 || $website == 6 || $website == 7 || $website == 8 || $website == 9 || $website == 10 || $website == 11 || $website == 12 || $website == 13 || $website == 14) {
-                      $dateTemp = explode('-', $line['A']);
-                      $date = $dateTemp[2].'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT);
-                      $index = $line['C'];
-                      $conso = $line['B'] * 1000;
+                  elseif (static::isWebsiteToutSurMonEau($website)){
+                      $dateTemp = explode(' ', $line['A']);
+                      $date = $dateTemp[0];
+                      $conso = $line['C'] * 1000;
+                      $index = $line['B'];
                       $typeReleve = 0;
                   } else {
                       $date = $dateTemp[2].'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT);
