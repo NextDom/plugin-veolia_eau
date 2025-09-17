@@ -298,7 +298,7 @@ class veolia_eau extends eqLogic {
 
 
     private static function isWebsiteToutSurMonEau($website){
-	    if ($website == 4 || $website == 6 || $website == 7 || $website == 8 || $website == 9 || $website == 10 || $website == 11 ||$website == 12 || $website == 13 ||$website == 14){
+	    if ($website == 4 || $website == 6 || $website == 7 || $website == 8 || $website == 9 || $website == 10 || $website == 11 ||$website == 12 || $website == 13 ||$website == 14 || $website == 15){
 		    return true;}
 	    return false;
     }
@@ -367,6 +367,9 @@ class veolia_eau extends eqLogic {
         } elseif ($website == 14) {
             $nom_fournisseur = 'Syndicat de Distribution d’Eau du Sud-Ouest Lyonnais (SIDESOL)';
             $url_site = 'sidesol.toutsurmoneau.fr';
+        } elseif ($website == 15) {
+            $nom_fournisseur = 'L\'eau du Valenciennois';
+            $url_site = 'leauduvalenciennois.toutsurmoneau.fr';
          } else {
 			$nom_fournisseur = '';
             $url_site = 'not defined';
@@ -449,6 +452,7 @@ class veolia_eau extends eqLogic {
 			case 12:
             case 13:
             case 14:
+            case 15:
 				$url_token = 'https://'.$url_site.'/mon-compte-en-ligne/je-me-connecte';
                 $tokenFieldName = '_csrf_token';
                 $url_login = 'https://'.$url_site.'/mon-compte-en-ligne/je-me-connecte';
@@ -530,7 +534,7 @@ class veolia_eau extends eqLogic {
 
             $token = $html->find('input[name='.$tokenFieldName.']', 0)->value;
             // Ajout : Extraction token pour le nouveau site toutsurmoneau
-			if ($website == 4 || $website == 6 || $website == 7 || $website == 8 || $website == 9 || $website == 10 || $website == 11 || $website == 12 || $website == 13 || $website == 14) {
+			if ($website == 4 || $website == 6 || $website == 7 || $website == 8 || $website == 9 || $website == 10 || $website == 11 || $website == 12 || $website == 13 || $website == 14 || $website == 15) {
               preg_match("/csrfToken.*targetUrl/", $response, $matches);
               $token = implode($matches);
               $token = str_ireplace("\u002D","-",$token);
