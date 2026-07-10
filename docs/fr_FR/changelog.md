@@ -1,5 +1,11 @@
 # Changelog
 
+###  Version 2026-10-07 - v 3.2.0 - Ichbinrodolf
+
+- Corrections pour la nouvelle version du site Tout sur mon eau
+- Corrections pour Eau du Valenciennois
+- Corrections pour Eau du grand Lyon
+
 ### Version 2022-02-27 - v 3.1.0 - @Gis70
 
 - Ajout de nouveaux fournisseurs (Société des Eaux de l'Essonne (SEE), VEND'Ô - Tout sur mon eau, Eau de Sénart, Stéphanoise des Eaux, Seynoise des Eaux, Orléanaise des Eaux, Société des Eaux de l'Ouest Parisien (SEOP)) @Xandr3
@@ -90,4 +96,3 @@
 
 - Création du changelog
 - Mise à jour de la documentation
-  s

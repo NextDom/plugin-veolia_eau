@@ -35,6 +35,7 @@ if (!function_exists('mb_convert_encoding')) {
 class veolia_eau extends eqLogic {
     /******************************* Attributs *******************************/
     /* Ajouter ici toutes vos variables propre à votre classe */
+    private const MAX_EMPTY_DATA_ATTEMPTS = 10;
     /***************************** Methode static ****************************/
     // Si mode debug, lancer le plugin toutes les minutes
     public static function cron() {
@@ -312,8 +313,26 @@ class veolia_eau extends eqLogic {
     /*     * **********************Getteur Setteur*************************** */
 
 	public function getConso($mock_test) {
-        // Add ability to mock and tests the process without Jeedom
-        // $mock_test=0: Normal process
+	    if ($this->getConsecutiveNoDataAttempts() >= self::MAX_EMPTY_DATA_ATTEMPTS) {
+	        log::add('veolia_eau', 'warning', 'Arrêt des tentatives : aucune donnée reçue après '.self::MAX_EMPTY_DATA_ATTEMPTS.' essais.');
+	        return;
+	    }
+		// Pour EGL (website=3) : bloquer si une relève a déjà réussi aujourd'hui
+		// (évite les relances en boucle après un succès suivi de données vides)
+		$website_check = intval($this->getConfiguration('website'));
+		if ($website_check === 3 && $mock_test == 0) {
+			$lastSuccess = intval($this->getConfiguration('lastSuccessTimestamp', 0));
+			if ($lastSuccess > 0) {
+				$todayStart = mktime(0, 0, 0, date('n'), date('j'), date('Y'));
+				if ($lastSuccess >= $todayStart) {
+					log::add('veolia_eau', 'debug',
+						'EGL : relève déjà réussie aujourd\'hui à '.date('H:i:s', $lastSuccess).', pas de nouvelle tentative.');
+					return;
+				}
+			}
+		}
+	    // Add ability to mock and tests the process without Jeedom
+	    // $mock_test=0: Normal process
         // $mock_test=1: Run automated tests with direct call to veolia
         // $mock_test=2: Run automated tests with mocked files
         // $mock_test=3: Run automated tests with mocked files and change of month
@@ -365,7 +384,7 @@ class veolia_eau extends eqLogic {
             $nom_fournisseur = 'L\'eau du Dunkerquois';
             $url_site = 'www.eaux-dunkerque.fr';
         } elseif ($website == 14) {
-            $nom_fournisseur = 'Syndicat de Distribution d’Eau du Sud-Ouest Lyonnais (SIDESOL)';
+            $nom_fournisseur = "Syndicat de Distribution d'Eau du Sud-Ouest Lyonnais (SIDESOL)";
             $url_site = 'sidesol.toutsurmoneau.fr';
         } elseif ($website == 15) {
             $nom_fournisseur = 'L\'eau du Valenciennois';
@@ -376,7 +395,6 @@ class veolia_eau extends eqLogic {
         }
         switch ($website) {
             case 2:
-            case 3:
             // Algo: Process HTML and CSV and compare results
             // It will allow a progressive migration to csv
             // index is not provided, it is calculated from the begining
@@ -437,6 +455,19 @@ class veolia_eau extends eqLogic {
                     'login='.urlencode($this->getConfiguration('login')),
                     'pass='.urlencode($this->getConfiguration('password')),
                     'connect=OK',
+                );
+                $extension='.csv';
+                break;
+
+            case 3:
+            // Nouveau site EGL (depuis janvier 2025) : API REST OAuth2 PKCE
+                $url_login = 'https://agence.eaudugrandlyon.com/application/auth/externe/authentification';
+                $getConsoInHtmlFile = false;
+                $currentdatenum = time();
+                $datas = array(
+                    'username='.urlencode($this->getConfiguration('login')),
+                    'password='.urlencode($this->getConfiguration('password')),
+                    'client_id=kwnOk0B_aqlOI6p_GVxrbf6',
                 );
                 $extension='.csv';
                 break;
@@ -526,12 +557,6 @@ class veolia_eau extends eqLogic {
           	log::add('veolia_eau', 'debug', 'Extracting token');
             require_once dirname(__FILE__).'/../../3rparty/SimpleHtmlParser/simple_html_dom.php';
             $html = str_get_html($response);
-            //// TODO: next line
-            //< Notice: Trying to get property of non-object in /home/travis/build/[secure]/plugin-veolia_eau/core/class/veolia_eau_process.class.php on line 356
-            // < Call Stack:
-            //<     0.0001     243200   1. {main}() /home/travis/build/[secure]/plugin-veolia_eau/tests/testVeoliaEau.php:0
-            //<     0.0020     565144   2. veolia_eau->getConso() /home/travis/build/[secure]/plugin-veolia_eau/tests/testVeoliaEau.php:16
-
             $token = $html->find('input[name='.$tokenFieldName.']', 0)->value;
             // Ajout : Extraction token pour le nouveau site toutsurmoneau
 			if ($website == 4 || $website == 6 || $website == 7 || $website == 8 || $website == 9 || $website == 10 || $website == 11 || $website == 12 || $website == 13 || $website == 14 || $website == 15) {
@@ -543,11 +568,6 @@ class veolia_eau extends eqLogic {
               log::add('veolia_eau', 'debug', 'Token: '.$token);
             }
             // Fin Ajout toutsurmoneau
-            //log::add('veolia_eau', 'debug', 'Token: '.$token);
-            
-            
-            
-            
             if ($token !== '') {
                 array_push($datas, $tokenFieldName.'='.$token);
             }
@@ -566,6 +586,164 @@ class veolia_eau extends eqLogic {
 
         log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
 		log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
+
+        // Flux OAuth2 PKCE pour le nouveau site EGL (website 3, depuis janvier 2025)
+        if ($website == 3 && $mock_test < 2) {
+            $login_json = json_decode($response, true);
+            if (!$login_json || ($login_json['code'] ?? '') !== '0') {
+                log::add('veolia_eau', 'error', 'Authentification EGL échouée. Vérifiez vos identifiants. Réponse : '.$response);
+                curl_close($ch);
+                @unlink($cookie_file);
+                return;
+            }
+            // Étape 2 : Authorization PKCE
+            $egl_client_id   = 'kwnOk0B_aqlOI6p_GVxrbf6';
+            $egl_redirect    = 'https://agence.eaudugrandlyon.com/autorisation-callback.html';
+            $egl_verifier    = '5';
+            $egl_challenge   = rtrim(strtr(base64_encode(hash('sha256', $egl_verifier, true)), '+/', '-_'), '=');
+            $authorize_url   = 'https://agence.eaudugrandlyon.com/application/auth/authorize-internet?'
+                .http_build_query([
+                    'redirect_uri'          => $egl_redirect,
+                    'response_type'         => 'code',
+                    'code_challenge'        => $egl_challenge,
+                    'code_challenge_method' => 'S256',
+                    'client_id'             => $egl_client_id,
+                ]);
+            log::add('veolia_eau', 'debug', '### EGL AUTHORIZE ###');
+            curl_setopt($ch, CURLOPT_URL, $authorize_url);
+            curl_setopt($ch, CURLOPT_POST, FALSE);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+            curl_exec($ch);
+            $final_url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+            log::add('veolia_eau', 'debug', 'EGL authorize final URL : '.$final_url);
+            parse_str(parse_url($final_url, PHP_URL_QUERY), $auth_query);
+            $auth_code = $auth_query['code'] ?? '';
+            if (!$auth_code) {
+                log::add('veolia_eau', 'error', 'EGL : code OAuth2 absent de la redirection : '.$final_url);
+                curl_close($ch);
+                @unlink($cookie_file);
+                return;
+            }
+            // Étape 3 : Échange du code contre un access_token
+            log::add('veolia_eau', 'debug', '### EGL TOKEN EXCHANGE ###');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_URL, 'https://agence.eaudugrandlyon.com/application/auth/tokenUtilisateurInternet');
+            curl_setopt($ch, CURLOPT_POST, TRUE);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+                'grant_type'    => 'authorization_code',
+                'code'          => $auth_code,
+                'code_verifier' => $egl_verifier,
+                'client_id'     => $egl_client_id,
+                'redirect_uri'  => $egl_redirect,
+            ]));
+            $token_resp = curl_exec($ch);
+            log::add('veolia_eau', 'debug', 'EGL token response : '.$token_resp);
+            $token_json = json_decode($token_resp, true);
+            $egl_access_token = $token_json['access_token'] ?? '';
+            if (!$egl_access_token) {
+                log::add('veolia_eau', 'error', 'EGL : access_token absent de la réponse : '.$token_resp);
+                curl_close($ch);
+                @unlink($cookie_file);
+                return;
+            }
+            // Étape 4 : Récupération du contrat
+            log::add('veolia_eau', 'debug', '### EGL GET CONTRACTS ###');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            $egl_contracts_select = 'id,reference,statutExtrait,dateEffet,dateEcheance,'
+                .'conditionPaiement(compteClient(solde),mensualise,modePaiement),'
+                .'servicesSouscrits(statut,usage,calibreCompteur,nombreHabitants),'
+                .'espaceDeLivraison(reference)';
+            $egl_contracts_expand = 'conditionPaiement(compteClient),servicesSouscrits,espaceDeLivraison';
+            $egl_headers = array_merge(
+                $headers,
+                [
+                    'Authorization: Bearer '.$egl_access_token,
+                    'Accept: application/json',
+                    'Content-Type: application/json',
+                    'entreprise: EPGL',
+                ]
+            );
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $egl_headers);
+            curl_setopt(
+                $ch,
+                CURLOPT_URL,
+                'https://agence.eaudugrandlyon.com/application/rest/interfaces/ael/contrats/rechercher?'
+                .http_build_query([
+                    'expand' => $egl_contracts_expand,
+                    'select' => $egl_contracts_select,
+                ])
+            );
+            curl_setopt($ch, CURLOPT_POST, TRUE);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, '{}');
+            $contracts_resp = curl_exec($ch);
+            log::add('veolia_eau', 'debug', 'EGL contracts : '.substr($contracts_resp, 0, 300));
+            $contracts_data = json_decode($contracts_resp, true);
+            $egl_contract_id = null;
+            if (is_array($contracts_data)) {
+                if (isset($contracts_data[0]['id'])) {
+                    $egl_contract_id = $contracts_data[0]['id'];
+                } elseif (isset($contracts_data['content'][0]['id'])) {
+                    $egl_contract_id = $contracts_data['content'][0]['id'];
+                }
+            }
+            if (!$egl_contract_id) {
+                log::add('veolia_eau', 'error', 'EGL : impossible de récupérer l\'ID du contrat : '.$contracts_resp);
+                curl_close($ch);
+                @unlink($cookie_file);
+                return;
+            }
+            log::add('veolia_eau', 'debug', 'EGL contract ID : '.$egl_contract_id);
+            // Étape 4b : Récupération des détails du contrat (passage en mode jour)
+            log::add('veolia_eau', 'debug', '### EGL GET CONTRACT DETAIL ###');
+            curl_setopt($ch, CURLOPT_POST, FALSE);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $egl_headers);
+            curl_setopt(
+                $ch,
+                CURLOPT_URL,
+                'https://agence.eaudugrandlyon.com/application/rest/produits/contrats/'
+                .$egl_contract_id.'?'
+                .http_build_query(['select' => 'pointAccesServicesClient,dateEffet,dateFin'])
+            );
+            $contract_detail_resp = curl_exec($ch);
+            log::add('veolia_eau', 'debug', 'EGL contract detail : '.$contract_detail_resp);
+            // Étape 4c : Vérification de la communicabilité AMM (suivi conso journalier)
+            log::add('veolia_eau', 'debug', '### EGL CHECK POINT DE SERVICE ###');
+            curl_setopt(
+                $ch,
+                CURLOPT_URL,
+                'https://agence.eaudugrandlyon.com/application/rest/produits/contrats/'
+                .$egl_contract_id.'/pointDeService?'
+                .http_build_query(['select' => 'communicabiliteAMM,modeReleve,niveauDeTension'])
+            );
+            $pds_resp = curl_exec($ch);
+            log::add('veolia_eau', 'debug', 'EGL pointDeService : '.$pds_resp);
+            $pds_data = json_decode($pds_resp, true);
+            $egl_amm       = $pds_data['communicabiliteAMM'] ?? null;
+            $egl_mode_releve = $pds_data['modeReleve'] ?? null;
+            log::add('veolia_eau', 'debug', 'EGL communicabiliteAMM : '.($egl_amm ? 'true' : 'false').', modeReleve : '.$egl_mode_releve);
+            if ($egl_amm === false) {
+                log::add('veolia_eau', 'error', 'EGL : communicabiliteAMM désactivée, les données journalières ne sont pas disponibles pour ce compteur');
+                curl_close($ch);
+                @unlink($cookie_file);
+                return;
+            }
+            // Étape 5 : Construction de l'URL de consommation journalière
+            // Les bornes doivent correspondre à minuit et fin de journée heure locale Paris
+            $egl_tz = new DateTimeZone('Europe/Paris');
+            $egl_dt_fin = new DateTime('today 23:59:59', $egl_tz);
+            $egl_date_fin = gmdate('Y-m-d\TH:i:s.999\Z', $egl_dt_fin->getTimestamp());
+            $egl_lastdate = $this->getConfiguration('last');
+            if ($egl_lastdate) {
+                $egl_dt_debut = new DateTime($egl_lastdate.' +1 day midnight', $egl_tz);
+            } else {
+                $egl_dt_debut = new DateTime('-2 years midnight', $egl_tz);
+            }
+            $egl_date_debut = gmdate('Y-m-d\TH:i:s.000\Z', $egl_dt_debut->getTimestamp());
+            $url_releve_csv = 'https://agence.eaudugrandlyon.com/application/rest/produits/contrats/'
+                .$egl_contract_id.'/consommationsJournalieres?'
+                .http_build_query(['dateDebut' => $egl_date_debut, 'dateFin' => $egl_date_fin]);
+        }
+
 		log::add('veolia_eau', 'debug', '### GO TO CONSOMMATION PAGE ###');
 
 		if ($getConsoInHtmlFile) {
@@ -597,20 +775,22 @@ class veolia_eau extends eqLogic {
 				log::add('veolia_eau', 'error', 'error on creating htm file "'.$htm_file.'"');
 			}
 		} else {
-			curl_setopt($ch, CURLOPT_URL, $url_consommation);
-			curl_setopt($ch, CURLOPT_POST, FALSE);
+			if ($website != 3) {
+				curl_setopt($ch, CURLOPT_URL, $url_consommation);
+				curl_setopt($ch, CURLOPT_POST, FALSE);
 
-            if ($mock_test >= 2) {
-                $response = "tbd";
-            } else {
-		        if (static::isWebsiteToutSurMonEau($website)){
-			        $response == "";}
-		        else{
-                    $response = curl_exec($ch);}
-            }
+				if ($mock_test >= 2) {
+					$response = "tbd";
+				} else {
+					if (static::isWebsiteToutSurMonEau($website)){
+						$response == "";}
+					else{
+						$response = curl_exec($ch);}
+				}
 
-			log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
-			log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
+				log::add('veolia_eau', 'debug', 'cURL response : '.urlencode($response));
+				log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
+			}
 
 			if (static::isWebsiteToutSurMonEau($website)){
 				$url_pds = 'https://'.$url_site.'/public-api/cel-consumption/meters-list';
@@ -634,9 +814,7 @@ class veolia_eau extends eqLogic {
 			}
 		}
 
-        //if ($website != 2){
-        // Inutile de recuperer le xls pour www.eau-services.com
-    	  log::add('veolia_eau', 'debug', '### GET DATAFILE CSV ###');
+        log::add('veolia_eau', 'debug', '### GET DATAFILE CSV ###');
           if($mock_test>=2){
               $data_file=$this->getConfiguration('csv_mock_file');
           } else {
@@ -648,25 +826,81 @@ class veolia_eau extends eqLogic {
 		      if ($fp) {
                 log::add('veolia_eau', 'debug', '### Curl call '.$url_releve_csv);
 			    curl_setopt($ch, CURLOPT_URL, $url_releve_csv);
-                if (!static::isWebsiteToutSurMonEau($website)){
+                if ($website == 3) {
+                    // EGL REST API : GET avec le bearer token et le header entreprise
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, $egl_headers);
+                    curl_setopt($ch, CURLOPT_POST, FALSE);
+                    $response = curl_exec($ch);
+                    $error = curl_error($ch);
+                    log::add('veolia_eau', 'debug', 'EGL response length : '.strlen($response));
+                    log::add('veolia_eau', 'debug', 'error : '.$error);
+                    log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
+                    log::add('veolia_eau', 'debug', 'EGL response preview : '.substr($response, 0, 300));
+                    // Convertir la réponse JSON en CSV (format date;index;volume)
+                    $json_data = json_decode($response, true);
+                    $entries = [];
+                    if (is_array($json_data)) {
+                        if (isset($json_data['postes'])) {
+                            foreach ($json_data['postes'] as $poste) {
+                                foreach (($poste['data'] ?? []) as $e) { $entries[] = $e; }
+                            }
+                        } elseif (isset($json_data['data']) && is_array($json_data['data'])) {
+                            $entries = $json_data['data'];
+                        } elseif (isset($json_data['consommationsJournalieres'])) {
+                            $entries = $json_data['consommationsJournalieres'];
+                        } elseif (isset($json_data[0])) {
+                            $entries = $json_data;
+                        }
+                        if (empty($entries)) {
+                            log::add('veolia_eau', 'debug', 'EGL JSON top-level keys : '.implode(',', array_keys($json_data)));
+                        }
+                    } else {
+                        log::add('veolia_eau', 'debug', 'EGL JSON decode failed or not an array, json_last_error : '.json_last_error());
+                    }
+                    log::add('veolia_eau', 'debug', 'EGL entries found : '.count($entries));
+                    if (!empty($entries)) {
+                        log::add('veolia_eau', 'debug', 'EGL first entry keys : '.implode(',', array_keys($entries[0])));
+                    }
+                    fwrite($fp, "date;index;volume\n");
+                    $egl_written = 0;
+                    $egl_skipped = 0;
+                    foreach ($entries as $entry) {
+                        // EGL encode les mois avec un décalage de -1 (janvier=0, février=1, etc.)
+                        // On passe true à normalizeEglDate pour corriger ce décalage (website==3 uniquement)
+                        $egl_date  = self::normalizeEglDate($entry, true);
+                        $egl_index = $entry['index'] ?? $entry['indexCompteur'] ?? $entry['releve'] ?? 0;
+                        $egl_conso = $entry['consommation'] ?? $entry['volume'] ?? $entry['quantite'] ?? 0;
+                        if ($egl_date && ($egl_conso !== 0 || $egl_index !== 0)) {
+                            fwrite($fp, $egl_date.';'.$egl_index.';'.$egl_conso."\n");
+                            $egl_written++;
+                        } else {
+                            if ($egl_skipped < 3) {
+                                log::add('veolia_eau', 'debug', 'EGL skipped entry : date='.($egl_date ?: '(empty)').' conso='.$egl_conso.' index='.$egl_index);
+                            }
+                            $egl_skipped++;
+                        }
+                    }
+                    if ($egl_skipped > 0) {
+                        log::add('veolia_eau', 'debug', 'EGL total skipped entries : '.$egl_skipped);
+                    }
+                    log::add('veolia_eau', 'debug', 'EGL entries written to CSV : '.$egl_written);
+                } elseif (!static::isWebsiteToutSurMonEau($website)){
 			        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                     curl_setopt($ch, CURLOPT_FILE, $fp);
                     curl_setopt($ch, CURLOPT_POST, TRUE);
-                }
-
-                if($mock_test>=2){
-                  $response = "tbd";
-                }else{
-                  $response = curl_exec($ch);
-                }
-                $error = curl_error($ch);
-
-			    log::add('veolia_eau', 'debug', 'response : '.$response);
-			    log::add('veolia_eau', 'debug', 'error : '.$error);
-			    log::add('veolia_eau', 'debug', 'response length : '.strlen($response));
-			    log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
-
-                if (static::isWebsiteToutSurMonEau($website)){
+                    $response = curl_exec($ch);
+                    $error = curl_error($ch);
+                    log::add('veolia_eau', 'debug', 'response : '.$response);
+                    log::add('veolia_eau', 'debug', 'error : '.$error);
+                    log::add('veolia_eau', 'debug', 'response length : '.strlen($response));
+                    log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
+                } else {
+                    $response = curl_exec($ch);
+                    $error = curl_error($ch);
+                    log::add('veolia_eau', 'debug', 'response : '.$response);
+                    log::add('veolia_eau', 'debug', 'error : '.$error);
+                    log::add('veolia_eau', 'debug', 'response length : '.strlen($response));
+                    log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
                     $json_obj = json_decode($response);
                     fwrite($fp, "date;index;volume\n");
                     foreach ($json_obj->{'content'}->{'measures'} as $measure){
@@ -703,17 +937,16 @@ class veolia_eau extends eqLogic {
         $website = intval($this->getConfiguration('website'));
         switch ($website) {
             case 2:
-            case 3:
               if ($file!=""){
                 $htmlDataFetched=static::processHtml($htm_file, $website, $compteur, $date, $offsetVeoliaDate, $mock_test, $lastdate, $currentdatenum, $nom_fournisseur, $url_site);
-                //log::add('veolia_eau', 'debug', 'csvDataFetched:'.serialize($datasFetched));
                   if($htmlDataFetched==0){
+                      $attempts = $this->incrementConsecutiveNoDataAttempts();
+                      $this->logConsecutiveNoDataAttempt($attempts, $nom_fournisseur, $url_site);
                       log::add('veolia_eau', 'error',"Pas de données sur le site");
                       return -1;
                   }
                 // Traitement du csv
                 $csvDataFetched=static::processCSV($file,$website, $offsetVeoliaDate, $nom_fournisseur, $url_site);
-                //log::add('veolia_eau', 'debug', 'csvDataFetched:'.serialize($csvDataFetched));
 
                 // Comparaison csv html pour corriger les non mesuree du html
                  $i=0;
@@ -731,23 +964,18 @@ class veolia_eau extends eqLogic {
 
                    if ($i < count($htmlDataFetched) ){
                      $dataHtml = $htmlDataFetched[ $i ];
-                    // log::add('veolia_eau', 'debug', '$i < count($htmlDataFetched) j'.$j." i:".$i." $datasFetched".serialize($datasFetched[$j]["index"]));
 
                     if ($dataHtml["date"] === $dateCSV["date"]){
                       if ($dataHtml["conso"] != $dateCSV["conso"]){
                           log::add('veolia_eau', 'error', '$dataHtml["date"]'.$dataHtml["date"].'$data<>'.$dataHtml["conso"].'$data<>'.$dateCSV["conso"]);
                       } else{
-                          if ($website==3 && $i==0 ){ // Remove last day of month at the begining for Lyon
-                          } else {
                           $dateCSV["index"]=($dateCSV["conso"]+$previousIndex);
                           $dateCSV["typeReleve"]="M";
                           $previousIndex=$dateCSV["index"];
                           $datasFetched[$j]=$dateCSV;
-                         }
                       }
                   } else {
                         $newDateCSV = date("Y-m-d", strtotime(" +1 day",strtotime($oldDateCSV)));
-                        //log::add('veolia_eau', 'error', '$newDateCSV'.$newDateCSV);
 
                         if($newDateCSV == $dataHtml["date"]) {
                             // add day with 0 conso
@@ -764,8 +992,6 @@ class veolia_eau extends eqLogic {
                           log::add('veolia_eau','debug','Missing item detected in CSV for:'.$newDateCSV);
                           $i=$i+2;
                         } else {
-                        // log::add('veolia_eau', 'error', 'date <> --- $dataHtml["date"]'.$dataHtml["date"].'$data<>'.$dataHtml["conso"].'$data<>'.$dateCSV["conso"]);
-
                               if ($dateCSV["conso"]<0){
                                 $keepNegativeConso=$dateCSV["conso"];
                                 $keepI=$i;
@@ -784,8 +1010,6 @@ class veolia_eau extends eqLogic {
 
                      if (isset($datasFetched[$j])) { // fix travis undefined offset when CSV is negative
                        $compteur=$datasFetched[$j]["index"];
-                       // log::add('veolia_eau', 'debug', '$compteur: '.$compteur );
-
                      }
                      $oldDateCSV=$dateCSV["date"];  // manage empty items into CSV
                      $i++; $j++;
@@ -799,6 +1023,17 @@ class veolia_eau extends eqLogic {
               }
 
               break;
+
+            case 3:
+            // Nouveau site EGL (depuis janvier 2025) : traitement direct du CSV REST
+                $datasFetched=static::processCSV($file, $website, $nom_fournisseur, $url_site);
+                if (is_array($datasFetched) && count($datasFetched) > 0) {
+                    $lastEntry = end($datasFetched);
+                    $date      = $lastEntry['date'];
+                    $compteur  = $lastEntry['index'];
+                    $lastdate  = $this->getConfiguration('last');
+                }
+                break;
 
 			// Cas concernant les site de Suez, gardé séparé de Veolia (case 1) en cas de besoin de modification de code
             case 4:
@@ -819,6 +1054,28 @@ class veolia_eau extends eqLogic {
                 $datasFetched=static::processCSV($file, $website, $nom_fournisseur, $url_site);
 
         }
+		if (!is_array($datasFetched) || count($datasFetched) === 0) {
+			// Pour EGL (website=3) : si last est récent (≤ 2 jours),
+			// l'absence de nouvelles données est normale (délai de publication).
+			// On ne pénalise pas le compteur dans ce cas.
+			$website = intval($this->getConfiguration('website'));
+			if ($website === 3) {
+				$lastdate   = $this->getConfiguration('last');
+				$lastdateTs = $lastdate ? strtotime($lastdate) : 0;
+				if ($lastdateTs > 0 && (time() - $lastdateTs) <= 2 * 86400) {
+					log::add('veolia_eau', 'info',
+						'EGL : aucune nouvelle donnée mais last ('.$lastdate.') est récent (≤ 2 jours), pas de pénalité.');
+					return;
+				}
+			}
+			$attempts = $this->incrementConsecutiveNoDataAttempts();
+			$this->logConsecutiveNoDataAttempt($attempts, $nom_fournisseur, $url_site);
+			return;
+		}
+        $this->resetConsecutiveNoDataAttempts();
+		// Mémoriser l'horodatage du dernier succès
+		$this->setConfiguration('lastSuccessTimestamp', time());
+		$this->save(true);
         if (is_array($datasFetched)){
             foreach ($datasFetched as $data) {
             log::add('veolia_eau', 'debug', 'Date: '.$data['date'].' / Index: '.$data['index'].' / Conso: '.$data['conso'].' / Type de relevé: '.$data['typeReleve']);
@@ -891,6 +1148,44 @@ class veolia_eau extends eqLogic {
         }
 	}
 
+    private function getConsecutiveNoDataAttempts() {
+        return intval($this->getConfiguration('noDataAttempts', 0));
+    }
+
+private function resetConsecutiveNoDataAttempts() {
+    if ($this->getConsecutiveNoDataAttempts() === 0) {
+        return;
+    }
+    $this->setConfiguration('noDataAttempts', 0);
+    $this->setConfiguration('noDataAttemptsLastTime', 0); // reset timestamp aussi
+    $this->save(true);
+}
+
+private function incrementConsecutiveNoDataAttempts() {
+    $now = time();
+    $lastFailTime = intval($this->getConfiguration('noDataAttemptsLastTime', 0));
+
+    // Si le dernier échec date de plus de 24h, on repart de 0
+    if ($lastFailTime > 0 && ($now - $lastFailTime) > 86400) {
+        log::add('veolia_eau', 'info', 'Réinitialisation du compteur noDataAttempts (dernier échec > 24h).');
+        $this->setConfiguration('noDataAttempts', 0);
+    }
+
+    $attempts = $this->getConsecutiveNoDataAttempts() + 1;
+    $this->setConfiguration('noDataAttempts', $attempts);
+    $this->setConfiguration('noDataAttemptsLastTime', $now); // horodatage du dernier échec
+    $this->save(true);
+    return $attempts;
+}
+
+    private function logConsecutiveNoDataAttempt($attempts, $nom_fournisseur, $url_site) {
+        if ($attempts >= self::MAX_EMPTY_DATA_ATTEMPTS) {
+            log::add('veolia_eau', 'error', 'Aucune donnée reçue pour : '.$nom_fournisseur.' (https://'.$url_site.'). Arrêt des tentatives après '.$attempts.' essais.');
+            return;
+        }
+        log::add('veolia_eau', 'error', 'Aucune donnée reçue pour : '.$nom_fournisseur.' (https://'.$url_site.'). Tentative '.$attempts.'/'.self::MAX_EMPTY_DATA_ATTEMPTS.'.');
+    }
+
 	private static function secure_touch($fname) {
 		if (file_exists($fname)) {
 			return;
@@ -936,11 +1231,19 @@ class veolia_eau extends eqLogic {
 
               foreach ($sheetData as $line) {
                   $dateTemp = explode('/', $line['A']);
-                  if ($website ==2 || $website == 3) {
+                  if ($website == 2) {
                       $date = $dateTemp[2].'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT);
                       $index = 0;
                       $conso = $line['B'];
                       $typeReleve = 0;
+                  }
+                  elseif ($website == 3) {
+                      // Nouveau site EGL : format date;index;volume (déjà en litres, pas de conversion)
+                      // La date est déjà normalisée en YYYY-MM-DD par normalizeEglDate (avec correction mois +1)
+                      $date = substr($line['A'], 0, 10);
+                      $index = floatval($line['B']);
+                      $conso = floatval($line['C']);
+                      $typeReleve = 'M';
                   }
                   elseif (static::isWebsiteToutSurMonEau($website)){
                       $dateTemp = explode(' ', $line['A']);
@@ -971,35 +1274,90 @@ class veolia_eau extends eqLogic {
       return $datasFetched;
     }
 
+    /**
+     * Normalise une date EGL vers le format YYYY-MM-DD.
+     *
+     * @param array $entry          Entrée JSON EGL
+     * @param bool  $egl_month_offset  Si true, corrige le décalage de mois de l'API EGL
+     *                                 (janvier=0, février=1, etc. → +1 pour obtenir le mois réel)
+     *
+     * @return string Date au format YYYY-MM-DD, ou chaîne vide si non déterminée
+     */
+    private static function normalizeEglDate(array $entry, bool $egl_month_offset = false) {
+        $egl_date = $entry['date'] ?? $entry['dateDebut'] ?? $entry['dateJour'] ?? $entry['dateReleve'] ?? '';
+
+        // Cas où la date est fournie sous forme de champs séparés jour/mois/annee
+        if (!$egl_date && isset($entry['jour'], $entry['mois'], $entry['annee'])) {
+            $day   = intval($entry['jour']);
+            $month = intval($entry['mois']) + ($egl_month_offset ? 1 : 0);
+            $year  = intval($entry['annee']);
+
+            if (checkdate($month, $day, $year)) {
+                return sprintf('%04d-%02d-%02d', $year, $month, $day);
+            }
+        }
+
+        if (!$egl_date) {
+            return '';
+        }
+
+        // Cas format dd/mm/yyyy avec correction du décalage de mois EGL
+        if ($egl_month_offset && strpos($egl_date, '/') !== false) {
+            $parts = explode('/', $egl_date);
+            if (count($parts) === 3) {
+                $day   = intval($parts[0]);
+                $month = intval($parts[1]) + 1; // janvier=0 → +1
+                $year  = intval($parts[2]);
+                if (checkdate($month, $day, $year)) {
+                    return sprintf('%04d-%02d-%02d', $year, $month, $day);
+                }
+            }
+        }
+
+        // Cas format dd/mm/yyyy standard (sans décalage)
+        if (strpos($egl_date, '/') !== false) {
+            $parts = explode('/', $egl_date);
+            if (count($parts) === 3 && checkdate(intval($parts[1]), intval($parts[0]), intval($parts[2]))) {
+                return sprintf('%04d-%02d-%02d', intval($parts[2]), intval($parts[1]), intval($parts[0]));
+            }
+        }
+
+        // Cas format YYYY-MM-DD ou ISO 8601 avec correction du décalage de mois EGL
+        if ($egl_month_offset && preg_match('/^(\d{4})-(\d{1,2})-(\d{1,2})/', $egl_date, $matches)) {
+            $year  = intval($matches[1]);
+            $month = intval($matches[2]) + 1; // janvier=0 → +1
+            $day   = intval($matches[3]);
+            if (checkdate($month, $day, $year)) {
+                return sprintf('%04d-%02d-%02d', $year, $month, $day);
+            }
+        }
+
+        // Cas format YYYY-MM-DD ou ISO 8601 standard (sans décalage)
+        if (preg_match('/^(\d{4})-(\d{1,2})-(\d{1,2})/', $egl_date, $matches)) {
+            return sprintf('%04d-%02d-%02d', intval($matches[1]), intval($matches[2]), intval($matches[3]));
+        }
+
+        // Fallback : strtotime (ne peut pas corriger le décalage de mois)
+        $timestamp = strtotime($egl_date);
+        if ($timestamp !== false) {
+            return date('Y-m-d', $timestamp);
+        }
+
+        return '';
+    }
+
     private function processHtml($htm_file, $website, &$compteur, &$date, $offsetVeoliaDate, $mock_test, &$lastdate, $currentdatenum, $nom_fournisseur, $url_site) {
-        log::add('veolia_eau', 'debug', '### TRAITE CONSO HTML '.$website.' ###');
+      log::add('veolia_eau', 'debug', '### TRAITE CONSO HTML '.$website.' ###');
         $depart = $this->getConfiguration('depart');
         $compteur = $this->getConfiguration('compteur');
         $lastdate=$this->getConfiguration('last');
         log::add('veolia_eau', 'debug', 'last1: '. $lastdate);
-        // -- format des data a decoder (y en litres)
-            // dataPoints: [
-        //  {y: 306, label: "01/10/2016"}
-        //  ,
-        //  {y: 602, label: "02/10/2016"}
-        //  ]
-                // -- Exception a gerer:
-        // dataPoints: [
-        //  {y: 0, color:"#c0bebf", label: "Non mesurée"},
-        //  {y: 0, color:"#c0bebf", label: "Non mesurée"},
-        //  {y: 0, color:"#c0bebf", label: "Non mesurée"}
-        // ]
-        // --
-        // String cible: "306,01/10/2016,602,02/10/2016"
-        // --
-        // String en cas de non mesuree: "0,Nonmesurée,0,Nonmesurée,0,Nonmesurée"
-        // --
         $html = file_get_contents($htm_file);
         $info = explode("dataPoints: [", $html,2);
         if (count($info) == 1) { //dataPoints pas dans le HTML
           log::add('veolia_eau', 'error', 'dataPoints: pas trouvé dans la reponse de : '.$nom_fournisseur.' (https://'.$url_site.').');
           $pos = strrpos($info[0], "Nous nous excusons pour la");
-          if ($pos != false) { // note: three equal signs
+          if ($pos != false) {
               log::add('veolia_eau', 'error', 'Site de '.$nom_fournisseur.' (https://'.$url_site.'.) H.-S. : une erreur est survenue, veuillez réessayer ultérieurement, nous nous excusons pour la gêne occasionnée.');
           }
           $pos = strrpos($info[0], "Site en cours de maintenance");
@@ -1024,18 +1382,13 @@ class veolia_eau extends eqLogic {
         $info = preg_replace('/color:"#[a-f0-9]{6}",?/i', "", $info);
         $info = str_replace("\"", "", $info);
         $info = explode( "|", $info);
-        //log::add('veolia_eau', 'debug', print_r($info, true));
 
         foreach ($info as $data) {
             log::add('veolia_eau', 'debug', print_r($data, true));
             $data = explode(",", $data);
 
-            // gerer le cas  "Non mesurée"
-            // {y: 0, color:"#c0bebf", label: "Non mesurée"}
-            // l espace a ete enleve par le str_replace(" ", "", $info[0]);
             if ($data[1] == "Nonmesurée") {
               log::add('veolia_eau', 'debug', 'valeur non mesurée');
-              // verification que la donnee non mesuree ne se produit pas le dernier jour du mois, dans ce cas elle est perdu et ne sera pas ajoute le lendemain
               if($mock_test==3){
                 $nm_currentreleve = mktime(0, 0, 0, date("m",mktime(0, 0, 0, 3, 3, 2018))  , date("d",mktime(0, 0, 0, 3, 3, 2018))-$offsetVeoliaDate, date("Y",mktime(0, 0, 0, 3, 3, 2018)));
                 $nm_nextreleve = mktime(0, 0, 0, date("m",mktime(0, 0, 0, 3, 3, 2018))  , date("d",mktime(0, 0, 0, 3, 3, 2018))-$offsetVeoliaDate+1, date("Y",mktime(0, 0, 0, 3, 3, 2018)));
@@ -1051,7 +1404,6 @@ class veolia_eau extends eqLogic {
                 log::add('veolia_eau', 'error', 'valeur non mesurée en fin de mois');
               }
               if ($date>$lastdate) {
-                # Ne pas mettre l'erreur plusieurs fois dans le mois
                 log::add('veolia_eau', 'error', 'Valeur non mesurée, une mesure est perdu');
               }
             continue;
@@ -1059,20 +1411,16 @@ class veolia_eau extends eqLogic {
 
             $dateTemp = explode('/', $data[1]);
 
-            // Recuperation d autres cas potentiel ou ce champ ne serait pas une date pour eviter de fausser le compteur
-            // verifie s il y a bien 2 slash
             if(count($dateTemp) != 3) {
                 log::add('veolia_eau', 'error', 'date invalide - impossible de trouver 2 slash :'.$data[1]);
                 return 0;
             }
 
-            // verifie si la date est valide
             if(!checkdate($dateTemp[1], $dateTemp[0], $dateTemp[2])){
                 log::add('veolia_eau', 'error', 'date invalide:'.$data[1]);
                 return 0;
             }
 
-            // transform d/m/yyyy to yyy-mm-dd with leading 0
             $date = $dateTemp[2].'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT);
             $conso = $data[0];
             $consomonth[] = $conso;
@@ -1103,12 +1451,6 @@ class veolia_eauCmd extends cmd {
     /***************************** Methode static ****************************/
 
     /*************************** Methode d'instance **************************/
-
-    /* Non obligatoire permet de demander de ne pas supprimer les commandes même si elles ne sont pas dans la nouvelle configuration de l'équipement envoyé en JS
-    public function dontRemoveCmd() {
-        return true;
-    }
-    */
 
     public function execute($_options = array()) {
         $veolia_eau = $this->getEqLogic(); //récupère l'éqlogic de la commande $this
