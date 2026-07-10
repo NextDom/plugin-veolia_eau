@@ -50,4 +50,21 @@ tests/Veolia-Lyon/*.htm
 
 tests/Veolia-Lyon/*.csv
 
+# Config locale Claude Code
+.claude/
+
+# Scripts de test temporaires
+_tmp_*.php
+
+# Captures réseau et exports de données personnelles
+*.har
+consommation_*.csv
+
+# Fichiers IDE / OS
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Dépendances composer (générées à l'install via composer install)
+/vendor/
 

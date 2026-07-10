@@ -120,7 +120,8 @@ $eqLogics = eqLogic::byType($plugin->getId());
                             <label class="col-sm-3 control-label">{{Service}}</label>
                             <div class="col-sm-3">
                                 <select class="form-control configuration eqLogicAttr" id="configuration_website" data-l1key="configuration" data-l2key="website">
-                                    <option value="1">Veolia</option>
+                                    <option value="16">Veolia (portail eau.veolia.fr)</option>
+                                    <option value="1">Veolia (ancien site service.eau.veolia.fr)</option>
                                     <option value="2">Veolia Méditerranée</option>
                                     <option value="3">Service Eau du Grand Lyon</option>
                                     <option value="4">Tout sur mon eau / Eau en ligne</option>

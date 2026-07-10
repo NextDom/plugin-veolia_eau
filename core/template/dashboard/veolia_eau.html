@@ -1,0 +1,165 @@
+<div class="eqLogic eqLogic-widget eqLogic-veolia allowResize allowReorderCmd #custom_layout# #eqLogic_class# #class# #category#" data-eqType="#eqType#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#" style="width: #width#;height: #height#;#style#">
+  <style>
+    .eqLogic-veolia {
+      --vw-blue: #2b8fd6;
+      --vw-teal: #19c3c8;
+      --vw-ink: var(--cmd-color, #e8f4fb);
+      --vw-card-bg: var(--widget-background-color, rgba(13, 38, 56, 0.55));
+      box-sizing: border-box;
+      padding: 16px 16px 14px;
+      border-radius: 16px;
+      overflow: hidden;
+      color: var(--vw-ink);
+      text-align: left;
+      background:
+        radial-gradient(120% 90% at 100% 0%, rgba(25,195,200,0.22), transparent 60%),
+        linear-gradient(155deg, rgba(43,143,214,0.20), rgba(11,74,122,0.10)),
+        var(--vw-card-bg);
+      border: 1px solid rgba(43,143,214,0.30);
+      box-shadow: 0 6px 18px rgba(8,30,50,0.25);
+    }
+    .eqLogic-veolia * { box-sizing: border-box; }
+
+    .eqLogic-veolia .vw-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .eqLogic-veolia .vw-drop {
+      flex: 0 0 auto; width: 34px; height: 34px; border-radius: 10px;
+      display: grid; place-items: center; color: #fff; font-size: 16px;
+      background: linear-gradient(140deg, var(--vw-teal), var(--vw-blue));
+      box-shadow: 0 3px 10px rgba(25,195,200,0.40);
+    }
+    .eqLogic-veolia .vw-title {
+      flex: 1 1 auto; min-width: 0; font-size: 13px; font-weight: 600; letter-spacing: .2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: .92;
+      color: inherit; text-decoration: none; cursor: pointer;
+    }
+    .eqLogic-veolia a.vw-title:hover { opacity: 1; text-decoration: underline; }
+    .eqLogic-veolia .vw-refresh {
+      flex: 0 0 auto; width: 32px; height: 32px; border-radius: 50%;
+      display: grid; place-items: center; color: var(--vw-ink); font-size: 13px;
+      background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.18);
+      cursor: pointer; transition: transform .25s ease, background .2s ease;
+    }
+    .eqLogic-veolia .vw-refresh:hover { background: rgba(255,255,255,0.20); transform: rotate(90deg); }
+    .eqLogic-veolia .vw-refresh:active { transform: rotate(180deg) scale(.92); }
+
+    .eqLogic-veolia .vw-main {
+      position: relative; padding: 14px 14px 16px; border-radius: 12px;
+      background: linear-gradient(150deg, rgba(43,143,214,0.18), rgba(25,195,200,0.10));
+      border: 1px solid rgba(43,143,214,0.25); overflow: hidden;
+    }
+    .eqLogic-veolia .vw-main-label {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 1px; opacity: .70; margin-bottom: 2px;
+    }
+    .eqLogic-veolia .vw-conso { display: flex; align-items: baseline; gap: 6px; line-height: 1; }
+    .eqLogic-veolia .vw-conso .value {
+      font-size: 40px; font-weight: 800; letter-spacing: -1px;
+      background: linear-gradient(120deg, var(--vw-teal), var(--vw-blue));
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; color: var(--vw-blue);
+    }
+    .eqLogic-veolia .vw-unit { font-size: 18px; font-weight: 700; opacity: .80; }
+    .eqLogic-veolia .vw-wave { position: absolute; left: 0; right: 0; bottom: -1px; height: 22px; width: 100%; opacity: .45; pointer-events: none; }
+
+    .eqLogic-veolia .vw-sub { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; }
+    .eqLogic-veolia .vw-index { min-width: 0; }
+    .eqLogic-veolia .vw-k { font-size: 10px; text-transform: uppercase; letter-spacing: .8px; opacity: .60; }
+    .eqLogic-veolia .vw-v { display: flex; align-items: baseline; gap: 4px; }
+    .eqLogic-veolia .vw-index .value { font-size: 16px; font-weight: 700; opacity: .95; }
+    .eqLogic-veolia .vw-unit-sm { font-size: 11px; opacity: .65; }
+
+    .eqLogic-veolia .vw-badge {
+      flex: 0 0 auto; display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .3px;
+      background: rgba(25,195,200,0.16); border: 1px solid rgba(25,195,200,0.45); color: #5fe6d6;
+    }
+    .eqLogic-veolia .vw-badge .vw-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+    .eqLogic-veolia .vw-badge.vw-badge--est { background: rgba(245,158,11,0.16); border-color: rgba(245,158,11,0.50); color: #f6b24a; }
+
+    .eqLogic-veolia .vw-foot {
+      display: flex; align-items: center; gap: 6px; margin-top: 12px; padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.10); font-size: 11px; opacity: .62;
+    }
+    .eqLogic-veolia .vw-foot .value { font-weight: 600; opacity: .9; }
+  </style>
+
+  <div class="vw-head">
+    <span class="vw-drop"><i class="fas fa-tint"></i></span>
+    <a class="vw-title" href="#eqLink#" title="#name_display#">#name_display#</a>
+    <span class="vw-refresh" data-cmd_id="#refresh_id#" title="#l_refresh#"><i class="fas fa-sync-alt"></i></span>
+  </div>
+
+  <div class="vw-main">
+    <div class="vw-main-label">#l_conso#</div>
+    <div class="vw-conso" data-vw="conso" data-cmd_id="#conso_id#">
+      <span class="value">#conso_value#</span>
+      <span class="vw-unit">#conso_unite#</span>
+    </div>
+    <svg class="vw-wave" viewBox="0 0 340 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 12 C 40 2, 70 22, 110 12 S 180 2, 220 12 S 300 22, 340 10 L340 22 L0 22 Z" fill="url(#vwGrad#uid#)"/>
+      <defs>
+        <linearGradient id="vwGrad#uid#" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#19c3c8"/>
+          <stop offset="1" stop-color="#2b8fd6"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+
+  <div class="vw-sub">
+    <div class="vw-index" data-vw="index" data-cmd_id="#index_id#">
+      <div class="vw-k">#l_index#</div>
+      <div class="vw-v">
+        <span class="value">#index_value#</span>
+        <span class="vw-unit-sm">#index_unite#</span>
+      </div>
+    </div>
+    <div class="vw-badge #type_badge_class#" data-vw="type" data-cmd_id="#type_id#" title="#l_type#">
+      <span class="vw-dot"></span>
+      <span class="value">#type_value#</span>
+    </div>
+  </div>
+
+  <div class="vw-foot" data-vw="date">
+    <i class="fas fa-calendar-day"></i>
+    <span>#l_date#</span>
+    <span class="value">#date_value#</span>
+  </div>
+
+  <script>
+    (function() {
+      var root = document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"]');
+      if (!root) { return; }
+
+      // Bouton rafraîchir
+      var refreshBtn = root.querySelector('.vw-refresh');
+      if ('#refresh_id#' != '' && refreshBtn) {
+        refreshBtn.addEventListener('click', function() { jeedom.cmd.execute({ id: '#refresh_id#' }); });
+      } else if (refreshBtn) {
+        refreshBtn.remove();
+      }
+
+      // Helper : applique la couleur du badge selon M/E
+      function applyBadge(val) {
+        var badge = root.querySelector('[data-vw="type"]');
+        if (!badge) { return; }
+        var est = (String(val || '').trim().toUpperCase().charAt(0) === 'E');
+        badge.classList.toggle('vw-badge--est', est);
+      }
+      applyBadge('#type_value#');
+
+      // Live-refresh des valeurs via le framework Jeedom
+      function bind(cmdId, selector, after) {
+        if (cmdId == '' || cmdId == '0') { return; }
+        jeedom.cmd.addUpdateFunction(cmdId, function(_options) {
+          var el = root.querySelector(selector + ' .value');
+          if (el) { el.innerHTML = _options.display_value !== undefined ? _options.display_value : _options.value; }
+          if (after) { after(_options.value); }
+        });
+      }
+      bind('#conso_id#', '[data-vw="conso"]');
+      bind('#index_id#', '[data-vw="index"]');
+      bind('#date_id#',  '[data-vw="date"]');
+      bind('#type_id#',  '[data-vw="type"]', applyBadge);
+    })();
+  </script>
+</div>
