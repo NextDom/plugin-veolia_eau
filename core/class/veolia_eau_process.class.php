@@ -46,10 +46,11 @@ class veolia_eau extends eqLogic {
 	  // Fonction d'info des dependances
 	public static function dependancy_info() {
 		$return = array();
+		$return['log'] = log::getPathToLog(__CLASS__ . '_update');
 		$return['progress_file'] = '/tmp/dependancy_veolia_in_progress';
 		$return['state'] = 'ok';
-		if (exec('php -v | grep "PHP 7." | wc -l') === 1
-            && exec('apt list --installed php7.0-mbstring | grep -E "mbstring"| wc -l') < 1) {
+		// Les dépendances PHP (PhpSpreadsheet) sont installées via composer.
+		if (!file_exists(dirname(__FILE__) . '/../../vendor/autoload.php')) {
 			$return['state'] = 'nok';
 		}
 		return $return;
@@ -304,11 +305,50 @@ class veolia_eau extends eqLogic {
 	    return false;
     }
 
-    /*
-     * Non obligatoire mais permet de modifier l'affichage du widget si vous en avez besoin
-      public function toHtml($_version = 'dashboard') {
-      }
-     */
+    /* Widget custom : carte "eau" (conso en hero, index, badge M/E, date).
+     * Le template se trouve dans core/template/dashboard/veolia_eau.html.
+     * Si l'utilisateur désactive le widget custom (option widgetTmpl), ou en
+     * version mobile (pas de template dédié), template_replace/getTemplate
+     * retombent automatiquement sur le rendu par défaut. */
+    public function toHtml($_version = 'dashboard') {
+        $replace = $this->preToHtml($_version);
+        if (!is_array($replace)) {
+            return $replace;
+        }
+        $version = jeedom::versionAlias($_version);
+
+        // logicalId de la commande => préfixe de placeholder dans le template
+        $map = array(
+            'conso'      => 'conso',
+            'index'      => 'index',
+            'dateReleve' => 'date',
+            'typeReleve' => 'type',
+        );
+        foreach ($map as $logicalId => $key) {
+            $cmd = $this->getCmd(null, $logicalId);
+            if (is_object($cmd)) {
+                $replace['#' . $key . '_id#']    = $cmd->getId();
+                $replace['#' . $key . '_value#'] = $cmd->execCmd();
+                $replace['#' . $key . '_unite#'] = $cmd->getUnite();
+            } else {
+                $replace['#' . $key . '_id#']    = '';
+                $replace['#' . $key . '_value#'] = '';
+                $replace['#' . $key . '_unite#'] = '';
+            }
+        }
+        // Badge ambre si relevé Estimé (E), teal si Mesuré (M)
+        $replace['#type_badge_class#'] = (strtoupper(substr(trim($replace['#type_value#']), 0, 1)) === 'E') ? 'vw-badge--est' : '';
+
+        // Libellés traduits côté serveur (les {{}} ne sont pas interprétés sur
+        // le HTML d'un widget injecté après la passe i18n du dashboard).
+        $replace['#l_conso#']   = __('Consommation du jour', __FILE__);
+        $replace['#l_index#']   = __('Index compteur', __FILE__);
+        $replace['#l_date#']    = __('Relevé du', __FILE__);
+        $replace['#l_type#']    = __('Type de relevé', __FILE__);
+        $replace['#l_refresh#'] = __('Rafraîchir', __FILE__);
+
+        return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, __CLASS__, __CLASS__)));
+    }
 
     /*     * **********************Getteur Setteur*************************** */
 
@@ -343,6 +383,14 @@ class veolia_eau extends eqLogic {
         $offsetVeoliaDate=$this->getConfiguration('offsetVeoliaDate');
 		$getConsoInHtmlFile = true;
         $website=intval($this->getConfiguration('website'));
+
+        // Nouveau portail Veolia (eau.veolia.fr) : authentification AWS Cognito + API JSON/CSV
+        // Flux totalement différent (token JWT Bearer), traité dans une méthode dédiée.
+        if ($website == 16) {
+            @unlink($cookie_file);
+            return $this->getConsoVeoliaWeb($mock_test, $offsetVeoliaDate);
+        }
+
         $url_token=0; // n etait pas initialisé dans tous les cas
         $releve=0; // Utilise par Veolia sudest et Lyon pour la date du releve, permet de recuperer l historique
         if ($website == 1) {
@@ -783,7 +831,7 @@ class veolia_eau extends eqLogic {
 					$response = "tbd";
 				} else {
 					if (static::isWebsiteToutSurMonEau($website)){
-						$response == "";}
+						$response = "";}
 					else{
 						$response = curl_exec($ch);}
 				}
@@ -798,6 +846,12 @@ class veolia_eau extends eqLogic {
 				curl_setopt($ch, CURLOPT_URL, $url_pds);
 				$response = curl_exec($ch);
 				$json_obj = json_decode($response);
+				if ($json_obj === null || !isset($json_obj->{'content'}->{'clientCompteursPro'}[0]->{'compteursPro'}[0]->{'idPDS'})) {
+					log::add('veolia_eau', 'error', 'Impossible de récupérer la liste des compteurs (authentification échouée ou réponse inattendue) sur '.$nom_fournisseur.' (https://'.$url_site.').');
+					curl_close($ch);
+					@unlink($cookie_file);
+					return;
+				}
 				$idPDS = $json_obj->{'content'}->{'clientCompteursPro'}[0]->{'compteursPro'}[0]->{'idPDS'};
 
                 $dt = date_create();
@@ -903,6 +957,9 @@ class veolia_eau extends eqLogic {
                     log::add('veolia_eau', 'debug', 'cURL errno : '.curl_errno($ch));
                     $json_obj = json_decode($response);
                     fwrite($fp, "date;index;volume\n");
+                    if ($json_obj === null || !isset($json_obj->{'content'}->{'measures'})) {
+                        log::add('veolia_eau', 'error', 'Aucune mesure récupérée (réponse inattendue) sur '.$nom_fournisseur.' (https://'.$url_site.').');
+                    } else
                     foreach ($json_obj->{'content'}->{'measures'} as $measure){
                         if ($measure->{'index'}){
                             fwrite($fp, $measure->{'date'}.';'.$measure->{'index'}.';'.$measure->{'volume'}."\n");}
@@ -920,6 +977,145 @@ class veolia_eau extends eqLogic {
 
         $this->traiteConso($data_file, $htm_file, $mock_test, $offsetVeoliaDate, $currentdatenum, $releve, $nom_fournisseur, $url_site);
 		@unlink($cookie_file);
+	}
+
+	/*
+	 * Récupération de la consommation sur le nouveau portail Veolia (eau.veolia.fr).
+	 * Authentification AWS Cognito (USER_PASSWORD_AUTH) puis appels à l'API backend
+	 * istefr avec le token Bearer (AccessToken).
+	 */
+	public function getConsoVeoliaWeb($mock_test, $offsetVeoliaDate) {
+		$nom_fournisseur = 'Veolia (portail eau.veolia.fr)';
+		$url_site = 'www.eau.veolia.fr';
+		$api = 'https://prd-ael-sirius-backend.istefr.fr';
+		$cognito_url = 'https://cognito-idp.eu-west-3.amazonaws.com/';
+		$cognito_client_id = '3kghade1fg54739kj8pkbova8j';
+
+		// 1. Authentification AWS Cognito
+		log::add('veolia_eau', 'debug', '### COGNITO AUTH ###');
+		$auth_payload = json_encode(array(
+			'AuthFlow' => 'USER_PASSWORD_AUTH',
+			'AuthParameters' => array(
+				'USERNAME' => $this->getConfiguration('login'),
+				'PASSWORD' => $this->getConfiguration('password'),
+			),
+			'ClientId' => $cognito_client_id,
+		));
+		$response = static::veoliaWebHttp($cognito_url, array(
+			'Content-Type: application/x-amz-json-1.1',
+			'X-Amz-Target: AWSCognitoIdentityProviderService.InitiateAuth',
+		), $auth_payload);
+		$auth = json_decode($response);
+		if ($auth === null || !isset($auth->AuthenticationResult->AccessToken)) {
+			log::add('veolia_eau', 'error', 'Authentification échouée sur '.$nom_fournisseur.' ; vérifiez votre identifiant et votre mot de passe (https://'.$url_site.').');
+			return;
+		}
+		$accessToken = $auth->AuthenticationResult->AccessToken;
+		$bearer = array('Authorization: Bearer '.$accessToken);
+
+		// 2. espace-client -> id_abonnement
+		log::add('veolia_eau', 'debug', '### ESPACE-CLIENT ###');
+		$response = static::veoliaWebHttp($api.'/espace-client?type-front=WEB_ORDINATEUR', $bearer);
+		$ec = json_decode($response);
+		$idAbo = null;
+		// idAbt permet de choisir l'abonnement si plusieurs (0 par défaut)
+		$wanted = intval($this->getConfiguration('idAbt', 0));
+		$found = 0;
+		if ($ec !== null && isset($ec->contacts)) {
+			foreach ($ec->contacts as $contact) {
+				if (!isset($contact->tiers)) { continue; }
+				foreach ($contact->tiers as $tiers) {
+					if (!isset($tiers->abonnements)) { continue; }
+					foreach ($tiers->abonnements as $abo) {
+						if (!isset($abo->id_abonnement)) { continue; }
+						if ($found == $wanted) {
+							$idAbo = $abo->id_abonnement;
+							break 3;
+						}
+						$found++;
+					}
+				}
+			}
+		}
+		if ($idAbo === null) {
+			log::add('veolia_eau', 'error', 'Aucun abonnement trouvé (index '.$wanted.') sur '.$nom_fournisseur.' (https://'.$url_site.').');
+			return;
+		}
+		log::add('veolia_eau', 'debug', 'id_abonnement: '.$idAbo);
+
+		// 3. facturation -> numero_pds + date_debut_abonnement
+		log::add('veolia_eau', 'debug', '### FACTURATION ###');
+		$response = static::veoliaWebHttp($api.'/abonnements/'.$idAbo.'/facturation', $bearer);
+		$fact = json_decode($response);
+		if ($fact === null || !isset($fact->numero_pds)) {
+			log::add('veolia_eau', 'error', 'Impossible de récupérer le numéro de PDS sur '.$nom_fournisseur.' (https://'.$url_site.').');
+			return;
+		}
+		$pds = $fact->numero_pds;
+		$dateDebut = isset($fact->date_debut_abonnement) ? substr($fact->date_debut_abonnement, 0, 10) : date('Y-m-d');
+		log::add('veolia_eau', 'debug', 'numero_pds: '.$pds.' / date_debut: '.$dateDebut);
+
+		// 4. Récupération du CSV journalier (mois courant + mois précédent pour couvrir les bords)
+		$data_file = sys_get_temp_dir().'/veolia_releve_'.uniqid().'.csv';
+		static::secure_touch($data_file);
+		$fp = fopen($data_file, 'w');
+		if (!$fp) {
+			log::add('veolia_eau', 'error', 'error on creating file "'.$data_file.'"');
+			return;
+		}
+
+		$headerWritten = false;
+		$now = time();
+		foreach (array(strtotime('first day of last month', $now), $now) as $monthTime) {
+			$annee = date('Y', $monthTime);
+			$mois = intval(date('m', $monthTime));
+			$url_csv = $api.'/consommations/'.$idAbo.'/journalieres/export?annee='.$annee.'&mois='.$mois.'&numero-pds='.$pds.'&date-debut-abonnement='.$dateDebut;
+			log::add('veolia_eau', 'debug', '### GET DAILY CSV '.$annee.'-'.$mois.' : '.$url_csv);
+			$csv = static::veoliaWebHttp($url_csv, $bearer);
+			if ($csv === false || $csv === '') {
+				log::add('veolia_eau', 'debug', 'CSV vide pour '.$annee.'-'.$mois);
+				continue;
+			}
+			// La 1re ligne est l'entête ; on ne l'écrit qu'une fois.
+			$lines = preg_split('/\r\n|\r|\n/', $csv);
+			foreach ($lines as $i => $line) {
+				if ($line === '') { continue; }
+				if ($i == 0) {
+					if ($headerWritten) { continue; }
+					$headerWritten = true;
+				}
+				fwrite($fp, $line."\n");
+			}
+		}
+		fclose($fp);
+
+		// 5. Traitement via processCSV (case 16) puis envoi des événements
+		$this->traiteConso($data_file, '', $mock_test, $offsetVeoliaDate, $now, 0, $nom_fournisseur, $url_site);
+		if ($mock_test == 0) {
+			@unlink($data_file);
+		}
+	}
+
+	/* Appel HTTP simple (cURL) pour le portail Veolia. POST si $postData fourni, sinon GET. */
+	private static function veoliaWebHttp($url, $headers = array(), $postData = null) {
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+		curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0");
+		if ($postData !== null) {
+			curl_setopt($ch, CURLOPT_POST, TRUE);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+		}
+		if (!empty($headers)) {
+			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		}
+		$response = curl_exec($ch);
+		log::add('veolia_eau', 'debug', 'HTTP '.$url.' -> errno '.curl_errno($ch).', len '.strlen($response ?: ''));
+		curl_close($ch);
+		return $response;
 	}
 
 	public function traiteConso($file, $htm_file, $mock_test, $offsetVeoliaDate, $currentdatenum, $releve, $nom_fournisseur, $url_site) {
@@ -1201,26 +1397,59 @@ private function incrementConsecutiveNoDataAttempts() {
       $conso = 0;
 
       log::add('veolia_eau', 'debug', '### TRAITE CONSO XLS '.$website.' ###');
-      require_once dirname(__FILE__).'/../../3rparty/PHPExcel/Classes/PHPExcel/IOFactory.php';
+
+      // Portail eau.veolia.fr (website 16) : CSV simple séparé par des virgules,
+      // généré par nos soins. On le parse en natif pour ne pas dépendre de PHPExcel
+      // (la lib embarquée 1.8 n'est pas compatible PHP 8 et provoque une erreur fatale).
+      // Format : Date de relevé,Consommation,Index relevé,Index mesuré/estimé,Écoulement
+      if ($website == 16) {
+          $lines = @file($csv_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+          if (!is_array($lines) || count($lines) < 2) {
+              log::add('veolia_eau', 'error', 'Aucune donnée, merci de vérifier vos identifiants et l\'accès au télérelevé de : '.$nom_fournisseur.' (https://'.$url_site.').');
+              return $datasFetched;
+          }
+          array_shift($lines); // entête
+          log::add('veolia_eau', 'debug', count($lines).' data lines');
+          foreach ($lines as $line) {
+              $col = str_getcsv($line, ',');
+              $dateTemp = explode('/', $col[0]);
+              // On ignore les jours non encore relevés (index vide).
+              if (count($dateTemp) != 3 || !isset($col[2]) || $col[2] === '') {
+                  continue;
+              }
+              $date = $dateTemp[2].'-'.str_pad($dateTemp[1], 2, '0', STR_PAD_LEFT).'-'.str_pad($dateTemp[0], 2, '0', STR_PAD_LEFT);
+              $datasFetched[] = array(
+                  'date' => $date,
+                  'index' => $col[2],
+                  'conso' => isset($col[1]) ? $col[1] : 0,
+                  'typeReleve' => isset($col[3]) ? $col[3] : ''
+              );
+          }
+          return $datasFetched;
+      }
+
+      require_once dirname(__FILE__).'/../../vendor/autoload.php';
+      // \Throwable (et pas seulement Exception) : on capture aussi les Error
+      // fatales pour ne jamais tuer le script en silence.
       if ($website ==2 || $website == 3 || static::isWebsiteToutSurMonEau($website)) {
-          $objReader = PHPExcel_IOFactory::createReader("CSV");
+          $objReader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader('Csv');
           $objReader->setDelimiter(";");
           try {
-            $objPHPExcel = $objReader->load( $csv_file );
-          } catch(Exception $e) {
+            $spreadsheet = $objReader->load( $csv_file );
+          } catch(\Throwable $e) {
               log::add('veolia_eau', 'error',$e->getMessage());
             return 0;
           }
       } else {
           try{
-            $objPHPExcel = PHPExcel_IOFactory::load($csv_file);
-        } catch(Exception $e) {
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($csv_file);
+        } catch(\Throwable $e) {
             log::add('veolia_eau', 'error',$e->getMessage());
           return 0;
         }
       }
 
-      $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
+      $sheetData = $spreadsheet->getActiveSheet()->toArray(null,true,true,true);
 
       if (is_array($sheetData) && count($sheetData)) {
           $entete = array_shift($sheetData);

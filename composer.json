@@ -1,0 +1,15 @@
+{
+    "name": "nextdom/plugin-veolia_eau",
+    "description": "Dépendances PHP du plugin Veolia eau pour Jeedom.",
+    "license": "AGPL-3.0-or-later",
+    "require": {
+        "php": ">=7.4",
+        "phpoffice/phpspreadsheet": "^1.29"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "platform": {
+            "php": "7.4.0"
+        }
+    }
+}
